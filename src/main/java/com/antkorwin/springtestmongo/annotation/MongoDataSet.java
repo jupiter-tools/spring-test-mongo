@@ -19,17 +19,17 @@ import java.lang.annotation.Target;
 public @interface MongoDataSet {
 
     /**
-     * Path to file with dataSet for populating
+     * Path to a file with the data-set for populating
      */
     String value() default "";
 
     /**
-     * Clean MongoDB data before run test
+     * Clean a MongoDB database before the test execution
      */
     boolean cleanBefore() default false;
 
     /**
-     * Clean MongoDB data after run test
+     * Clean a MongoDB database after the test execution
      */
     boolean cleanAfter() default false;
 }

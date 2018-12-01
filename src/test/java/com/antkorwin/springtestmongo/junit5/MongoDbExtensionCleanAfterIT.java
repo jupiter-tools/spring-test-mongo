@@ -19,8 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ExtendWith({MongoExtensionCleanAfterIT.TestExtension.class, MongoExtension.class})
-class MongoExtensionCleanAfterIT {
+@ExtendWith({MongoDbExtensionCleanAfterIT.TestExtension.class, MongoDbExtension.class})
+class MongoDbExtensionCleanAfterIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;

@@ -11,22 +11,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.function.Supplier;
 
-import static com.antkorwin.springtestmongo.errorinfo.RiderErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
+import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 
 /**
  * Created by Korovin A. on 21.01.2018.
  *
- * MongoDB-Rider Test Rule for integration testing application with MongoDb persistence layer.
- *
- * Give effect to:
- * - processing MongoDataSet annotation
- * - populate test data beforeInvocation run test method
- * - clean mongo db after/beforeInvocation test run
+ * {@link MongoDbRule} is a rule to write integration tests
+ * of applications with a MongoDb persistence layer, in JUnit4.
  *
  * @author Korovin Anatoliy
  * @version 1.0
  */
-public class MongoDbRiderRule implements TestRule {
+public class MongoDbRule implements TestRule {
 
     private MongoTemplate mongoTemplate;
     private Supplier<MongoTemplate> mongoTemplateProvider;
@@ -40,7 +36,7 @@ public class MongoDbRiderRule implements TestRule {
      *
      * @param templateProvider mongoTemplate provider
      */
-    public MongoDbRiderRule(Supplier<MongoTemplate> templateProvider) {
+    public MongoDbRule(Supplier<MongoTemplate> templateProvider) {
         mongoTemplateProvider = templateProvider;
     }
 
@@ -66,7 +62,8 @@ public class MongoDbRiderRule implements TestRule {
     }
 
     /**
-     * internal logic that runs before each test
+     * Clean a database before the test execution if it needed,
+     * then populate data-set from the file.
      */
     private void beforeInvocation(MongoDataSet mongoDataSet) {
 
@@ -85,7 +82,8 @@ public class MongoDbRiderRule implements TestRule {
 
 
     /**
-     * internal logic that runs after each test
+     * Clean a database after test execution,
+     * if it required by the {@link MongoDataSet} annotation.
      */
     private void afterInvocation(MongoDataSet mongoDataSet){
         if (mongoDataSet != null && mongoDataSet.cleanAfter()) {
@@ -93,9 +91,8 @@ public class MongoDbRiderRule implements TestRule {
         }
     }
 
-
     /**
-     * Clean all mongodb collection, obtained by current mongoTemplate
+     * Clean all collections in mongodb, obtained by the current MongoTemplate
      */
     private void cleanDataBase() {
         mongoTemplate.getCollectionNames()

@@ -5,12 +5,12 @@ import com.antkorwin.commonutils.validation.ErrorInfo;
 /**
  * Created by Korovin A. on 21.01.2018.
  *
- * MongoDbRider error details
+ * Error info messages
  *
  * @author Korovin Anatoliy
  * @version 1.0
  */
-public enum RiderErrorInfo implements ErrorInfo {
+public enum MongoDbErrorInfo implements ErrorInfo {
 
     READ_DATASETS_FILE_ERROR("Error while reading file with a DataSet."),
     FILE_NOT_FOUND("Not found a DataSet file."),
@@ -25,7 +25,7 @@ public enum RiderErrorInfo implements ErrorInfo {
     private final int base = 1000;
 
 
-    RiderErrorInfo(String msg) {
+    MongoDbErrorInfo(String msg) {
         this.message = msg;
     }
 

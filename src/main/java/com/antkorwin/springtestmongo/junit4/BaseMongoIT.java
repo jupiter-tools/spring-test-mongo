@@ -1,6 +1,5 @@
 package com.antkorwin.springtestmongo.junit4;
 
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,9 @@ import org.testcontainers.containers.GenericContainer;
 /**
  * Created by Korovin A. on 19.01.2018.
  * <p>
- * Running all context configurations include MongoDB test container.
- * Also initializing the MongoDbRiderRule to write an integration
- * test case witch using the MongoDataSet annotation.
+ * Runs whole application context and start the MongoDB test container.
+ * Also initialize the {@link MongoDbRule} to write integration
+ * tests where you can use the {@link com.antkorwin.springtestmongo.annotation.MongoDataSet} annotation.
  *
  * @author Korovin Anatoliy
  * @version 1.0
@@ -41,5 +40,5 @@ public abstract class BaseMongoIT {
     protected MongoTemplate mongoTemplate;
 
     @Rule
-    public MongoDbRiderRule mongoDbRiderRule = new MongoDbRiderRule(() -> mongoTemplate);
+    public MongoDbRule mongoDbRule = new MongoDbRule(() -> mongoTemplate);
 }

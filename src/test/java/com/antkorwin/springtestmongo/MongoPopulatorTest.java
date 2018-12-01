@@ -2,7 +2,7 @@ package com.antkorwin.springtestmongo;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.GuardCheck;
-import com.antkorwin.springtestmongo.errorinfo.RiderErrorInfo;
+import com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
@@ -100,7 +100,7 @@ class MongoPopulatorTest {
         // Act & Assert
         GuardCheck.check(() -> MongoPopulator.populate(template, "unexist"),
                          InternalException.class,
-                         RiderErrorInfo.FILE_NOT_FOUND);
+                         MongoDbErrorInfo.FILE_NOT_FOUND);
     }
 
     /**
@@ -113,7 +113,7 @@ class MongoPopulatorTest {
         // Act & Assert
         GuardCheck.check(() -> MongoPopulator.populate(template, "/dataset/emptyfile.json"),
                          InternalException.class,
-                         RiderErrorInfo.DATASET_PARSING_ERROR);
+                         MongoDbErrorInfo.DATASET_PARSING_ERROR);
     }
 
     /**
@@ -126,7 +126,7 @@ class MongoPopulatorTest {
         // Act & Assert
         GuardCheck.check(() -> MongoPopulator.populate(template, "/dataset/wrong_format.json"),
                          InternalException.class,
-                         RiderErrorInfo.DATASET_PARSING_ERROR);
+                         MongoDbErrorInfo.DATASET_PARSING_ERROR);
     }
 
     /**
@@ -139,7 +139,7 @@ class MongoPopulatorTest {
         // Act & Assert
         GuardCheck.check(() -> MongoPopulator.populate(template, "/dataset/wrong_collection_type.json"),
                          InternalException.class,
-                         RiderErrorInfo.UNRESOLVED_DOCUMENT_COLLECTION_CLASS_TYPE);
+                         MongoDbErrorInfo.UNRESOLVED_DOCUMENT_COLLECTION_CLASS_TYPE);
     }
 
     /**
@@ -153,7 +153,7 @@ class MongoPopulatorTest {
         // Act & Assert
         GuardCheck.check(() -> MongoPopulator.populate(template, "/dataset/wrong_dataformat.json"),
                          InternalException.class,
-                         RiderErrorInfo.DATASET_FORMAT_ERROR);
+                         MongoDbErrorInfo.DATASET_FORMAT_ERROR);
     }
 
     /**
@@ -167,7 +167,7 @@ class MongoPopulatorTest {
         // Act & Assert
         GuardCheck.check(() -> MongoPopulator.populate(template, "/dataset/wrong_dataformat_in_record.json"),
                          InternalException.class,
-                         RiderErrorInfo.DOCUMENT_RECORD_PARSING_ERROR);
+                         MongoDbErrorInfo.DOCUMENT_RECORD_PARSING_ERROR);
     }
 
     /**
@@ -178,6 +178,6 @@ class MongoPopulatorTest {
         // Act & Assert
         GuardCheck.check(() -> MongoPopulator.populate(null, "123"),
                          InternalException.class,
-                         RiderErrorInfo.MONGO_TEMPLATE_IS_MANDATORY);
+                         MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY);
     }
 }

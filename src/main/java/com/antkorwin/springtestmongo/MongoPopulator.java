@@ -18,13 +18,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
-import static com.antkorwin.springtestmongo.errorinfo.RiderErrorInfo.*;
+import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.*;
 
 
 /**
  * Created by Korovin A. on 21.01.2018.
  * <p>
- * MongoDB data populate utility
+ * MongoDB data populating utility
  *
  * @author Korovin Anatoliy
  */
@@ -35,7 +35,7 @@ public class MongoPopulator {
     private static Logger log = LoggerFactory.getLogger(MongoPopulator.class);
 
     /**
-     * Populate DataSet from file to mongo
+     * Populate a DataSet from the file to MongoDb
      *
      * @param mongoTemplate   connection to mongo database
      * @param dataSetFileName path to the json dataset
