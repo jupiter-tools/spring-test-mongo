@@ -22,20 +22,6 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEM
  */
 public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEachCallback, AfterEachCallback {
 
-    private static final Integer MONGO_PORT = 27017;
-
-    static {
-        System.out.println("Start MongoDb testcontainers extension...\n");
-
-        GenericContainer mongo = new GenericContainer("mongo:latest")
-                .withExposedPorts(MONGO_PORT);
-
-        mongo.start();
-
-        System.setProperty("spring.data.mongodb.host", mongo.getContainerIpAddress());
-        System.setProperty("spring.data.mongodb.port", mongo.getMappedPort(MONGO_PORT).toString());
-    }
-
     private MongoTemplate mongoTemplate;
 
     /**

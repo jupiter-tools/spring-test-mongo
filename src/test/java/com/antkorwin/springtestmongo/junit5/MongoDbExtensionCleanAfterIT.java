@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @ExtendWith({MongoDbExtensionCleanAfterIT.TestExtension.class, MongoDbExtension.class})
+@EnableMongoDbTestContainers
 class MongoDbExtensionCleanAfterIT {
 
     @Autowired

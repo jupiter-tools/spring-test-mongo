@@ -1,28 +1,26 @@
-package com.antkorwin.springtestmongo.junit5;
+package com.antkorwin.springtestmongo.junit5.meta.annotation;
 
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
+import com.antkorwin.springtestmongo.junit5.meta.annotation.MongoDbDataTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 
 /**
- * Created on 01.12.2018.
- *
+ * Run a test with the configuration by {@link MongoDbDataTest}.
+ * <p>
+ * Using this annotation will disable full auto-configuration and instead apply only
+ * configuration relevant to MongoDB tests.
+ * <p>
  * @author Korovin Anatoliy
  */
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@ExtendWith(MongoDbExtension.class)
-@EnableMongoDbTestContainers
-class MongoDbExtensionIT {
+@MongoDbDataTest
+class MongoDbDataTestAnnotationIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
