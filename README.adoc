@@ -9,13 +9,6 @@ Tools to write integration tests of applications with a MongoDb persistance laye
 
 ## Getting started
 
-Here you can find an example of using the TestContainers library to make integration tests.
-And JUnit5 extension to make your tests more pragmatic and elegant.
-
-Also, you can use the JUnit4 rule and the base abstract class
-to write integration tests in the old-style (with the use of the JUnit4)
-
-
 You need to add next dependencies:
 
 [source, xml]
@@ -41,6 +34,10 @@ And repository:
 
 ## JUnit5 integration test
 
+Let's look at the example of using the TestContainers library to make integration tests.
+And the JUnit5 extension to make your tests more pragmatic and elegant.
+
+
 [source, java]
 ----
 @MongoDbIntegrationTest
@@ -50,7 +47,7 @@ class JUnit5ExampleTest {
     private MongoTemplate mongoTemplate;
 
     @Test
-    @MongoDataSet(value = "/dataset/multidocument_dataset.json")
+    @MongoDataSet(value = "/dataset/bar_dataset.json")
     void testPopulatingByMongoDataSet() throws Exception {
 
         Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300b", Bar.class);
@@ -63,10 +60,31 @@ class JUnit5ExampleTest {
 }
 ----
 
+and here we can see the file with a data-set(`bar_dataset.json`):
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongo.Bar": [
+    {
+      "id": "55f3ed00b1375a48e618300a",
+      "data": "A"
+    },
+    {
+      "id": "55f3ed00b1375a48e618300b",
+      "data": "BB"
+    }
+  ]
+}
+----
+
 
 ## JUnit4 integration test
 
-[sourca, java]
+Also, you can use the JUnit4 rule and the base abstract class
+to write integration tests in the old-style (with the use of the JUnit4 and inheritance in tests)
+
+[source, java]
 ----
 public class JUnit4ExampleTest extends BaseMongoIT {
 
