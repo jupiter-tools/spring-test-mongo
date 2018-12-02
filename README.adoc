@@ -4,15 +4,17 @@
 
 image:https://travis-ci.com/antkorwin/spring-test-mongo.svg?branch=master["Build Status", link="https://travis-ci.com/antkorwin/spring-test-mongo"]
 
-**spring-test-mongo** is a suit of tools to write integration tests of applications with a MongoDb persistance layer and Spring Framework.
+Tools to write integration tests of applications with a MongoDb persistance layer and Spring Framework.
+
+
+## Getting started
 
 Here you can find an example of using the TestContainers library to make integration tests.
 And JUnit5 extension to make your tests more pragmatic and elegant.
 
-Also you can find here the JUnit4 rule and the base abstract class
-to write integration tests in an old-style (with th use of the JUnit4)
+Also, you can use the JUnit4 rule and the base abstract class
+to write integration tests in the old-style (with the use of the JUnit4)
 
-## Getting started
 
 You need to add next dependencies:
 
