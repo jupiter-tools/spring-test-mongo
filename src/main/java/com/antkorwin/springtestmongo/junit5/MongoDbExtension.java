@@ -7,7 +7,6 @@ import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.testcontainers.containers.GenericContainer;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 

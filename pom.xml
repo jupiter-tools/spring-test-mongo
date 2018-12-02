@@ -11,13 +11,6 @@
     <name>spring-test-mongo</name>
     <description>Tools suit to write integration tests for MongoDb in Spring Framework.</description>
 
-    <!--<parent>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-parent</artifactId>-->
-        <!--<version>${spring-boot.version}</version>-->
-        <!--<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
-    <!--</parent>-->
-
     <properties>
         <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

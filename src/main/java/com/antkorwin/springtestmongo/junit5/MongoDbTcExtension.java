@@ -1,7 +1,6 @@
 package com.antkorwin.springtestmongo.junit5;
 
 import org.junit.jupiter.api.extension.Extension;
-import org.springframework.util.SocketUtils;
 import org.testcontainers.containers.GenericContainer;
 
 /**
