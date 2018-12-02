@@ -11,9 +11,12 @@ import java.util.Date;
 /**
  * Created on 01.12.2018.
  *
+ * Test a behavior of the {@link MongoDbRule} and the base abstract class {@link BaseMongoIT}
+ * to write integration tests in old (junit4) style.
+ *
  * @author Korovin Anatoliy
  */
-public class Junit4MongoDataSetIT extends BaseMongoIT {
+public class MongoDbRuleIT extends BaseMongoIT {
 
     /**
      * Testing populate mongo database from dataset defined in MongoDataSet annotation

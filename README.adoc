@@ -1,0 +1,83 @@
+:toc: preamble
+
+# Spring Test MongoDb
+
+image:https://travis-ci.com/antkorwin/spring-test-mongo.svg?branch=master["Build Status", link="https://travis-ci.com/antkorwin/spring-test-mongo"]
+
+**spring-test-mongo** is a suit of tools to write integration tests of applications with a MongoDb persistance layer and Spring Framework.
+
+Here you can find an example of using the TestContainers library to make integration tests.
+And JUnit5 extension to make your tests more pragmatic and elegant.
+
+Also you can find here the JUnit4 rule and the base abstract class
+to write integration tests in an old-style (with th use of the JUnit4)
+
+## Getting started
+
+You need to add next dependencies:
+
+[source, xml]
+----
+<dependency>
+    <groupId>com.github.antkorwin</groupId>
+    <artifactId>spring-test-mongo</artifactId>
+    <version>0.4</version>
+</dependency>
+----
+
+And repository:
+
+[source, xml]
+----
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+----
+
+## JUnit5 integration test
+
+[source, java]
+----
+@MongoDbIntegrationTest
+class JUnit5ExampleTest {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @Test
+    @MongoDataSet(value = "/dataset/multidocument_dataset.json")
+    void testPopulatingByMongoDataSet() throws Exception {
+
+        Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300b", Bar.class);
+
+        Assertions.assertThat(simpleDoc)
+                  .isNotNull()
+                  .extracting(Bar::getId, Bar::getData)
+                  .containsOnly("55f3ed00b1375a48e618300b", "BB");
+    }
+}
+----
+
+
+## JUnit4 integration test
+
+[sourca, java]
+----
+public class JUnit4ExampleTest extends BaseMongoIT {
+
+    @Test
+    @MongoDataSet(value = "/dataset/multidocument_dataset.json")
+    public void testPopulatingByMongoDataSet() throws Exception {
+
+        Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300b", Bar.class);
+
+        Assertions.assertThat(simpleDoc)
+                  .isNotNull()
+                  .extracting(Bar::getId, Bar::getData)
+                  .containsOnly("55f3ed00b1375a48e618300b", "BB");
+    }
+}
+----
