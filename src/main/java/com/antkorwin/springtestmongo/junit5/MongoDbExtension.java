@@ -1,10 +1,19 @@
 package com.antkorwin.springtestmongo.junit5;
 
+import java.util.Set;
+
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
 import com.antkorwin.springtestmongo.MongoPopulator;
+import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
-import org.junit.jupiter.api.extension.*;
+import com.antkorwin.springtestmongo.internal.DataJson;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.Extension;
+import org.junit.jupiter.api.extension.ExtensionContext;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -25,6 +34,7 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
 
     /**
      * check existence of the {@link MongoTemplate} in the context
+     *
      * @param context junit5 extension context
      */
     @Override
@@ -65,12 +75,26 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
      */
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
+        exportDataSet(context);
+        cleanAfter(context);
+    }
 
+    private void cleanAfter(ExtensionContext context) {
         MongoDataSet mongoDataSet = getAnnotationFromCurrentMethod(context);
-
         if (mongoDataSet != null && mongoDataSet.cleanAfter()) {
             cleanDataBase();
         }
+    }
+
+    private void exportDataSet(ExtensionContext context) {
+        ExportMongoDataSet exportMongoDataSet = context.getRequiredTestMethod()
+                                                       .getAnnotation(ExportMongoDataSet.class);
+
+        if (exportMongoDataSet == null) {
+            return;
+        }
+
+        new DataJson(mongoTemplate, exportMongoDataSet.outputFile()).export();
     }
 
     private MongoDataSet getAnnotationFromCurrentMethod(ExtensionContext context) {
