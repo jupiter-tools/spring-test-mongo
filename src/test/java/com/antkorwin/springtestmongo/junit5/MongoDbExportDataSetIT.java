@@ -1,13 +1,19 @@
 package com.antkorwin.springtestmongo.junit5;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.Extension;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -28,34 +34,50 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ExtendWith(MongoDbExtension.class)
 @ExtendWith(MongoDbExportDataSetIT.ExportTestExtension.class)
+@ExtendWith(MongoDbExtension.class)
 @EnableMongoDbTestContainers
 class MongoDbExportDataSetIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    private static final String INPUT_DATA_SET_FILE = "/dataset/exported_dataset.json";
     private static final String OUTPUT_FILE_NAME = "target/dataset/export.json";
 
     @Test
     @ExportMongoDataSet(outputFile = OUTPUT_FILE_NAME)
     void exportDataSet() {
-        MongoPopulator.populate(mongoTemplate, "/dataset/simple_collections_dataset.json");
+        // TODO: test it without MongoPopulator, must use external tools to be sure in stability of this solution
+        MongoPopulator.populate(mongoTemplate, INPUT_DATA_SET_FILE);
     }
 
 
-    static class ExportTestExtension implements Extension, AfterEachCallback {
+    static class ExportTestExtension implements Extension, AfterEachCallback, BeforeEachCallback {
 
         @Override
         public void afterEach(ExtensionContext context) throws Exception {
-            InputStream inputStream = MongoPopulator.class.getClass().getResourceAsStream(OUTPUT_FILE_NAME);
+            FileInputStream inputStream = FileUtils.openInputStream(new File(OUTPUT_FILE_NAME));
             assertThat(inputStream).isNotNull();
 
             String stringDataSet = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-            assertThat(stringDataSet).isNotNull();
+            assertThat(stringDataSet).isNotNull()
+                                     .isEqualTo(getExpectedJson());
 
             System.out.println(stringDataSet);
+        }
+
+        @Override
+        public void beforeEach(ExtensionContext context) throws Exception {
+            File file = new File(OUTPUT_FILE_NAME);
+            Files.deleteIfExists(file.toPath());
+        }
+
+        private String getExpectedJson() throws IOException {
+            final InputStream inputStream =
+                    ExportTestExtension.class.getClass().getResourceAsStream(INPUT_DATA_SET_FILE);
+
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         }
     }
 }
