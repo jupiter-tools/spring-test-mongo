@@ -9,6 +9,7 @@ import java.nio.file.Files;
 
 import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
+import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -34,10 +35,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@ExtendWith(MongoDbExportDataSetIT.ExportTestExtension.class)
+@ExtendWith(MongoDbExtensionExportDataSetIT.ExportTestExtension.class)
 @ExtendWith(MongoDbExtension.class)
 @EnableMongoDbTestContainers
-class MongoDbExportDataSetIT {
+class MongoDbExtensionExportDataSetIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -46,6 +47,7 @@ class MongoDbExportDataSetIT {
     private static final String OUTPUT_FILE_NAME = "target/dataset/export.json";
 
     @Test
+    @MongoDataSet(cleanBefore = true)
     @ExportMongoDataSet(outputFile = OUTPUT_FILE_NAME)
     void exportDataSet() {
         // TODO: test it without MongoPopulator, must use external tools to be sure in stability of this solution
@@ -61,10 +63,9 @@ class MongoDbExportDataSetIT {
             assertThat(inputStream).isNotNull();
 
             String stringDataSet = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            System.out.println(stringDataSet);
             assertThat(stringDataSet).isNotNull()
                                      .isEqualTo(getExpectedJson());
-
-            System.out.println(stringDataSet);
         }
 
         @Override

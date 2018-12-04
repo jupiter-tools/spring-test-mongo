@@ -1,15 +1,18 @@
 package com.antkorwin.springtestmongo.junit4;
 
+import java.util.function.Supplier;
+
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
 import com.antkorwin.springtestmongo.MongoPopulator;
+import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
+import com.antkorwin.springtestmongo.internal.DataJson;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.util.function.Supplier;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 
@@ -52,11 +55,10 @@ public class MongoDbRule implements TestRule {
 
                 mongoTemplate = mongoTemplateProvider.get();
                 Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
-                MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
 
-                beforeInvocation(mongoDataSet);
+                beforeInvocation(description);
                 base.evaluate();
-                afterInvocation(mongoDataSet);
+                afterInvocation(description);
             }
         };
     }
@@ -65,9 +67,11 @@ public class MongoDbRule implements TestRule {
      * Clean a database before the test execution if it needed,
      * then populate data-set from the file.
      */
-    private void beforeInvocation(MongoDataSet mongoDataSet) {
+    private void beforeInvocation(Description description) {
 
-        if(mongoDataSet== null) return;
+        MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
+
+        if (mongoDataSet == null) return;
 
         // clean before
         if (mongoDataSet.cleanBefore()) {
@@ -85,7 +89,26 @@ public class MongoDbRule implements TestRule {
      * Clean a database after test execution,
      * if it required by the {@link MongoDataSet} annotation.
      */
-    private void afterInvocation(MongoDataSet mongoDataSet){
+    private void afterInvocation(Description description) {
+        exportDataSet(description);
+        cleanAfter(description);
+    }
+
+    private void exportDataSet(Description description) {
+
+        ExportMongoDataSet exportMongoDataSet = description.getAnnotation(ExportMongoDataSet.class);
+
+        if (exportMongoDataSet == null) {
+            return;
+        }
+
+        new DataJson(mongoTemplate, exportMongoDataSet.outputFile()).export();
+    }
+
+    private void cleanAfter(Description description){
+
+        MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
+
         if (mongoDataSet != null && mongoDataSet.cleanAfter()) {
             cleanDataBase();
         }

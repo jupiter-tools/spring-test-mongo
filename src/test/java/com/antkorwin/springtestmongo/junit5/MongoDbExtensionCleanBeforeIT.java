@@ -27,6 +27,7 @@ class MongoDbExtensionCleanBeforeIT {
     private MongoTemplate mongoTemplate;
 
     @Test
+    @MongoDataSet(cleanAfter = true)
     void name() {
         Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e61830bf", Bar.class);
         assertThat(simpleDoc).isNotNull();
