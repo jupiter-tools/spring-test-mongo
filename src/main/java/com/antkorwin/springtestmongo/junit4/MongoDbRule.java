@@ -8,6 +8,7 @@ import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.DataJson;
+import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -102,7 +103,8 @@ public class MongoDbRule implements TestRule {
             return;
         }
 
-        new DataJson(mongoTemplate, exportMongoDataSet.outputFile()).export();
+        //new DataJson(mongoTemplate, exportMongoDataSet.outputFile()).export();
+        new MongoDbTest(mongoTemplate).exportTo(exportMongoDataSet.outputFile());
     }
 
     private void cleanAfter(Description description){

@@ -79,7 +79,8 @@ public class MongoPopulator {
     }
 
 
-    private static void populateOneDocumentCollection(MongoTemplate mongoTemplate, Class<?> documentClassType,
+    private static void populateOneDocumentCollection(MongoTemplate mongoTemplate,
+                                                      Class<?> documentClassType,
                                                       List<?> recordCollection) {
         recordCollection.forEach(document -> {
             try {

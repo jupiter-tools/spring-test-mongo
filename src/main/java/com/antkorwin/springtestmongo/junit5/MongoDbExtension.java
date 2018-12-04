@@ -8,6 +8,7 @@ import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.DataJson;
+import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -94,7 +95,8 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
             return;
         }
 
-        new DataJson(mongoTemplate, exportMongoDataSet.outputFile()).export();
+        //new DataJson(mongoTemplate, exportMongoDataSet.outputFile()).export();
+        new MongoDbTest(mongoTemplate).exportTo(exportMongoDataSet.outputFile());
     }
 
     private MongoDataSet getAnnotationFromCurrentMethod(ExtensionContext context) {

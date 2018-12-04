@@ -1,44 +1,33 @@
 package com.antkorwin.springtestmongo.internal;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.antkorwin.commonutils.exceptions.InternalException;
+import com.antkorwin.commonutils.validation.Guard;
+import org.bson.Document;
+import org.springframework.data.mongodb.core.MongoTemplate;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.antkorwin.commonutils.exceptions.InternalException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.bson.Document;
-
-import org.springframework.data.mongodb.core.MongoTemplate;
+import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 
 /**
- * Created on 03.12.2018.
- *
- * TODO: replace on javadoc
+ * Created on 04.12.2018.
  *
  * @author Korovin Anatoliy
  */
-public class DataJson {
+public class MongoData implements DataSet {
 
     private final MongoTemplate mongoTemplate;
-    private final String outputFile;
-    private final ObjectMapper objectMapper;
 
-    public DataJson(MongoTemplate mongoTemplate, String outputFile) {
-        // TODO: check nullability
+    public MongoData(MongoTemplate mongoTemplate) {
+        Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
-        this.outputFile = outputFile;
-
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
-    public void export() {
+    @Override
+    public Map<String, List<?>> read(){
 
         Map<String, List<?>> map = new HashMap<>();
 
@@ -46,27 +35,7 @@ public class DataJson {
             map.put(getEntityClassName(name), getDataSet(name));
         }
 
-        saveInFile(outputFile, convertToJson(map));
-    }
-
-    private void saveInFile(String outputFile, String data) {
-        try {
-            Files.write(Paths.get(outputFile), data.getBytes());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            throw new InternalException(e);
-        }
-    }
-
-    private String convertToJson(Object object) {
-        try {
-            return objectMapper.writeValueAsString(object);
-        }
-        catch (JsonProcessingException e) {
-            e.printStackTrace();
-            throw new InternalException(e);
-        }
+        return map;
     }
 
     private List<?> getDataSet(String collectionName) {
