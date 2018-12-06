@@ -6,16 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
- * Created on 06.12.2018.
+ * Convert object to {@link Text} in JSON format.
  *
  * @author Korovin Anatoliy
  */
-public class JsonExport implements Text {
+class JsonExport implements Text {
 
     private final DataSet dataSet;
     private final ObjectMapper objectMapper;
 
-    public JsonExport(DataSet dataSet) {
+    JsonExport(DataSet dataSet) {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         this.dataSet = dataSet;

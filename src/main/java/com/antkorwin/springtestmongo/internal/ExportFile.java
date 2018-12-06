@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Created on 06.12.2018.
+ * Save text in a file.
  *
  * @author Korovin Anatoliy
  */
@@ -16,10 +16,16 @@ class ExportFile {
 
     private final Text text;
 
-    public ExportFile(Text text) {
+    ExportFile(Text text) {
         this.text = text;
     }
 
+    /**
+     * save text in a file, if the file does not exist
+     * then it will create with all folders in the path.
+     *
+     * @param fileName path to file
+     */
     public void write(String fileName) {
         String textData = this.text.read();
         try {

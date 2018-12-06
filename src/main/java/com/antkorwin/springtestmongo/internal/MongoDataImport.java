@@ -12,7 +12,11 @@ import java.util.List;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.*;
 
-
+/**
+ * Import a data from {@link DataSet} to MongoDb
+ *
+ * @author Korovin Anatoliy
+ */
 class MongoDataImport implements DataSetImport {
 
     private final MongoTemplate mongoTemplate;

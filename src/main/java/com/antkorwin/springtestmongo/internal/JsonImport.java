@@ -9,6 +9,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Convert a {@link Text} (in JSON format) to the {@link DataSet}
+ *
+ * @author Korovin Anatoliy
+ */
 class JsonImport implements DataSet {
 
     private final Text text;

@@ -12,6 +12,11 @@ import java.util.Map;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 
+/**
+ * Export a data from MongoDb to {@link DataSet}
+ *
+ * @author Korovin Anatoliy
+ */
 class MongoDataExport implements DataSet {
 
     private final MongoTemplate mongoTemplate;

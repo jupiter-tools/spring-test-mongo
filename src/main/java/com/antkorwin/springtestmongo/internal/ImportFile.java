@@ -12,7 +12,7 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.READ_DATA
 import static sun.management.AgentConfigurationError.FILE_NOT_FOUND;
 
 /**
- * Created on 06.12.2018.
+ * Load text from a file.
  *
  * @author Korovin Anatoliy
  */
