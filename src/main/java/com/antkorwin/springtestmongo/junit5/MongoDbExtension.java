@@ -1,20 +1,12 @@
 package com.antkorwin.springtestmongo.junit5;
 
-import java.util.Set;
-
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
 import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
-import com.antkorwin.springtestmongo.internal.DataJson;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.Extension;
-import org.junit.jupiter.api.extension.ExtensionContext;
-
+import org.junit.jupiter.api.extension.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -22,7 +14,7 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEM
 
 /**
  * Created on 30.11.2018.
- *
+ * <p>
  * Junit5 extension:
  * - starting mongodb test container
  * - processing {@link MongoDataSet} annotation in tests
@@ -66,7 +58,7 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
 
         // populate before test invocation
         if (!mongoDataSet.value().isEmpty()) {
-            MongoPopulator.populate(mongoTemplate, mongoDataSet.value());
+            new MongoDbTest(mongoTemplate).importFrom(mongoDataSet.value());
         }
     }
 
@@ -95,7 +87,6 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
             return;
         }
 
-        //new DataJson(mongoTemplate, exportMongoDataSet.outputFile()).export();
         new MongoDbTest(mongoTemplate).exportTo(exportMongoDataSet.outputFile());
     }
 

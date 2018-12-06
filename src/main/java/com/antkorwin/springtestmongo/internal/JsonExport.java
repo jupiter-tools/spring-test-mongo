@@ -1,21 +1,24 @@
 package com.antkorwin.springtestmongo.internal;
 
-
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-
-public class JsonData implements TextData {
+/**
+ * Created on 06.12.2018.
+ *
+ * @author Korovin Anatoliy
+ */
+public class JsonExport implements Text {
 
     private final DataSet dataSet;
     private final ObjectMapper objectMapper;
 
-    public JsonData(DataSet dataSet) {
-        this.dataSet = dataSet;
+    public JsonExport(DataSet dataSet) {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        this.dataSet = dataSet;
     }
 
     @Override

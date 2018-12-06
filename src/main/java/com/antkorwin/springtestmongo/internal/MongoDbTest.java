@@ -12,11 +12,11 @@ public class MongoDbTest {
 
     // mongo -> file
     public void exportTo(String fileName) {
-        new FileData(new JsonData(new MongoData(this.mongoTemplate))).write(fileName);
+        new ExportFile(new JsonExport(new MongoDataExport(this.mongoTemplate))).write(fileName);
     }
 
     // file -> mongo
     public void importFrom(String fileName) {
-
+        new MongoDataImport(mongoTemplate).importFrom(new JsonImport(new ImportFile(fileName)));
     }
 }

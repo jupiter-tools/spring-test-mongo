@@ -12,23 +12,17 @@ import java.util.Map;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 
-/**
- * Created on 04.12.2018.
- *
- * @author Korovin Anatoliy
- */
-public class MongoData implements DataSet {
+class MongoDataExport implements DataSet {
 
     private final MongoTemplate mongoTemplate;
 
-    public MongoData(MongoTemplate mongoTemplate) {
+    MongoDataExport(MongoTemplate mongoTemplate) {
         Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
     }
 
     @Override
-    public Map<String, List<?>> read(){
-
+    public Map<String, List<?>> read() {
         Map<String, List<?>> map = new HashMap<>();
 
         for (String name : mongoTemplate.getCollectionNames()) {

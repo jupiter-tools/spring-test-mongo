@@ -7,17 +7,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Created on 06.12.2018.
+ *
+ * @author Korovin Anatoliy
+ */
+class ExportFile {
 
-public class FileData {
+    private final Text text;
 
-    private final TextData textData;
-
-    public FileData(TextData textData) {
-        this.textData = textData;
+    public ExportFile(Text text) {
+        this.text = text;
     }
 
-    void write(String fileName) {
-        String textData = this.textData.read();
+    public void write(String fileName) {
+        String textData = this.text.read();
         try {
             Path path = Paths.get(fileName);
             Files.createDirectories(path.getParent());
