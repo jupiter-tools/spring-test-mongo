@@ -40,6 +40,7 @@ public class MongoPopulator {
      * @param mongoTemplate   connection to mongo database
      * @param dataSetFileName path to the json dataset
      */
+    @Deprecated
     public static void populate(MongoTemplate mongoTemplate, String dataSetFileName) {
 
         Guard.check(dataSetFileName != null, InternalException.class, DATASET_FILE_NAME_IS_MANDATORY);
@@ -79,7 +80,8 @@ public class MongoPopulator {
     }
 
 
-    private static void populateOneDocumentCollection(MongoTemplate mongoTemplate, Class<?> documentClassType,
+    private static void populateOneDocumentCollection(MongoTemplate mongoTemplate,
+                                                      Class<?> documentClassType,
                                                       List<?> recordCollection) {
         recordCollection.forEach(document -> {
             try {

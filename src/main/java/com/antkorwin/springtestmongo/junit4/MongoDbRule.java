@@ -3,7 +3,9 @@ package com.antkorwin.springtestmongo.junit4;
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
 import com.antkorwin.springtestmongo.MongoPopulator;
+import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
+import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -15,7 +17,7 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEM
 
 /**
  * Created by Korovin A. on 21.01.2018.
- *
+ * <p>
  * {@link MongoDbRule} is a rule to write integration tests
  * of applications with a MongoDb persistence layer, in JUnit4.
  *
@@ -30,7 +32,7 @@ public class MongoDbRule implements TestRule {
     /**
      * Init test rule, required MongoTemplate provider
      * for lazy obtaining mongo template.
-     *
+     * <p>
      * It is necessary because the priority of the test rule is higher
      * than the application context.
      *
@@ -52,11 +54,10 @@ public class MongoDbRule implements TestRule {
 
                 mongoTemplate = mongoTemplateProvider.get();
                 Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
-                MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
 
-                beforeInvocation(mongoDataSet);
+                beforeInvocation(description);
                 base.evaluate();
-                afterInvocation(mongoDataSet);
+                afterInvocation(description);
             }
         };
     }
@@ -65,9 +66,11 @@ public class MongoDbRule implements TestRule {
      * Clean a database before the test execution if it needed,
      * then populate data-set from the file.
      */
-    private void beforeInvocation(MongoDataSet mongoDataSet) {
+    private void beforeInvocation(Description description) {
 
-        if(mongoDataSet== null) return;
+        MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
+
+        if (mongoDataSet == null) return;
 
         // clean before
         if (mongoDataSet.cleanBefore()) {
@@ -76,7 +79,7 @@ public class MongoDbRule implements TestRule {
 
         // populate before test invocation
         if (!mongoDataSet.value().isEmpty()) {
-            MongoPopulator.populate(mongoTemplate, mongoDataSet.value());
+            new MongoDbTest(mongoTemplate).importFrom(mongoDataSet.value());
         }
     }
 
@@ -85,7 +88,26 @@ public class MongoDbRule implements TestRule {
      * Clean a database after test execution,
      * if it required by the {@link MongoDataSet} annotation.
      */
-    private void afterInvocation(MongoDataSet mongoDataSet){
+    private void afterInvocation(Description description) {
+        exportDataSet(description);
+        cleanAfter(description);
+    }
+
+    private void exportDataSet(Description description) {
+
+        ExportMongoDataSet exportMongoDataSet = description.getAnnotation(ExportMongoDataSet.class);
+
+        if (exportMongoDataSet == null) {
+            return;
+        }
+
+        new MongoDbTest(mongoTemplate).exportTo(exportMongoDataSet.outputFile());
+    }
+
+    private void cleanAfter(Description description) {
+
+        MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
+
         if (mongoDataSet != null && mongoDataSet.cleanAfter()) {
             cleanDataBase();
         }
