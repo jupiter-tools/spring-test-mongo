@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
+import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ class MongoDbExtensionExportDataSetIT {
     @ExportMongoDataSet(outputFile = OUTPUT_FILE_NAME)
     void exportDataSet() {
         // TODO: test it without MongoPopulator, must use external tools to be sure in stability of this solution
-        MongoPopulator.populate(mongoTemplate, INPUT_DATA_SET_FILE);
+        new MongoDbTest(mongoTemplate).importFrom(INPUT_DATA_SET_FILE);
     }
 
 

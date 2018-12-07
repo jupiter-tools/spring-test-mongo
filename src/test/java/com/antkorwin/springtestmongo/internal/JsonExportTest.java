@@ -37,15 +37,6 @@ class JsonExportTest {
     }
 
     private String getExpectedJson() {
-        // new ImportFile("/dataset/internal/json_expected.json").read();
-        return "{\n" +
-               "  \"com.antkorwin.springtestmongo.Bar\" : [ {\n" +
-               "    \"id\" : \"111100001\",\n" +
-               "    \"data\" : \"data-1\"\n" +
-               "  }, {\n" +
-               "    \"id\" : \"111100002\",\n" +
-               "    \"data\" : \"data-2\"\n" +
-               "  } ]\n" +
-               "}";
+        return new ImportFile("/dataset/internal/json_expected.json").read();
     }
 }

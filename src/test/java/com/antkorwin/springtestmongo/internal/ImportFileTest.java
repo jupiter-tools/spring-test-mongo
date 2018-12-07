@@ -14,22 +14,10 @@ class ImportFileTest {
     @Test
     void read() {
         // Arrange
-        Text fileText = new ImportFile("/dataset/internal/json_expected.json");
+        Text fileText = new ImportFile("/dataset/internal/test_file.txt");
         // Act
         String text = fileText.read();
         // Asserts
-        assertThat(text).isEqualTo(getExpectedText());
-    }
-
-    private String getExpectedText() {
-        return "{\n" +
-               "  \"com.antkorwin.springtestmongo.Bar\" : [ {\n" +
-               "    \"id\" : \"111100001\",\n" +
-               "    \"data\" : \"data-1\"\n" +
-               "  }, {\n" +
-               "    \"id\" : \"111100002\",\n" +
-               "    \"data\" : \"data-2\"\n" +
-               "  } ]\n" +
-               "}";
+        assertThat(text).isEqualTo("secret-123");
     }
 }

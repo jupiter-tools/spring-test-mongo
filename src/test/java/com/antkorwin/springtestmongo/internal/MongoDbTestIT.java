@@ -1,5 +1,10 @@
 package com.antkorwin.springtestmongo.internal;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.junit5.EnableMongoDbTestContainers;
 import org.apache.commons.io.IOUtils;
@@ -8,15 +13,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,25 +63,18 @@ class MongoDbTestIT {
     @Test
     void exportTest() throws IOException {
         // Arrange
-        mongoTemplate.save(new Bar("101","data-1"));
-        mongoTemplate.save(new Bar("102","data-2"));
-        mongoTemplate.save(new Bar("103","data-3"));
+        mongoTemplate.save(new Bar("111100001", "data-1"));
+        mongoTemplate.save(new Bar("111100002", "data-2"));
         // Act
         mongoDbTest.exportTo("./target/export.json");
         // Asserts
         String result = getResultFromFile("./target/export.json");
-        assertThat(result).isEqualTo("{\n" +
-                                     "  \"com.antkorwin.springtestmongo.Bar\" : [ {\n" +
-                                     "    \"id\" : \"101\",\n" +
-                                     "    \"data\" : \"data-1\"\n" +
-                                     "  }, {\n" +
-                                     "    \"id\" : \"102\",\n" +
-                                     "    \"data\" : \"data-2\"\n" +
-                                     "  }, {\n" +
-                                     "    \"id\" : \"103\",\n" +
-                                     "    \"data\" : \"data-3\"\n" +
-                                     "  } ]\n" +
-                                     "}");
+        assertThat(result).isEqualTo(getExpectedResult());
+    }
+
+    private String getExpectedResult() throws IOException {
+        InputStream inputStream = MongoDbTestIT.class.getResourceAsStream("/dataset/internal/json_expected.json");
+        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
     private String getResultFromFile(String fileName) throws IOException {
