@@ -8,7 +8,10 @@ import java.lang.annotation.Target;
 /**
  * Created on 03.12.2018.
  *
- * TODO: replace on javadoc
+ * You can use this annotation in tests to
+ * generate files with data sets.
+ * All document collections from current database
+ * will be store in export file, after test execution.
  *
  * @author Korovin Anatoliy
  */
@@ -16,5 +19,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface ExportMongoDataSet {
 
+    /**
+     * @return path to the export file
+     */
     String outputFile();
 }
