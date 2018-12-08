@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.FILE_NOT_FOUND;
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.READ_DATASETS_FILE_ERROR;
-import static sun.management.AgentConfigurationError.FILE_NOT_FOUND;
 
 /**
  * Load text from a file.
@@ -26,12 +26,10 @@ class ImportFile implements Text {
 
     @Override
     public String read() {
-
-        InputStream inputStream = getResourceStream();
-        Guard.check(inputStream != null, InternalException.class, FILE_NOT_FOUND);
-
-        try {
+        try (InputStream inputStream = getResourceStream()) {
+            Guard.check(inputStream != null, InternalException.class, FILE_NOT_FOUND);
             return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new InternalException(READ_DATASETS_FILE_ERROR, e);

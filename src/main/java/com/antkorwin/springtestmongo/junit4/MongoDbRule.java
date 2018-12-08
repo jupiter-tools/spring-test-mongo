@@ -2,7 +2,6 @@ package com.antkorwin.springtestmongo.junit4;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
-import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;

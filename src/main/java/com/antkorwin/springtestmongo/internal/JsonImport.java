@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.JSON_PARSING_ERROR;
+
 /**
  * Convert a {@link Text} (in JSON format) to the {@link DataSet}
  *
@@ -30,10 +32,11 @@ class JsonImport implements DataSet {
 
         String content = text.read();
         try {
-            return objectMapper.readValue(content, new TypeReference<Map<String, List<?>>>() {});
+            return objectMapper.readValue(content, new TypeReference<Map<String, List<?>>>() {
+            });
         } catch (IOException e) {
             e.printStackTrace();
-            throw new InternalException(e);
+            throw new InternalException(JSON_PARSING_ERROR, e);
         }
     }
 }

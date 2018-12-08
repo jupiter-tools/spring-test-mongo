@@ -19,7 +19,8 @@ public enum MongoDbErrorInfo implements ErrorInfo {
     UNRESOLVED_DOCUMENT_COLLECTION_CLASS_TYPE("Unresolved document collection class reference from the DataSet."),
     DOCUMENT_RECORD_PARSING_ERROR("Error while parsing the document record in the collection."),
     DATASET_PARSING_ERROR("Error while parsing the file with a dataset."),
-    DATASET_FORMAT_ERROR("Wrong dataset's format.");
+    DATASET_FORMAT_ERROR("Wrong dataset's format."),
+    JSON_PARSING_ERROR("Error when parsing the JSON text.");
 
     private final String message;
     private final int base = 1000;

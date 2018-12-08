@@ -1,6 +1,10 @@
 package com.antkorwin.springtestmongo.internal;
 
+import com.antkorwin.commonutils.exceptions.InternalException;
+import com.antkorwin.commonutils.validation.Guard;
 import org.springframework.data.mongodb.core.MongoTemplate;
+
+import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 
 /**
  * MongoDb test tools,
@@ -13,6 +17,7 @@ public class MongoDbTest {
     private final MongoTemplate mongoTemplate;
 
     public MongoDbTest(MongoTemplate mongoTemplate) {
+        Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
     }
 

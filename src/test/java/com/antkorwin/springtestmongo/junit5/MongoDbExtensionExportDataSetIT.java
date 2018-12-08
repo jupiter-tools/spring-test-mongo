@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;
@@ -51,7 +50,7 @@ class MongoDbExtensionExportDataSetIT {
     @MongoDataSet(cleanBefore = true)
     @ExportMongoDataSet(outputFile = OUTPUT_FILE_NAME)
     void exportDataSet() {
-        // TODO: test it without MongoPopulator, must use external tools to be sure in stability of this solution
+        // TODO: test it without MongoDbTest, must use external tools to be sure in stability of this solution
         new MongoDbTest(mongoTemplate).importFrom(INPUT_DATA_SET_FILE);
     }
 

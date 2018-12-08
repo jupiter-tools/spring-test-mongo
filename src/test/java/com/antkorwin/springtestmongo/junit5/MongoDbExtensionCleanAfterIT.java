@@ -1,7 +1,6 @@
 package com.antkorwin.springtestmongo.junit5;
 
 import com.antkorwin.springtestmongo.Bar;
-import com.antkorwin.springtestmongo.MongoPopulator;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.junit.jupiter.api.Test;
