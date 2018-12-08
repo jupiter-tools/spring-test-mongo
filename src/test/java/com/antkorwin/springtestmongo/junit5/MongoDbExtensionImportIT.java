@@ -22,17 +22,17 @@ import java.util.Date;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MongoDbExtension.class)
 @EnableMongoDbTestContainers
-class MongoDbExtensionIT {
+class MongoDbExtensionImportIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     /**
-     * Testing populate mongo database from dataset defined in MongoDataSet annotation
+     * Testing import to the current mongo database from a dataset defined in the MongoDataSet annotation
      */
     @Test
     @MongoDataSet(value = "/dataset/multidocument_dataset.json", cleanBefore = true, cleanAfter = true)
-    void testPopulatingByMongoDataSet() throws Exception {
+    void testImportByMongoDataSetAnnotation() throws Exception {
         // Act
         Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
         Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300b", Bar.class);
