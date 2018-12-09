@@ -17,12 +17,12 @@ class JsonImportTest {
     @Test
     void testImport() {
         // Act
-        Map<String, List<?>> map = new JsonImport(this::getJson).read();
+        Map<String, List<Map<String, Object>>> map = new JsonImport(this::getJson).read();
         // Asserts
         assertThat(map).isNotNull()
                        .containsKeys("com.antkorwin.springtestmongo.Bar");
 
-        Map<String, String> bar = (Map<String, String>) map.get("com.antkorwin.springtestmongo.Bar").get(0);
+        Map<String, Object> bar = map.get("com.antkorwin.springtestmongo.Bar").get(0);
 
         assertThat(bar.keySet()).containsOnly("id", "data");
         assertThat(bar.values()).containsOnly("55f3ed00b1375a48e61830bf", "TEST");

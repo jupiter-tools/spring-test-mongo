@@ -1,0 +1,30 @@
+{
+  "com.antkorwin.springtestmongo.Bar": [
+    {
+      "data": "data-1"
+    },
+    {
+      "data": "data-2"
+    },
+    {
+      "data": "data-2"
+    }
+  ],
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "counter": 1
+    },
+    {
+      "counter": 2
+    },
+    {
+      "counter": 3
+    },
+    {
+      "counter": 4
+    },
+    {
+      "counter": 3
+    }
+  ]
+}
