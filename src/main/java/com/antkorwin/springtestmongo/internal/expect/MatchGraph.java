@@ -20,7 +20,7 @@ public class MatchGraph implements Graph {
     }
 
     @Override
-    public int matcherCount() {
+    public int instanceCount() {
         return this.matched.size();
     }
 
@@ -32,7 +32,7 @@ public class MatchGraph implements Graph {
     @Override
     public boolean[][] calculate() {
 
-        int matchedSize = matcherCount();
+        int matchedSize = instanceCount();
         int patternSize = patternCount();
 
         boolean[][] matrix = new boolean[matchedSize][patternSize];

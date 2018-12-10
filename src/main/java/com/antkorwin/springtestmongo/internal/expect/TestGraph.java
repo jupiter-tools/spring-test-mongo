@@ -21,7 +21,7 @@ public class TestGraph implements Graph {
     }
 
     @Override
-    public int matcherCount() {
+    public int instanceCount() {
         return matrix[0].length;
     }
 

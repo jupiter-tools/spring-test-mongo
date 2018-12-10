@@ -43,9 +43,11 @@ class ValidateGraphTest {
                 // @formatter:on
         };
         // Act & Assert
-        Assertions.assertThrows(Error.class, () -> {
+        Error error = Assertions.assertThrows(Error.class, () -> {
             new ValidateGraph(new TestGraph(() -> graph)).validate();
         });
+        System.out.println(error);
+        new Printer(new TestGraph(()->graph)).print();
     }
 
     @Test
@@ -61,8 +63,9 @@ class ValidateGraphTest {
                 // @formatter:on
         };
         // Act & Assert
-        Assertions.assertThrows(Error.class, () -> {
+        Error error = Assertions.assertThrows(Error.class, () -> {
             new ValidateGraph(new TestGraph(() -> graph)).validate();
         });
+        System.out.println(error);
     }
 }
