@@ -59,13 +59,14 @@ class MongoDbExtensionExportDataSetIT {
 
         @Override
         public void afterEach(ExtensionContext context) throws Exception {
-            FileInputStream inputStream = FileUtils.openInputStream(new File(OUTPUT_FILE_NAME));
-            assertThat(inputStream).isNotNull();
+            try (FileInputStream inputStream = FileUtils.openInputStream(new File(OUTPUT_FILE_NAME))){
+                assertThat(inputStream).isNotNull();
 
-            String stringDataSet = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-            System.out.println(stringDataSet);
-            assertThat(stringDataSet).isNotNull()
-                                     .isEqualTo(getExpectedJson());
+                String stringDataSet = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+                System.out.println(stringDataSet);
+                assertThat(stringDataSet).isNotNull()
+                                         .isEqualTo(getExpectedJson());
+            }
         }
 
         @Override
@@ -75,10 +76,10 @@ class MongoDbExtensionExportDataSetIT {
         }
 
         private String getExpectedJson() throws IOException {
-            final InputStream inputStream =
-                    ExportTestExtension.class.getClass().getResourceAsStream(INPUT_DATA_SET_FILE);
-
-            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            try (InputStream inputStream = ExportTestExtension.class.getClass()
+                                                                    .getResourceAsStream(INPUT_DATA_SET_FILE)){
+                return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            }
         }
     }
 }

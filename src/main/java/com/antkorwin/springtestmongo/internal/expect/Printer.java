@@ -13,10 +13,6 @@ public class Printer {
         this.graph = graph;
     }
 
-    public Printer(boolean[][] matrix) {
-        this.graph = () -> matrix;
-    }
-
     public void print() {
         boolean[][] matrix = graph.calculate();
         System.out.println("Data / Matchers ---> ");

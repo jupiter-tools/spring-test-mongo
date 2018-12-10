@@ -19,9 +19,9 @@ public class AssertGraphEquals {
         boolean result = Arrays.deepEquals(firstMatrix, secondMatrix);
         if (!result) {
             System.out.println("Actual graph: ");
-            new Printer(firstMatrix).print();
+            new Printer(first).print();
             System.out.println("Expected graph: ");
-            new Printer(secondMatrix).print();
+            new Printer(second).print();
             Assertions.fail("Graphs are not equal.");
         }
     }

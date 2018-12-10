@@ -48,7 +48,7 @@ public class MatchDataSets {
 
         boolean[][] matrix = new ReachabilityGraph(new MatchGraph(matched, pattern)).calculate();
 
-        new Printer(matrix).print();
+        new Printer(new TestGraph(()->matrix)).print();
     }
 
     private void assertDocumentsCountAreEquals(String documentName, List<Map<String, Object>> matched,
