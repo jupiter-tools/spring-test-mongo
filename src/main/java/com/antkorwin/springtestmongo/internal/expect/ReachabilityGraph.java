@@ -50,6 +50,11 @@ public class ReachabilityGraph implements Graph {
         return graph.getPattern(index);
     }
 
+    @Override
+    public String getDocumentName() {
+        return graph.getDocumentName();
+    }
+
     /**
      * Processing of one line in the graph.
      * Find unique matcher(applied only for one line(entity) in graph)

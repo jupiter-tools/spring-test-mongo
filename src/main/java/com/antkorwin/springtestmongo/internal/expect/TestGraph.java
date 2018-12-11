@@ -54,4 +54,9 @@ public class TestGraph implements Graph {
     public Map<String, Object> getPattern(int index) {
         return patterns.get(index);
     }
+
+    @Override
+    public String getDocumentName() {
+        return "TestDocument";
+    }
 }

@@ -18,4 +18,6 @@ public interface Graph {
     Map<String,Object> getDataRecord(int index);
 
     Map<String,Object> getPattern(int index);
+
+    String getDocumentName();
 }

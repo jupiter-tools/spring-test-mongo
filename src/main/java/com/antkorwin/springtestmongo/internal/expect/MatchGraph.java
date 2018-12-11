@@ -12,9 +12,12 @@ public class MatchGraph implements Graph {
 
     private final List<Map<String, Object>> dataRecords;
     private final List<Map<String, Object>> patterns;
+    private final String documentName;
 
-    public MatchGraph(List<Map<String, Object>> dataRecords,
+    public MatchGraph(String documentName,
+                      List<Map<String, Object>> dataRecords,
                       List<Map<String, Object>> patterns) {
+        this.documentName = documentName;
         this.dataRecords = dataRecords;
         this.patterns = patterns;
     }
@@ -55,6 +58,11 @@ public class MatchGraph implements Graph {
     @Override
     public Map<String, Object> getPattern(int index) {
         return patterns.get(index);
+    }
+
+    @Override
+    public String getDocumentName() {
+        return this.documentName;
     }
 
 }

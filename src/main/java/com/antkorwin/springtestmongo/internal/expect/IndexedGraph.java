@@ -42,6 +42,11 @@ public class IndexedGraph implements Graph {
         return graph.getPattern(index);
     }
 
+    @Override
+    public String getDocumentName() {
+        return graph.getDocumentName();
+    }
+
     /**
      * @return set with indexes of patterns used in this graph
      */

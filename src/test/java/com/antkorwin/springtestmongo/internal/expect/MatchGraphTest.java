@@ -31,7 +31,7 @@ class MatchGraphTest {
                               ImmutableMap.of("firstField", "2A",
                                               "secondField", "2B"));
         // Act
-        MatchGraph matchGraph = new MatchGraph(matchedDocuments, patternDocuments);
+        MatchGraph matchGraph = new MatchGraph("test", matchedDocuments, patternDocuments);
 
         // Asserts
         boolean[][] expected = {
@@ -59,7 +59,7 @@ class MatchGraphTest {
                               ImmutableMap.of("firstField", "z",
                                               "secondField", "w"));
         // Act
-        MatchGraph matchGraph = new MatchGraph(matchedDocuments, patternDocuments);
+        MatchGraph matchGraph = new MatchGraph("test", matchedDocuments, patternDocuments);
 
         // Asserts
         boolean[][] expected = {
@@ -82,7 +82,7 @@ class MatchGraphTest {
         List<Map<String, Object>> patternDocuments =
                 Arrays.asList(ImmutableMap.of("field", "A"));
         // Act
-        MatchGraph matchGraph = new MatchGraph(matchedDocuments, patternDocuments);
+        MatchGraph matchGraph = new MatchGraph("test", matchedDocuments, patternDocuments);
 
         // Asserts
         boolean[][] expected = {
@@ -105,7 +105,7 @@ class MatchGraphTest {
                 Arrays.asList(ImmutableMap.of("firstField", "A"),
                               ImmutableMap.of("secondField", "B"));
         // Act
-        MatchGraph matchGraph = new MatchGraph(matchedDocuments, patternDocuments);
+        MatchGraph matchGraph = new MatchGraph("test", matchedDocuments, patternDocuments);
 
         // Asserts
         boolean[][] expected = {
@@ -130,7 +130,7 @@ class MatchGraphTest {
                               ImmutableMap.of("firstField", "2A",
                                               "secondField", "2B"));
         // Act
-        MatchGraph matchGraph = new MatchGraph(matchedDocuments, patternDocuments);
+        MatchGraph matchGraph = new MatchGraph("test", matchedDocuments, patternDocuments);
 
         // Asserts
         boolean[][] expected = {
