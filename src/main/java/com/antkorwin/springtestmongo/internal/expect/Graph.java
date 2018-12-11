@@ -9,7 +9,7 @@ public interface Graph {
 
     boolean[][] calculate();
 
-    int instanceCount();
+    int dataCount();
 
     int patternCount();
 }

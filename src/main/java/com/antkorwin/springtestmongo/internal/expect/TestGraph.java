@@ -21,12 +21,12 @@ public class TestGraph implements Graph {
     }
 
     @Override
-    public int instanceCount() {
-        return matrix[0].length;
+    public int dataCount() {
+        return matrix.length;
     }
 
     @Override
     public int patternCount() {
-        return matrix.length;
+        return matrix[0].length;
     }
 }

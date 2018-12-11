@@ -31,8 +31,8 @@ public class ReachabilityGraph implements Graph {
     }
 
     @Override
-    public int instanceCount() {
-        return graph.instanceCount();
+    public int dataCount() {
+        return graph.dataCount();
     }
 
     @Override
