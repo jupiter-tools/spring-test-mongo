@@ -1,6 +1,7 @@
 package com.antkorwin.springtestmongo.internal.expect;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class IndexedGraph implements Graph {
@@ -29,6 +30,16 @@ public class IndexedGraph implements Graph {
     @Override
     public int patternCount() {
         return graph.patternCount();
+    }
+
+    @Override
+    public Map<String, Object> getDataRecord(int index) {
+        return graph.getDataRecord(index);
+    }
+
+    @Override
+    public Map<String, Object> getPattern(int index) {
+        return graph.getPattern(index);
     }
 
     /**

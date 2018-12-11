@@ -1,5 +1,7 @@
 package com.antkorwin.springtestmongo.internal.expect;
 
+import java.util.Map;
+
 /**
  * Created on 09.12.2018.
  *
@@ -12,4 +14,8 @@ public interface Graph {
     int dataCount();
 
     int patternCount();
+
+    Map<String,Object> getDataRecord(int index);
+
+    Map<String,Object> getPattern(int index);
 }

@@ -40,6 +40,16 @@ public class ReachabilityGraph implements Graph {
         return graph.patternCount();
     }
 
+    @Override
+    public Map<String, Object> getDataRecord(int index) {
+        return graph.getDataRecord(index);
+    }
+
+    @Override
+    public Map<String, Object> getPattern(int index) {
+        return graph.getPattern(index);
+    }
+
     /**
      * Processing of one line in the graph.
      * Find unique matcher(applied only for one line(entity) in graph)
