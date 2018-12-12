@@ -2,10 +2,16 @@ package com.antkorwin.springtestmongo.junit5;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.antkorwin.springtestmongo.annotation.ExpectedMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;
-import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.Extension;
+import org.junit.jupiter.api.extension.ExtensionContext;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -67,8 +73,20 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
      */
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
+        expectedDataSet(context);
         exportDataSet(context);
         cleanAfter(context);
+    }
+
+    private void expectedDataSet(ExtensionContext context) {
+        ExpectedMongoDataSet expectedMongoDataSet = context.getRequiredTestMethod()
+                                                           .getAnnotation(ExpectedMongoDataSet.class);
+
+        if(expectedMongoDataSet == null) {
+            return;
+        }
+
+        new MongoDbTest(mongoTemplate).expect(expectedMongoDataSet.value());
     }
 
     private void cleanAfter(ExtensionContext context) {

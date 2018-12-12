@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.junit5;
+package com.antkorwin.springtestmongo.internal;
 
 import java.util.Date;
 
@@ -6,6 +6,8 @@ import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;
+import com.antkorwin.springtestmongo.junit5.EnableMongoDbTestContainers;
+import com.antkorwin.springtestmongo.junit5.MongoDbExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MongoDbExtension.class)
 @EnableMongoDbTestContainers
-class ExpectedMongoDataSetIT {
+class MongoDbTestExpectedIT {
 
     @Autowired
     private MongoTemplate mongoTemplate;
