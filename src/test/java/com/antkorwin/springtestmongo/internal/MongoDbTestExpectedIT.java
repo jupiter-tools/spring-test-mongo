@@ -1,21 +1,19 @@
 package com.antkorwin.springtestmongo.internal;
 
-import java.util.Date;
-
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
-import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import com.antkorwin.springtestmongo.junit5.EnableMongoDbTestContainers;
 import com.antkorwin.springtestmongo.junit5.MongoDbExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,6 +47,20 @@ class MongoDbTestExpectedIT {
 
     @Test
     @MongoDataSet(cleanAfter = true, cleanBefore = true)
+    void testExpectWithDifferentCountOfEntities() {
+        // Arrange
+        Bar bar1 = new Bar("111100001", "data-1");
+        mongoTemplate.save(bar1);
+        // Act
+        Error error = Assertions.assertThrows(Error.class, () -> {
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset.json");
+        });
+        assertThat(error.getMessage())
+                .contains("expected 2 but found 1 - com.antkorwin.springtestmongo.Bar entities");
+    }
+
+    @Test
+    @MongoDataSet(cleanAfter = true, cleanBefore = true)
     void testExpectWithNotSame() {
         // Arrange
         Bar bar1 = new Bar("111100001", "data-1");
@@ -66,10 +78,11 @@ class MongoDbTestExpectedIT {
 
     @Test
     @MongoDataSet(cleanAfter = true, cleanBefore = true)
-    void testWrongDataExpect() {
-        Assertions.assertThrows(Error.class, () -> {
+    void testWithEmptyDataBaseAndNotEmptyDataSet() {
+        Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset.json");
         });
+        assertThat(error.getMessage()).contains("Not equal document collections");
     }
 
     @Test
@@ -154,8 +167,13 @@ class MongoDbTestExpectedIT {
         mongoTemplate.save(bar1);
         mongoTemplate.save(bar2);
         // Act
-        Assertions.assertThrows(Error.class, () -> {
+        Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset_multiple.json");
         });
+
+        assertThat(error.getMessage()).contains("Not equal document collections")
+                                      .contains("expected:\n[com.antkorwin.springtestmongo.Bar]")
+                                      .contains("actual: \n[com.antkorwin.springtestmongo.Bar," +
+                                                " com.antkorwin.springtestmongo.Foo]");
     }
 }

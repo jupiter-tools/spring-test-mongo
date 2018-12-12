@@ -6,9 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created on 12.12.2018.
+ * You can use this annotation in tests
+ * to check a state of the mongodb after the test execution.
  *
- * TODO: replace on javadoc
+ * After test execution, all document collections will check
+ * to match to expected data set in the selected file.
  *
  * @author Korovin Anatoliy
  */
@@ -17,9 +19,9 @@ import java.lang.annotation.Target;
 public @interface ExpectedMongoDataSet {
 
     /**
-     * Path to the file with an expected data set after test execution
+     * Path to the file with an expected data set (after test execution)
      *
-     * @return path to expected data set file
+     * @return path to file with an expected data set
      */
     String value();
 }

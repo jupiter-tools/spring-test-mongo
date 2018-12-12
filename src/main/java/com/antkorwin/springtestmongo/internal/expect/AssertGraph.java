@@ -11,8 +11,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
+/**
+ * Evaluate the IndexedGraph and
+ * assert that all patterns applied to any data record.
+ */
 public class AssertGraph {
 
     private final IndexedGraph indexGraph;
@@ -29,8 +31,8 @@ public class AssertGraph {
         validateDataRecords(indexGraph.evaluateDataIndexes());
         validatePatterns(indexGraph.evaluatePatternIndexes());
         if (failed) {
-            throw new Error("\nExpectedDataSet of "+indexGraph.getDocumentName()+" \n\n" +
-                 errors.stream().collect(Collectors.joining("\n"))+"\n");
+            throw new Error("\nExpectedDataSet of " + indexGraph.getDocumentName() + " \n\n" +
+                            errors.stream().collect(Collectors.joining("\n")) + "\n");
         }
     }
 
@@ -53,11 +55,11 @@ public class AssertGraph {
         if (indexes.size() != indexGraph.patternCount()) {
 
             String notFoundPatterns = IntStream.range(0, indexGraph.patternCount())
-                                                  .boxed()
-                                                  .filter(i -> !indexes.contains(i))
-                                                  .map(indexGraph::getPattern)
-                                                  .map(this::mapToString)
-                                                  .collect(Collectors.joining("\n"));
+                                               .boxed()
+                                               .filter(i -> !indexes.contains(i))
+                                               .map(indexGraph::getPattern)
+                                               .map(this::mapToString)
+                                               .collect(Collectors.joining("\n"));
 
             error("Expected but not found: \n" + notFoundPatterns + "\n");
         }

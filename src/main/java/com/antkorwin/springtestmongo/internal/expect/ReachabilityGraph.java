@@ -8,6 +8,9 @@ import java.util.Map;
 /**
  * Created on 09.12.2018.
  *
+ * Remove from a graph all unreachable combination
+ * of objects matching.
+ *
  * @author Korovin Anatoliy
  */
 public class ReachabilityGraph implements Graph {

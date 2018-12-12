@@ -6,6 +6,10 @@ import java.util.Map;
 /**
  * Created on 09.12.2018.
  *
+ * Evaluate the graph of the object matching,
+ * try to match all data records to each pattern,
+ * and save this in the matrix.
+ *
  * @author Korovin Anatoliy
  */
 public class MatchGraph implements Graph {

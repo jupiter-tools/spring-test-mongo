@@ -6,7 +6,8 @@ import java.util.Map;
  * Created on 09.12.2018.
  *
  * Graph is a model to calculate the matching of data in
- * mongodb and patterns in provided data sets.
+ * mongodb and patterns in provided data sets, for one
+ * type of document collection.
  *
  * @author Korovin Anatoliy
  */

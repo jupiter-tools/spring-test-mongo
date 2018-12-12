@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 /**
  * Created on 10.12.2018.
  *
+ * Stub implementation of the {@link Graph} interface
+ *
  * @author Korovin Anatoliy
  */
 public class TestGraph implements Graph {

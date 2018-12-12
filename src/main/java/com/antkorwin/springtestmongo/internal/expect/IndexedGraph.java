@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Add in graph indexes of successful matched patterns
+ * and data records.
+ */
 public class IndexedGraph implements Graph {
 
     private final Graph graph;

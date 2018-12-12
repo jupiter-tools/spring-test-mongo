@@ -13,6 +13,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created on 09.12.2018.
  *
+ * Match two data sets, evaluate a combination of full matching.
+ *
+ * Each data record match at least to one pattern
+ * and each pattern applies at least to one data record.
+ *
  * @author Korovin Anatoliy
  */
 public class MatchDataSets {
@@ -56,7 +61,7 @@ public class MatchDataSets {
     private void assertDocumentsCountAreEquals(String documentName, List<Map<String, Object>> matched,
                                                List<Map<String, Object>> pattern) {
         assertThat(matched.size())
-                .describedAs("expected %d but found %d - %s entities.",
+                .describedAs("expected %d but found %d - %s entities",
                              pattern.size(), matched.size(), documentName)
                 .isEqualTo(pattern.size());
     }
@@ -65,7 +70,7 @@ public class MatchDataSets {
                                                    Set<String> documentNamesSecond) {
         Assertions.assertEquals(documentNamesFirst,
                                 documentNamesSecond,
-                                () -> String.format("Not equal document collections,\n expected: \n%s, \n actual:\n %s",
+                                () -> String.format("Not equal document collections:\n expected:\n[%s],\n actual: \n[%s]",
                                                     documentNamesFirst.stream().collect(Collectors.joining(", ")),
                                                     documentNamesSecond.stream().collect(Collectors.joining(", "))));
     }
