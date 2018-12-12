@@ -1,5 +1,7 @@
 package com.antkorwin.springtestmongo.junit5;
 
+import java.util.Date;
+
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
@@ -7,12 +9,13 @@ import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Date;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created on 08.12.2018.
@@ -51,9 +54,12 @@ class ExpectedMongoDataSetIT {
         mongoTemplate.save(bar1);
         mongoTemplate.save(bar2);
         // Act
-        Assertions.assertDoesNotThrow(() -> {
+        Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset.json");
         });
+        assertThat(error.getMessage()).contains("ExpectedDataSet of " + Bar.class.getCanonicalName())
+                                      .contains("Not expected: \n{\"id\":\"111100002\",\"data\":\"data-3\"}")
+                                      .contains("Expected but not found: \n{\"data\":\"data-2\"}");
     }
 
     @Test
@@ -92,16 +98,20 @@ class ExpectedMongoDataSetIT {
         Bar bar2 = new Bar("111100002", "data-2");
         mongoTemplate.save(bar1);
         mongoTemplate.save(bar2);
-        Foo foo1 = new Foo("F1", new Date(), 1);
-        Foo foo2 = new Foo("F2", new Date(), 3);
-        Foo foo3 = new Foo("F3", new Date(), 3);
+        Foo foo1 = new Foo("F1", new Date(12345001), 1);
+        Foo foo2 = new Foo("F2", new Date(12345002), 3);
+        Foo foo3 = new Foo("F3", new Date(12345003), 3);
         mongoTemplate.save(foo1);
         mongoTemplate.save(foo2);
         mongoTemplate.save(foo3);
         // Act
-        Assertions.assertDoesNotThrow(() -> {
+        Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset_multiple.json");
         });
+
+        assertThat(error.getMessage()).contains("ExpectedDataSet of " + Foo.class.getCanonicalName())
+                                      .contains("Not expected: \n{\"id\":\"F2\",\"time\":12345002,\"counter\":3}")
+                                      .contains("Expected but not found: \n{\"id\":\"F2\",\"counter\":2}");
     }
 
     @Test
@@ -125,9 +135,12 @@ class ExpectedMongoDataSetIT {
         mongoTemplate.save(foo4);
         mongoTemplate.save(foo5);
         // Act
-        Assertions.assertDoesNotThrow(() -> {
+        Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset_double_matching.json");
         });
+        System.out.println(error.getMessage());
+        assertThat(error.getMessage()).contains("ExpectedDataSet of " + Foo.class.getCanonicalName())
+                                      .contains("Expected but not found: \n{\"counter\":2}");
     }
 
     @Test

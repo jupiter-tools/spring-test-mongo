@@ -44,13 +44,13 @@ public class MatchDataSets {
 
         assertDocumentsCountAreEquals(documentName, matched, pattern);
 
-//        new ValidateGraph(new ReachabilityGraph(new MatchGraph(matched, pattern)));
-
-        new AssertGraph(new IndexedGraph(new ReachabilityGraph(new MatchGraph(documentName, matched, pattern)))).doAssert();
-
-//        boolean[][] matrix = new ReachabilityGraph(new MatchGraph(matched, pattern)).calculate();
-
-//        new Printer(new TestGraph(() -> matrix)).print();
+        new AssertGraph(
+                new IndexedGraph(
+                        new ReachabilityGraph(
+                                new MatchGraph(documentName, matched, pattern)
+                        )
+                )
+        ).doAssert();
     }
 
     private void assertDocumentsCountAreEquals(String documentName, List<Map<String, Object>> matched,
