@@ -2,6 +2,7 @@ package com.antkorwin.springtestmongo.junit4;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.antkorwin.springtestmongo.annotation.ExpectedMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;
@@ -88,8 +89,19 @@ public class MongoDbRule implements TestRule {
      * if it required by the {@link MongoDataSet} annotation.
      */
     private void afterInvocation(Description description) {
+        expectedDataSet(description);
         exportDataSet(description);
         cleanAfter(description);
+    }
+
+    private void expectedDataSet(Description description) {
+        ExpectedMongoDataSet expectedMongoDataSet = description.getAnnotation(ExpectedMongoDataSet.class);
+
+        if(expectedMongoDataSet == null) {
+            return;
+        }
+
+        new MongoDbTest(mongoTemplate).expect(expectedMongoDataSet.value());
     }
 
     private void exportDataSet(Description description) {

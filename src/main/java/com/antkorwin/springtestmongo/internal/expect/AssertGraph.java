@@ -29,7 +29,7 @@ public class AssertGraph {
         validateDataRecords(indexGraph.evaluateDataIndexes());
         validatePatterns(indexGraph.evaluatePatternIndexes());
         if (failed) {
-            fail("\nExpectedDataSet of "+indexGraph.getDocumentName()+" \n\n" +
+            throw new Error("\nExpectedDataSet of "+indexGraph.getDocumentName()+" \n\n" +
                  errors.stream().collect(Collectors.joining("\n"))+"\n");
         }
     }

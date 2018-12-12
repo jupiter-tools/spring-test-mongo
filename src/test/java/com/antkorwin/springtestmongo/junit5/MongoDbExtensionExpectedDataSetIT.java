@@ -6,8 +6,6 @@ import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
 import com.antkorwin.springtestmongo.annotation.ExpectedMongoDataSet;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
-import com.antkorwin.springtestmongo.internal.MongoDbTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +30,8 @@ import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.r
  *
  * @author Korovin Anatoliy
  */
+@Disabled("TODO: find a way to test extension which throws an exception.")
 class MongoDbExtensionExpectedDataSetIT {
-
 
     @Test
     void testExpected() {
@@ -104,7 +102,7 @@ class MongoDbExtensionExpectedDataSetIT {
         return listener.getSummary();
     }
 
-    @Disabled
+    @Disabled("TODO: find a way to test extension which throws an exception.")
     @SpringBootTest
     @ExtendWith(SpringExtension.class)
     @ExtendWith(MongoDbExtension.class)
