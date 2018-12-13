@@ -2,6 +2,7 @@ package com.antkorwin.springtestmongo.internal;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
 
@@ -20,15 +22,17 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEM
 class MongoDataExport implements DataSet {
 
     private final MongoTemplate mongoTemplate;
+    private final ObjectMapper objectMapper;
 
     MongoDataExport(MongoTemplate mongoTemplate) {
         Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
+        this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public Map<String, List<?>> read() {
-        Map<String, List<?>> map = new HashMap<>();
+    public Map<String, List<Map<String, Object>>> read() {
+        Map<String, List<Map<String, Object>>> map = new HashMap<>();
 
         for (String name : mongoTemplate.getCollectionNames()) {
             map.put(getEntityClassName(name), getDataSet(name));
@@ -37,7 +41,7 @@ class MongoDataExport implements DataSet {
         return map;
     }
 
-    private List<?> getDataSet(String collectionName) {
+    private List<Map<String, Object>> getDataSet(String collectionName) {
 
         Document first = mongoTemplate.getCollection(collectionName)
                                       .find(Document.class)
@@ -49,9 +53,14 @@ class MongoDataExport implements DataSet {
         try {
             String className = (String) first.get("_class");
             Class<?> aClass = Class.forName(className);
-            return mongoTemplate.findAll(aClass);
-        }
-        catch (ClassNotFoundException e) {
+
+            return mongoTemplate.findAll(aClass)
+                                .stream()
+                                .map(e -> objectMapper.convertValue(e, Map.class))
+                                .map(e -> (Map<String,Object>)e)
+                                .collect(Collectors.toList());
+
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
             throw new InternalException(e);
         }

@@ -2,6 +2,7 @@ package com.antkorwin.springtestmongo.internal;
 
 import com.antkorwin.springtestmongo.Bar;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 
 import java.util.Arrays;
@@ -30,9 +31,16 @@ class JsonExportTest {
     }
 
     private DataSet getDataSet() {
+
+        ObjectMapper mapper = new ObjectMapper();
+
         Bar bar1 = new Bar("111100001", "data-1");
         Bar bar2 = new Bar("111100002", "data-2");
-        Map<String, List<?>> map = ImmutableMap.of(Bar.class.getCanonicalName(), Arrays.asList(bar1, bar2));
+
+        Map<String, List<Map<String, Object>>> map =
+                ImmutableMap.of(Bar.class.getCanonicalName(),
+                                Arrays.asList(mapper.convertValue(bar1, Map.class),
+                                              mapper.convertValue(bar2, Map.class)));
         return () -> map;
     }
 

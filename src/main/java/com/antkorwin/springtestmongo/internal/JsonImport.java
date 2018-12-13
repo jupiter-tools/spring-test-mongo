@@ -28,12 +28,12 @@ class JsonImport implements DataSet {
     }
 
     @Override
-    public Map<String, List<?>> read() {
+    public Map<String, List<Map<String, Object>>> read() {
 
         String content = text.read();
         try {
-            return objectMapper.readValue(content, new TypeReference<Map<String, List<?>>>() {
-            });
+            return objectMapper.readValue(content,
+                                          new TypeReference<Map<String, List<Map<String, Object>>>>() {});
         } catch (IOException e) {
             e.printStackTrace();
             throw new InternalException(JSON_PARSING_ERROR, e);

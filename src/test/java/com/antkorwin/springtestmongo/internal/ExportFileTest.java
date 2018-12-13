@@ -1,15 +1,15 @@
 package com.antkorwin.springtestmongo.internal;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +32,7 @@ class ExportFileTest {
 
     @AfterEach
     void tearDown() {
-        new File(OUTPUT_FILE_NAME).delete();
+        System.out.println("DELETE: " + new File(OUTPUT_FILE_NAME).delete());
     }
 
     @Test
@@ -51,7 +51,8 @@ class ExportFileTest {
     }
 
     private String getResultFromFile() throws IOException {
-        InputStream inputStream = new FileInputStream(OUTPUT_FILE_NAME);
-        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        try (InputStream inputStream = new FileInputStream(OUTPUT_FILE_NAME);) {
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        }
     }
 }

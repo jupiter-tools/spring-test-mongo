@@ -1,0 +1,7 @@
+{
+  "com.antkorwin.springtestmongo.Bar" : [ {
+    "data" : "data-1"
+  }, {
+    "data" : "data-2"
+  } ]
+}

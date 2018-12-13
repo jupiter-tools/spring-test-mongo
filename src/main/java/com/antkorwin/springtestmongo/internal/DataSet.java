@@ -8,15 +8,15 @@ import java.util.Map;
  *
  * @author Korovin Anatoliy
  */
-interface DataSet {
+public interface DataSet {
 
     /**
      * Read the data set from some kind of source
      *
      * @return map with the data set,
      * map looks like this:
-     * "org.package....FirstDocument" : [FirstDocument doc1, FirstDocument doc2, FirstDocument doc3],
-     * "org.package....SecondDocument" : [SecondDocument Doc1, SecondDocument Doc2, SecondDocument Doc3]
+     * "org.package....FirstDocument" : [{"id":"1", "field":"aaa"}, {"id":"2", "field":"bbb"}],
+     * "org.package....SecondDocument" : [{"id":"1", "value":"123"}, {"id":"2", "value":"456"}]
      */
-    Map<String, List<?>> read();
+    Map<String, List<Map<String, Object>>> read();
 }

@@ -2,6 +2,8 @@ package com.antkorwin.springtestmongo.internal;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.antkorwin.springtestmongo.internal.expect.MatchDataSets;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY;
@@ -37,5 +39,17 @@ public class MongoDbTest {
      */
     public void importFrom(String fileName) {
         new MongoDataImport(mongoTemplate).importFrom(new JsonImport(new ImportFile(fileName)));
+    }
+
+    /**
+     * Check data in the mongodb,
+     * try to match data from the DB to loaded from file data set.
+     *
+     * @param fileName path to file with an expected data set
+     */
+    public void expect(String fileName) {
+        DataSet dataSet = new JsonImport(new ImportFile(fileName));
+        DataSet mongoData = new MongoDataExport(mongoTemplate);
+        new MatchDataSets(mongoData, dataSet).check();
     }
 }

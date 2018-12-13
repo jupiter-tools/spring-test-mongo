@@ -1,5 +1,12 @@
 package com.antkorwin.springtestmongo.junit4;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
 import com.antkorwin.springtestmongo.annotation.ExportMongoDataSet;
 import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.apache.commons.io.FileUtils;
@@ -7,13 +14,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.ExternalResource;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -42,23 +42,23 @@ public class MongoDbRuleExportDataSetIT extends BaseMongoIT {
 
         @Override
         protected void after() {
-            try {
-                FileInputStream inputStream = FileUtils.openInputStream(new File(OUTPUT_FILE_NAME));
+            try (FileInputStream inputStream = FileUtils.openInputStream(new File(OUTPUT_FILE_NAME))) {
                 String stringDataSet = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
                 System.out.println(stringDataSet);
                 assertThat(stringDataSet).isNotNull()
                                          .isEqualTo(getExpectedJson());
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
                 fail(e.getMessage());
             }
         }
 
         private String getExpectedJson() throws IOException {
-            final InputStream inputStream =
-                    MongoDbRuleExportDataSetIT.class.getClass().getResourceAsStream(INPUT_DATA_SET_FILE);
-
-            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            try (InputStream inputStream = MongoDbRuleExportDataSetIT.class.getClass()
+                                                                           .getResourceAsStream(INPUT_DATA_SET_FILE)) {
+                return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+            }
         }
     };
 

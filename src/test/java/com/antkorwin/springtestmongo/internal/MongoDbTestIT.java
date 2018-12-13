@@ -73,13 +73,15 @@ class MongoDbTestIT {
     }
 
     private String getExpectedResult() throws IOException {
-        InputStream inputStream = MongoDbTestIT.class.getResourceAsStream("/dataset/internal/json_expected.json");
-        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        try (InputStream inputStream = MongoDbTestIT.class.getResourceAsStream("/dataset/internal/json_expected.json")) {
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        }
     }
 
     private String getResultFromFile(String fileName) throws IOException {
-        InputStream inputStream = new FileInputStream(fileName);
-        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        try (InputStream inputStream = new FileInputStream(fileName)) {
+            return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        }
     }
 
 }
