@@ -6,10 +6,12 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import com.antkorwin.springtestmongo.Bar;
+import com.antkorwin.springtestmongo.FooBar;
 import com.antkorwin.springtestmongo.junit5.EnableMongoDbTestContainers;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,6 +72,16 @@ class MongoDbTestIT {
         // Asserts
         String result = getResultFromFile("./target/export.json");
         assertThat(result).isEqualTo(getExpectedResult());
+    }
+
+    @Test
+    void expectedTest() {
+        // Arrange
+        mongoTemplate.save(new FooBar("1FB", "DATA", new Bar("1B", "B")));
+        // Act & Assert
+        Assertions.assertDoesNotThrow(() -> {
+            mongoDbTest.expect("/dataset/internal/expect_nested.json");
+        });
     }
 
     private String getExpectedResult() throws IOException {
