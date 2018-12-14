@@ -73,7 +73,7 @@ class MongoDbTestIT {
     }
 
     private String getExpectedResult() throws IOException {
-        try (InputStream inputStream = MongoDbTestIT.class.getResourceAsStream("/dataset/internal/json_expected.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/dataset/internal/json_expected.json")) {
             return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         }
     }

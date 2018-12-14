@@ -20,4 +20,24 @@ class ImportFileTest {
         // Asserts
         assertThat(text).isEqualTo("secret-123");
     }
+
+    @Test
+    void readWithoutSlashInPath() {
+        // Arrange
+        Text fileText = new ImportFile("dataset/internal/test_file.txt");
+        // Act
+        String text = fileText.read();
+        // Asserts
+        assertThat(text).isEqualTo("secret-123");
+    }
+
+    @Test
+    void readWithoutDataSetInPath() {
+        // Arrange
+        Text fileText = new ImportFile("internal/test_file.txt");
+        // Act
+        String text = fileText.read();
+        // Asserts
+        assertThat(text).isEqualTo("secret-123");
+    }
 }
