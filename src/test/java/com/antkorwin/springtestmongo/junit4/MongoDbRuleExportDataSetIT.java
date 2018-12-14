@@ -55,8 +55,7 @@ public class MongoDbRuleExportDataSetIT extends BaseMongoIT {
         }
 
         private String getExpectedJson() throws IOException {
-            try (InputStream inputStream = MongoDbRuleExportDataSetIT.class.getClass()
-                                                                           .getResourceAsStream(INPUT_DATA_SET_FILE)) {
+            try (InputStream inputStream = getClass().getResourceAsStream(INPUT_DATA_SET_FILE)) {
                 return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
             }
         }
