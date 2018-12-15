@@ -6,6 +6,7 @@ import com.antkorwin.springtestmongo.annotation.MongoDataSet;
 import com.antkorwin.springtestmongo.junit5.EnableMongoDbTestContainers;
 import com.antkorwin.springtestmongo.junit5.MongoDbExtension;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -175,5 +177,47 @@ class MongoDbTestExpectedIT {
                                       .contains("expected:\n[com.antkorwin.springtestmongo.Bar]")
                                       .contains("actual: \n[com.antkorwin.springtestmongo.Bar," +
                                                 " com.antkorwin.springtestmongo.Foo]");
+    }
+
+
+    @Nested
+    @SpringBootTest
+    @ExtendWith(SpringExtension.class)
+    @ExtendWith(MongoDbExtension.class)
+    @EnableMongoDbTestContainers
+    class RegexTests {
+
+        @Autowired
+        private MongoTemplate mongoTemplate;
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void foundMatch() {
+            // Arrange
+            Bar bar1 = new Bar(UUID.randomUUID().toString(), "data-1");
+            mongoTemplate.save(bar1);
+            // Act
+            Assertions.assertDoesNotThrow(() -> {
+                new MongoDbTest(mongoTemplate).expect("/dataset/internal/expect/regex_test.json");
+            });
+        }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void notFoundMatch() {
+            // Arrange
+            Bar bar1 = new Bar("12345", "data-1");
+            mongoTemplate.save(bar1);
+            // Act
+            Error error = Assertions.assertThrows(Error.class, () -> {
+                new MongoDbTest(mongoTemplate).expect("/dataset/internal/expect/regex_test.json");
+            });
+
+            assertThat(error.getMessage()).contains("ExpectedDataSet of com.antkorwin.springtestmongo.Bar")
+            .contains("Not expected: \n" +
+                      "{\"id\":\"12345\",\"data\":\"data-1\"}")
+            .contains("Expected but not found: \n" +
+                      "{\"id\":\"regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}\",\"data\":\"data-1\"}");
+        }
     }
 }
