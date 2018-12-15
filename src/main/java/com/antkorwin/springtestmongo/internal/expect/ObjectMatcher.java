@@ -25,20 +25,35 @@ public class ObjectMatcher {
 
         Map<String, Object> comparableMap = convertToMap(comparable);
 
-        for (String field : comparableMap.keySet()) {
+        for (Map.Entry<String, Object> comparableEntry : comparableMap.entrySet()) {
 
-            Object originField = original.get(field);
+            String cmpKey = comparableEntry.getKey();
+            Object cmpValue = comparableEntry.getValue();
+            Object originValue = original.get(cmpKey);
 
-            if (originField == null && comparableMap.get(field) != null) {
+            // Check cases with a null-value
+            if (cmpValue == null) {
+                continue;
+            }
+            if (originValue == null) {
                 return false;
             }
-            if (complexityDataTypes.isComplexType(originField)) {
-                boolean result = new ObjectMatcher(originField).match(comparableMap.get(field));
-                if (!result) return false;
-            } else {
-                if (!comparableMap.get(field).equals(originField)) return false;
+
+            // Check the nested object (field by field)
+            if (complexityDataTypes.isComplexType(originValue)) {
+                if (!new ObjectMatcher(originValue).match(cmpValue)) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+
+            // Check equals of values
+            if (!originValue.equals(cmpValue)) {
+                return false;
             }
         }
+
         return true;
     }
 

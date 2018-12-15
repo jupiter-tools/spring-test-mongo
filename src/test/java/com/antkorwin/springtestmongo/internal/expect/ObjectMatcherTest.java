@@ -1,11 +1,12 @@
 package com.antkorwin.springtestmongo.internal.expect;
 
-import java.util.Map;
-
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.FooBar;
+import com.antkorwin.springtestmongo.internal.TestData;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -184,5 +185,17 @@ class ObjectMatcherTest {
         ObjectMatcher matcher = new ObjectMatcher(bar1);
         // Asserts
         assertThat(matcher.match(bar2)).isFalse();
+    }
+
+    @Test
+    void matchWithNullable() {
+
+        Map<String, Object> first =
+                new TestData().read("/dataset/internal/expect/match_objects.json").get("test").get(0);
+
+        Map<String, Object> second =
+                new TestData().read("/dataset/internal/expect/match_objects.json").get("test").get(1);
+
+        assertThat(new ObjectMatcher(first).match(second)).isTrue();
     }
 }
