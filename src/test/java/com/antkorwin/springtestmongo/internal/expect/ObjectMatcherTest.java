@@ -3,10 +3,12 @@ package com.antkorwin.springtestmongo.internal.expect;
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.FooBar;
 import com.antkorwin.springtestmongo.internal.TestData;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -197,5 +199,33 @@ class ObjectMatcherTest {
                 new TestData().read("/dataset/internal/expect/match_objects.json").get("test").get(1);
 
         assertThat(new ObjectMatcher(first).match(second)).isTrue();
+    }
+
+    @Nested
+    class RegexTests {
+
+        @Test
+        void simpleRegularExpression() {
+            // Arrange
+            Bar original = new Bar("1", "data-101");
+            Map<String, Object> same = ImmutableMap.of("id", "1",
+                                                       "data", "regex: ^data-...$");
+            // Act
+            ObjectMatcher matcher = new ObjectMatcher(original);
+            // Asserts
+            assertThat(matcher.match(same)).isTrue();
+        }
+
+        @Test
+        void uuidRegularExpression() {
+            // Arrange
+            Bar original = new Bar(UUID.randomUUID().toString(), "data-101");
+            Map<String, Object> same = ImmutableMap.of("id", "regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}",
+                                                       "data", "regex: ^data-...$");
+            // Act
+            ObjectMatcher matcher = new ObjectMatcher(original);
+            // Asserts
+            assertThat(matcher.match(same)).isTrue();
+        }
     }
 }
