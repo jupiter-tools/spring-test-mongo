@@ -32,7 +32,10 @@ class ComplexityDataTypesTest {
                          Arguments.of(new Float(0.123)),
                          Arguments.of(new Double(0.1234567)),
                          Arguments.of("test string"),
-                         Arguments.of(ElementType.METHOD));
+                         Arguments.of(ElementType.METHOD),
+                         Arguments.of(123),
+                         Arguments.of(true)
+                         );
     }
 
     private static Stream<Arguments> complexTypes() {

@@ -31,6 +31,8 @@ class ComplexityDataTypes {
      */
     boolean isComplexType(Object object) {
         Class<?> type = object.getClass();
-        return !type.isPrimitive() && !type.isEnum() && !simpleTypes.contains(type);
+        return !type.isPrimitive() &&
+               !type.isEnum() &&
+               !simpleTypes.contains(type);
     }
 }
