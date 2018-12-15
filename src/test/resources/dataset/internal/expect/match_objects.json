@@ -1,0 +1,29 @@
+{
+  "test": [
+    {
+      "simpleSameBefore": "1F",
+      "nullInSecond": "DATA",
+      "nullInOrigin": null,
+      "nestedSameByAllFields": {
+        "id": "1B",
+        "data": "B"
+      },
+      "simpleSameAfter": "123",
+      "nestedSameByOneField": {
+        "data": "C"
+      }
+    },
+    {
+      "simpleSameBefore": "1F",
+      "nullInSecond": null,
+      "nestedSameByAllFields": {
+        "id": "1B",
+        "data": "B"
+      },
+      "simpleSameAfter": "123",
+      "nestedSameByOneField": {
+        "data": "C"
+      }
+    }
+  ]
+}

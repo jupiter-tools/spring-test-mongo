@@ -1,0 +1,9 @@
+{
+  "com.antkorwin.springtestmongo.FooBar" : [ {
+    "id": "1FB",
+    "data" : "DATA",
+    "bar": {
+      "data":"B"
+    }
+  }]
+}
