@@ -80,6 +80,17 @@ class ObjectMatcherTest {
             // Asserts
             assertThat(matcher.match(same)).isFalse();
         }
+
+        @Test
+        void matchWithDifferentTypesOfField() {
+            // Arrange
+            Bar original = new Bar("1", "1100");
+            Map<String, Object> notSame = ImmutableMap.of("data", 1100);
+            // Act
+            ObjectMatcher matcher = new ObjectMatcher(original);
+            // Asserts
+            assertThat(matcher.match(notSame)).isFalse();
+        }
     }
 
     @Nested
@@ -214,7 +225,7 @@ class ObjectMatcherTest {
         @Test
         void uuidRegularExpression() {
             // Arrange
-            String UUID_REGEXP= "regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}";
+            String UUID_REGEXP = "regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}";
 
             Bar original = new Bar(UUID.randomUUID().toString(), "data-101");
             Map<String, Object> same = ImmutableMap.of("id", UUID_REGEXP,
@@ -228,7 +239,7 @@ class ObjectMatcherTest {
         @Test
         void uuidRegularExpressionNotMatch() {
             // Arrange
-            String UUID_REGEXP= "regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}";
+            String UUID_REGEXP = "regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}";
 
             Bar original = new Bar("123", "data-101");
             Map<String, Object> same = ImmutableMap.of("id", UUID_REGEXP,

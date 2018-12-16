@@ -1,6 +1,9 @@
 package com.antkorwin.springtestmongo.internal.expect.matcher;
 
 
+/**
+ * Match two objects of simple types.
+ */
 class SimpleMatcher implements ValueMatcher {
 
     @Override

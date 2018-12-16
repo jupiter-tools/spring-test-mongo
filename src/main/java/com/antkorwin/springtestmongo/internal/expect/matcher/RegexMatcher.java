@@ -4,6 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * Match two objects with using a regular expression in the expected value.
+ */
 public class RegexMatcher implements ValueMatcher {
 
     @Override

@@ -1,7 +1,9 @@
 package com.antkorwin.springtestmongo.internal.expect.matcher;
 
 
-
+/**
+ * Factory for obtaining a {@link ValueMatcher} to match the given value
+ */
 public class MatcherFactory {
 
     private final RegexMatcher regexMatcher;
@@ -12,6 +14,13 @@ public class MatcherFactory {
         simpleMatcher = new SimpleMatcher();
     }
 
+    /**
+     * get matcher by the value of expected object
+     *
+     * @param value the value of expected object
+     *
+     * @return matcher for this value
+     */
     public ValueMatcher getMatcher(Object value) {
         if (regexMatcher.isNecessary(value)) {
             return regexMatcher;
