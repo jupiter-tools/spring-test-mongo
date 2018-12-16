@@ -12,9 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created on 09.12.2018.
- *
+ * <p>
  * Match two data sets, evaluate a combination of full matching.
- *
+ * <p>
  * Each data record match at least to one pattern
  * and each pattern applies at least to one data record.
  *

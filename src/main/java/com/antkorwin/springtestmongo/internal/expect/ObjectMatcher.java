@@ -1,8 +1,11 @@
 package com.antkorwin.springtestmongo.internal.expect;
 
+import com.antkorwin.springtestmongo.internal.expect.matcher.MatcherFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created on 08.12.2018.
@@ -36,6 +39,8 @@ public class ObjectMatcher {
 
         Map<String, Object> comparableMap = convertToMap(comparable);
 
+        MatcherFactory matcherFactory = new MatcherFactory();
+
         for (Map.Entry<String, Object> comparableEntry : comparableMap.entrySet()) {
 
             String cmpKey = comparableEntry.getKey();
@@ -59,10 +64,14 @@ public class ObjectMatcher {
                 }
             }
 
-            // Check equals of values
-            if (!originValue.equals(cmpValue)) {
+            if (!originValue.getClass().equals(cmpValue.getClass())) {
                 return false;
             }
+
+            boolean match = matcherFactory.getMatcher(cmpValue)
+                                          .match(originValue, cmpValue);
+
+            if(!match) return false;
         }
 
         return true;
@@ -71,4 +80,5 @@ public class ObjectMatcher {
     private Map<String, Object> convertToMap(Object object) {
         return objectMapper.convertValue(object, Map.class);
     }
+
 }
