@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 /**
  * Match two objects with using a regular expression in the expected value.
+ *
+ * @author Korovin Anatoliy
  */
 public class RegexMatcher implements ValueMatcher {
 

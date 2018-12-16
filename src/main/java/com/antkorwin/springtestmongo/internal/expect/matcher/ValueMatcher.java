@@ -3,6 +3,8 @@ package com.antkorwin.springtestmongo.internal.expect.matcher;
 
 /**
  * Algorithm to match two objects and check equals.
+ *
+ * @author Korovin Anatoliy
  */
 public interface ValueMatcher {
 

@@ -3,6 +3,8 @@ package com.antkorwin.springtestmongo.internal.expect.matcher;
 
 /**
  * Match two objects of simple types.
+ *
+ * @author Korovin Anatoliy
  */
 class SimpleMatcher implements ValueMatcher {
 

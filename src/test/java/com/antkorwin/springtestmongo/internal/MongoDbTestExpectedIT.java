@@ -219,5 +219,21 @@ class MongoDbTestExpectedIT {
             .contains("Expected but not found: \n" +
                       "{\"id\":\"regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}\",\"data\":\"data-1\"}");
         }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void multipleRegexp() {
+            // Arrange
+            Bar bar1 = new Bar("1", "data-1");
+            Bar bar2 = new Bar("2", "data-2");
+            Bar bar3 = new Bar("3", "data-3");
+            Bar bar4 = new Bar("4", "data-4");
+            mongoTemplate.save(bar1);
+            mongoTemplate.save(bar2);
+            mongoTemplate.save(bar3);
+            mongoTemplate.save(bar4);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/expect/multiple_regex.json");
+        }
     }
 }

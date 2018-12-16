@@ -3,6 +3,8 @@ package com.antkorwin.springtestmongo.internal.expect.matcher;
 
 /**
  * Factory for obtaining a {@link ValueMatcher} to match the given value
+ *
+ * @author Korovin Anatoliy
  */
 public class MatcherFactory {
 
