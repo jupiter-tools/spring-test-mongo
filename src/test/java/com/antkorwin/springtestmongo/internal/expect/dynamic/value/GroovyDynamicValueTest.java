@@ -44,6 +44,16 @@ class GroovyDynamicValueTest {
     }
 
     @Test
+    void notNecessaryWrongType() {
+        // Arrange
+        GroovyDynamicValue groovyDynamicValue = new GroovyDynamicValue();
+        // Act
+        boolean result = groovyDynamicValue.isNecessary(12345);
+        // Asserts
+        Assertions.assertFalse(result);
+    }
+
+    @Test
     void evaluateSum() {
         // Arrange
         GroovyDynamicValue groovyDynamicValue = new GroovyDynamicValue();
