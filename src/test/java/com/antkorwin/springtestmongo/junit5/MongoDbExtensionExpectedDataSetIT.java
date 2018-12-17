@@ -26,8 +26,6 @@ import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.r
 /**
  * Created on 12.12.2018.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @Disabled("TODO: find a way to test extension which throws an exception.")

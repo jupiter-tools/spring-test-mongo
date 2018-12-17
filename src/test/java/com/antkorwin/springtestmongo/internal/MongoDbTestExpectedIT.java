@@ -236,4 +236,24 @@ class MongoDbTestExpectedIT {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expect/multiple_regex.json");
         }
     }
+
+    @Nested
+    @SpringBootTest
+    @ExtendWith(SpringExtension.class)
+    @ExtendWith(MongoDbExtension.class)
+    @EnableMongoDbTestContainers
+    class DynamicDataGroovyTest {
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void expectGroovy() {
+            // Arrange
+            Bar bar1 = new Bar("1", "3");
+            Bar bar2 = new Bar("2", "55");
+            mongoTemplate.save(bar1);
+            mongoTemplate.save(bar2);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/expect_with_groovy.json");
+        }
+    }
 }

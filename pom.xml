@@ -111,6 +111,15 @@
             <version>1.2</version>
         </dependency>
 
+        <!-- Groovy -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.4.6</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Groovy -->
+
     </dependencies>
 
     <profiles>

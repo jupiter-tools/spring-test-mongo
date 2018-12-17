@@ -29,8 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created on 03.12.2018.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @SpringBootTest

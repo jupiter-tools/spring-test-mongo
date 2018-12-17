@@ -1,0 +1,9 @@
+{
+  "test": [
+    {
+      "groovy": "groovy: (1..10).sum()",
+      "simple": "fixme: 123",
+      "random": "rnd: 100"
+    }
+  ]
+}

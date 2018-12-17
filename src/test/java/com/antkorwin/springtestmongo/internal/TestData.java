@@ -10,7 +10,11 @@ import java.util.Map;
  */
 public class TestData {
 
-    public Map<String, List<Map<String, Object>>> read(String fileName){
+    public Map<String, List<Map<String, Object>>> read(String fileName) {
         return new JsonImport(new ImportFile(fileName)).read();
+    }
+
+    public DataSet jsonDataSet(String fileName) {
+        return new JsonImport(new ImportFile(fileName));
     }
 }
