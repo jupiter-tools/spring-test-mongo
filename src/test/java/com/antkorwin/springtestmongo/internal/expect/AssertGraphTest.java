@@ -10,8 +10,6 @@ import java.util.Map;
 
 /**
  * Created on 10.12.2018.
- * <p>
- * TODO: replace on javadoc
  *
  * @author Korovin Anatoliy
  */

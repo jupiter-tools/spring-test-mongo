@@ -1,0 +1,9 @@
+{
+  "test": [
+    {
+      "date": "groovy: new Date().getTime()",
+      "2by4":"groovy: 2*4",
+      "sum":"groovy: (1..10).sum()"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "test": [
+    {
+      "first": "fixme:1",
+      "nested": {
+        "second": "fixme:2",
+        "nested": {
+          "third": "fixme:3"
+        }
+      }
+    }
+  ]
+}

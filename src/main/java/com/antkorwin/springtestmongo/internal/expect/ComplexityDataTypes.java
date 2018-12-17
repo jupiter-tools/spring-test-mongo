@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Check complexity of the object
  */
-class ComplexityDataTypes {
+public class ComplexityDataTypes {
 
     private final Set<Class> simpleTypes =
             Sets.newHashSet(Boolean.class,
@@ -29,7 +29,7 @@ class ComplexityDataTypes {
      * @return true if the object type is a simple and
      * false when this object will convert to a map before comparing.
      */
-    boolean isComplexType(Object object) {
+    public boolean isComplexType(Object object) {
         Class<?> type = object.getClass();
         return !type.isPrimitive() &&
                !type.isEnum() &&

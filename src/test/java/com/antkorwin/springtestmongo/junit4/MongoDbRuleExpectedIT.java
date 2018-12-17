@@ -15,8 +15,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 /**
  * Created on 12.12.2018.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 @Ignore("TODO: find a way to test JUnit4 rules which throws an exception.")

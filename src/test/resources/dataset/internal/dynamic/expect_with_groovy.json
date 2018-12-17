@@ -1,0 +1,12 @@
+{
+  "com.antkorwin.springtestmongo.Bar": [
+    {
+      "id": "1",
+      "data": "groovy: (1+2).toString()"
+    },
+    {
+      "id": "2",
+      "data": "groovy: (1..10).sum().toString()"
+    }
+  ]
+}

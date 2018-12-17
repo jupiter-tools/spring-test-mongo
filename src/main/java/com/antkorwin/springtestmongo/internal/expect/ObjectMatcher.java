@@ -4,8 +4,6 @@ import com.antkorwin.springtestmongo.internal.expect.matcher.MatcherFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created on 08.12.2018.
@@ -64,17 +62,21 @@ public class ObjectMatcher {
                 }
             }
 
-            if (!originValue.getClass().equals(cmpValue.getClass())) {
+            if (!isSameType(cmpValue, originValue)) {
                 return false;
             }
 
             boolean match = matcherFactory.getMatcher(cmpValue)
                                           .match(originValue, cmpValue);
 
-            if(!match) return false;
+            if (!match) return false;
         }
 
         return true;
+    }
+
+    private boolean isSameType(Object cmpValue, Object originValue) {
+        return originValue.getClass().equals(cmpValue.getClass());
     }
 
     private Map<String, Object> convertToMap(Object object) {
