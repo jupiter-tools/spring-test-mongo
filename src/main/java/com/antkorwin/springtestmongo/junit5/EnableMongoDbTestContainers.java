@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Created on 02.12.2018.
@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Tag("antkorwin-mongodb-testcontainers")
-@ContextConfiguration
 @ExtendWith(MongoDbTcExtension.class)
+@ActiveProfiles("antkorwin-mongodb-testcontainers")
 public @interface EnableMongoDbTestContainers {
 }
