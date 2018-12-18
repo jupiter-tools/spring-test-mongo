@@ -1,11 +1,13 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.exportdata;
+
+import com.antkorwin.springtestmongo.internal.DataSet;
 
 /**
  * Export data from MongoDb --> {@link DataSet}
  *
  * @author Korovin Anatoliy
  */
-interface DataSetExport {
+public interface DataSetExport {
 
     /**
      * export data set from MongoDb to the {@link DataSet} instance

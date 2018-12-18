@@ -1,6 +1,10 @@
 package com.antkorwin.springtestmongo.internal.expect;
 
 import com.antkorwin.springtestmongo.internal.DataSet;
+import com.antkorwin.springtestmongo.internal.expect.graph.AssertGraph;
+import com.antkorwin.springtestmongo.internal.expect.graph.IndexedGraph;
+import com.antkorwin.springtestmongo.internal.expect.graph.MatchGraph;
+import com.antkorwin.springtestmongo.internal.expect.graph.ReachabilityGraph;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.List;

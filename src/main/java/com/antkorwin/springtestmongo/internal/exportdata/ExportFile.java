@@ -1,6 +1,7 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.exportdata;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
+import com.antkorwin.springtestmongo.internal.Text;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,11 +13,11 @@ import java.nio.file.Paths;
  *
  * @author Korovin Anatoliy
  */
-class ExportFile {
+public class ExportFile {
 
     private final Text text;
 
-    ExportFile(Text text) {
+    public ExportFile(Text text) {
         this.text = text;
     }
 

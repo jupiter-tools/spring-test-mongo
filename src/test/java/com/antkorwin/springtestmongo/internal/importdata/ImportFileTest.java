@@ -1,5 +1,7 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.importdata;
 
+import com.antkorwin.springtestmongo.internal.Text;
+import com.antkorwin.springtestmongo.internal.importdata.ImportFile;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

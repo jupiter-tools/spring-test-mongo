@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.exportdata;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import com.antkorwin.springtestmongo.internal.Text;
+import com.antkorwin.springtestmongo.internal.exportdata.ExportFile;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

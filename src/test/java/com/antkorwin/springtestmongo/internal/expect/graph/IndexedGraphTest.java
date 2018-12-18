@@ -1,5 +1,7 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
+import com.antkorwin.springtestmongo.internal.expect.graph.IndexedGraph;
+import com.antkorwin.springtestmongo.internal.expect.graph.TestGraph;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

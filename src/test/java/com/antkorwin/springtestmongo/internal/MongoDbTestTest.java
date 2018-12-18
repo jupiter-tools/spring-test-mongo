@@ -5,7 +5,6 @@ import com.antkorwin.commonutils.validation.GuardCheck;
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
 import com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo;
-import com.antkorwin.springtestmongo.internal.MongoDbTest;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;

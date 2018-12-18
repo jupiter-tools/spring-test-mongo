@@ -1,5 +1,7 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
+import com.antkorwin.springtestmongo.internal.expect.graph.Graph;
+import com.antkorwin.springtestmongo.internal.expect.graph.Printer;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.Arrays;

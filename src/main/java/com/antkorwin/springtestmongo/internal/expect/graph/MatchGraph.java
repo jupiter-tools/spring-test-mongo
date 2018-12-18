@@ -1,7 +1,9 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
 import java.util.List;
 import java.util.Map;
+
+import com.antkorwin.springtestmongo.internal.expect.ObjectMatcher;
 
 /**
  * Created on 09.12.2018.

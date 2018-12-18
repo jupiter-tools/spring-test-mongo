@@ -1,5 +1,6 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.importdata;
 
+import com.antkorwin.springtestmongo.internal.importdata.JsonImport;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

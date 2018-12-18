@@ -1,7 +1,8 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.exportdata;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.antkorwin.springtestmongo.internal.DataSet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,12 +20,12 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.MONGO_TEM
  *
  * @author Korovin Anatoliy
  */
-class MongoDataExport implements DataSet {
+public class MongoDataExport implements DataSet {
 
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
 
-    MongoDataExport(MongoTemplate mongoTemplate) {
+    public MongoDataExport(MongoTemplate mongoTemplate) {
         Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
         this.objectMapper = new ObjectMapper();

@@ -1,7 +1,8 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.importdata;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.antkorwin.springtestmongo.internal.DataSet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.LoggerFactory;
@@ -17,12 +18,12 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.*;
  *
  * @author Korovin Anatoliy
  */
-class MongoDataImport implements DataSetImport {
+public class MongoDataImport implements DataSetImport {
 
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
 
-    MongoDataImport(MongoTemplate mongoTemplate) {
+    public MongoDataImport(MongoTemplate mongoTemplate) {
         Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
         this.objectMapper = new ObjectMapper();

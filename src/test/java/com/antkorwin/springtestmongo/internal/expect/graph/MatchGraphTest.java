@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;

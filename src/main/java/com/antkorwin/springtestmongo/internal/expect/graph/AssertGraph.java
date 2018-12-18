@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.fasterxml.jackson.core.JsonProcessingException;

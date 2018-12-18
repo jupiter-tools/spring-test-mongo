@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
 /**
  * Created on 09.12.2018.

@@ -1,5 +1,8 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
+import com.antkorwin.springtestmongo.internal.expect.graph.AssertGraph;
+import com.antkorwin.springtestmongo.internal.expect.graph.Printer;
+import com.antkorwin.springtestmongo.internal.expect.graph.TestGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;

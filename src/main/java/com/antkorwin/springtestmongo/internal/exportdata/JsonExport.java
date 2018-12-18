@@ -1,6 +1,8 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.exportdata;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
+import com.antkorwin.springtestmongo.internal.DataSet;
+import com.antkorwin.springtestmongo.internal.Text;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -10,12 +12,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  *
  * @author Korovin Anatoliy
  */
-class JsonExport implements Text {
+public class JsonExport implements Text {
 
     private final DataSet dataSet;
     private final ObjectMapper objectMapper;
 
-    JsonExport(DataSet dataSet) {
+    public JsonExport(DataSet dataSet) {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         this.dataSet = dataSet;

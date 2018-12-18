@@ -1,7 +1,8 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.exportdata;
 
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
+import com.antkorwin.springtestmongo.internal.exportdata.MongoDataExport;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.assertj.core.groups.Tuple;

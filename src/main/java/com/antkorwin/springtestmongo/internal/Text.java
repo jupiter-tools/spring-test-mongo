@@ -6,7 +6,7 @@ package com.antkorwin.springtestmongo.internal;
  *
  * @author Korovin Anatoliy
  */
-interface Text {
+public interface Text {
 
     /**
      * read text data

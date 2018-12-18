@@ -1,11 +1,13 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.importdata;
+
+import com.antkorwin.springtestmongo.internal.DataSet;
 
 /**
  * Import data to MongoDb from {@link DataSet}
  *
  * @author Korovin Anatoliy
  */
-interface DataSetImport {
+public interface DataSetImport {
 
     /**
      * Import {@link DataSet} to the MongoDb

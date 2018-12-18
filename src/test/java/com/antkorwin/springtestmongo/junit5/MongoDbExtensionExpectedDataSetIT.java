@@ -29,6 +29,7 @@ import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.r
  * @author Korovin Anatoliy
  */
 @Disabled("TODO: find a way to test extension which throws an exception.")
+// To run this tests remove disabled from parent and child classes
 class MongoDbExtensionExpectedDataSetIT {
 
     @Test

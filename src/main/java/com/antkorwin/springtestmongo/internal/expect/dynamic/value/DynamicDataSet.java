@@ -54,8 +54,13 @@ public class DynamicDataSet implements DataSet {
                     }
                 }
             } else {
-                Map<String, Object> map = this.objectMapper.convertValue(value, Map.class);
-                applyReplacerToMap(map);
+                if(value instanceof Map) {
+                    Map<String, Object> map = this.objectMapper.convertValue(value, Map.class);
+                    applyReplacerToMap(map);
+                } else {
+                    List<Map<String, Object>> list = this.objectMapper.convertValue(value, List.class);
+                    list.forEach(this::applyReplacerToMap);
+                }
             }
         }
     }

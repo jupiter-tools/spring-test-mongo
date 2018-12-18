@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.graph;
 
 import java.util.ArrayList;
 import java.util.List;

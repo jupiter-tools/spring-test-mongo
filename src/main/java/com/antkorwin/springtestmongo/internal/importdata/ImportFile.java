@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.internal;
+package com.antkorwin.springtestmongo.internal.importdata;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.antkorwin.springtestmongo.internal.Text;
 import org.apache.commons.io.IOUtils;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.FILE_NOT_FOUND;
@@ -16,11 +17,11 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.READ_DATA
  *
  * @author Korovin Anatoliy
  */
-class ImportFile implements Text {
+public class ImportFile implements Text {
 
     private final String fileName;
 
-    ImportFile(String fileName) {
+    public ImportFile(String fileName) {
         this.fileName = fileName;
     }
 

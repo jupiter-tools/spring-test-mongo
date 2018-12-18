@@ -1,9 +1,9 @@
 package com.antkorwin.springtestmongo.internal.expect;
 
+import java.util.Map;
+
 import com.antkorwin.springtestmongo.internal.expect.matcher.MatcherFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.Map;
 
 /**
  * Created on 08.12.2018.
@@ -29,7 +29,6 @@ public class ObjectMatcher {
      * Expect that all fields from the comparable object exist in the original object.
      *
      * @param comparable expected state of the original object
-     *
      * @return true if original object match by all fields to comparable
      * and false if not.
      */
@@ -57,7 +56,8 @@ public class ObjectMatcher {
             if (complexityDataTypes.isComplexType(originValue)) {
                 if (!new ObjectMatcher(originValue).match(cmpValue)) {
                     return false;
-                } else {
+                }
+                else {
                     continue;
                 }
             }
