@@ -266,4 +266,26 @@ class ObjectMatcherTest {
             assertThat(new ObjectMatcher(first).match(second)).isTrue();
         }
     }
+
+    @Nested
+    class NestedArraysTests {
+
+        @Test
+        void matchWithNullable() {
+
+            String DATA_SET_JSON_PATH = "/dataset/internal/expect/expect_with_nested_array.json";
+
+            Map<String, Object> first =
+                    new TestData().read(DATA_SET_JSON_PATH)
+                                  .get("test")
+                                  .get(0);
+
+            Map<String, Object> second =
+                    new TestData().read(DATA_SET_JSON_PATH)
+                                  .get("test")
+                                  .get(1);
+
+            assertThat(new ObjectMatcher(first).match(second)).isTrue();
+        }
+    }
 }
