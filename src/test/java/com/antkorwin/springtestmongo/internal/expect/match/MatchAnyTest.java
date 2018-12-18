@@ -1,9 +1,8 @@
-package com.antkorwin.springtestmongo.internal.expect;
+package com.antkorwin.springtestmongo.internal.expect.match;
 
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.FooBar;
 import com.antkorwin.springtestmongo.internal.TestData;
-import com.antkorwin.springtestmongo.internal.expect.match.AnyDataMatch;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
@@ -14,11 +13,13 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created on 08.12.2018.
+ * Created on 18.12.2018.
+ * <p>
+ * TODO: replace on javadoc
  *
  * @author Korovin Anatoliy
  */
-class ObjectMatcherTest {
+class MatchAnyTest {
 
     @Nested
     class SimpleTests {
@@ -29,10 +30,8 @@ class ObjectMatcherTest {
             Bar original = new Bar("1", "data-101");
             Map<String, Object> same = ImmutableMap.of("id", "1",
                                                        "data", "data-101");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isTrue();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isTrue();
         }
 
         @Test
@@ -40,10 +39,8 @@ class ObjectMatcherTest {
             // Arrange
             Bar original = new Bar("1", "data-101");
             Map<String, Object> same = ImmutableMap.of("data", "data-101");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isTrue();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isTrue();
         }
 
         @Test
@@ -51,10 +48,8 @@ class ObjectMatcherTest {
             // Arrange
             Bar original = new Bar("1", "data-101");
             Map<String, Object> same = ImmutableMap.of("data", "not same");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isFalse();
         }
 
         @Test
@@ -63,10 +58,8 @@ class ObjectMatcherTest {
             Bar original = new Bar("1", "data-101");
             Map<String, Object> same = ImmutableMap.of("id", "1",
                                                        "data", "not same");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isFalse();
         }
 
         @Test
@@ -76,10 +69,8 @@ class ObjectMatcherTest {
             Map<String, Object> same = ImmutableMap.of("id", "1",
                                                        "data", "data-101",
                                                        "field", "not_exists_in_origin");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isFalse();
         }
 
         @Test
@@ -87,10 +78,8 @@ class ObjectMatcherTest {
             // Arrange
             Bar original = new Bar("1", "1100");
             Map<String, Object> notSame = ImmutableMap.of("data", 1100);
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(notSame)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, notSame)).isFalse();
         }
     }
 
@@ -107,9 +96,9 @@ class ObjectMatcherTest {
                                                        "bar", ImmutableMap.of("id", "1B",
                                                                               "data", "Bar-404"));
             // Act
-            ObjectMatcher matcher = new ObjectMatcher(fooBar);
+            MatchAny matcher = new MatchAny();
             // Asserts
-            assertThat(matcher.match(same)).isTrue();
+            assertThat(matcher.match(fooBar, same)).isTrue();
         }
 
         @Test
@@ -120,10 +109,8 @@ class ObjectMatcherTest {
             Map<String, Object> same = ImmutableMap.of("id", "1A",
                                                        "data", "FooBar",
                                                        "bar", ImmutableMap.of("data", "Bar-404"));
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(fooBar);
-            // Asserts
-            assertThat(matcher.match(same)).isTrue();
+            // Act & Asserts
+            assertThat(new MatchAny().match(fooBar, same)).isTrue();
         }
 
         @Test
@@ -134,10 +121,8 @@ class ObjectMatcherTest {
             Map<String, Object> same = ImmutableMap.of("id", "1A",
                                                        "data", "FooBar",
                                                        "bar", ImmutableMap.of("data", "Bar-401"));
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(fooBar);
-            // Asserts
-            assertThat(matcher.match(same)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(fooBar, same)).isFalse();
         }
 
         @Test
@@ -157,10 +142,8 @@ class ObjectMatcherTest {
             Map<String, Object> bar2 = ImmutableMap.of("id", "1B",
                                                        "data", "Bar",
                                                        "firstNested", firstNested2);
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(bar1);
-            // Asserts
-            assertThat(matcher.match(bar2)).isTrue();
+            // Act & Asserts
+            assertThat(new MatchAny().match(bar1, bar2)).isTrue();
         }
 
         @Test
@@ -179,10 +162,8 @@ class ObjectMatcherTest {
             Map<String, Object> bar2 = ImmutableMap.of("id", "1B",
                                                        "data", "Bar",
                                                        "firstNested", firstNested2);
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(bar1);
-            // Asserts
-            assertThat(matcher.match(bar2)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(bar1, bar2)).isFalse();
         }
 
         @Test
@@ -201,10 +182,8 @@ class ObjectMatcherTest {
             Map<String, Object> bar2 = ImmutableMap.of("id", "1B",
                                                        "data", "Bar",
                                                        "firstNested", firstNested2);
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(bar1);
-            // Asserts
-            assertThat(matcher.match(bar2)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(bar1, bar2)).isFalse();
         }
     }
 
@@ -217,10 +196,8 @@ class ObjectMatcherTest {
             Bar original = new Bar("1", "data-101");
             Map<String, Object> same = ImmutableMap.of("id", "1",
                                                        "data", "regex: ^data-...$");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isTrue();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isTrue();
         }
 
         @Test
@@ -231,10 +208,8 @@ class ObjectMatcherTest {
             Bar original = new Bar(UUID.randomUUID().toString(), "data-101");
             Map<String, Object> same = ImmutableMap.of("id", UUID_REGEXP,
                                                        "data", "regex: ^data-...$");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isTrue();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isTrue();
         }
 
         @Test
@@ -245,10 +220,8 @@ class ObjectMatcherTest {
             Bar original = new Bar("123", "data-101");
             Map<String, Object> same = ImmutableMap.of("id", UUID_REGEXP,
                                                        "data", "regex: ^data-...$");
-            // Act
-            ObjectMatcher matcher = new ObjectMatcher(original);
-            // Asserts
-            assertThat(matcher.match(same)).isFalse();
+            // Act & Asserts
+            assertThat(new MatchAny().match(original, same)).isFalse();
         }
     }
 
@@ -264,7 +237,21 @@ class ObjectMatcherTest {
             Map<String, Object> second =
                     new TestData().read("/dataset/internal/expect/match_objects.json").get("test").get(1);
 
-            assertThat(new ObjectMatcher(first).match(second)).isTrue();
+            assertThat(new MatchAny().match(first, second)).isTrue();
+        }
+    }
+
+    @Nested
+    class NestedMapTests {
+
+        @Test
+        void matchMap() {
+            // Arrange
+            String dataSetFilePath = "/dataset/internal/expect/match_objects.json";
+            Map<String, Object> first = new TestData().read(dataSetFilePath).get("test").get(0);
+            Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(1);
+            // Act & Asserts
+            assertThat(new MatchAny().match(first, second)).isTrue();
         }
     }
 
@@ -286,7 +273,38 @@ class ObjectMatcherTest {
                                   .get("test")
                                   .get(1);
 
-            assertThat(new AnyDataMatch().match(first, second)).isTrue();
+            assertThat(new MatchAny().match(first, second)).isTrue();
+        }
+
+        @Test
+        void matchNestedArray() {
+            // Arrange
+            String dataSetFilePath = "/dataset/internal/expect/expect_with_nested_array.json";
+            Map<String, Object> first = new TestData().read(dataSetFilePath).get("test").get(0);
+            Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(1);
+            // Act
+            assertThat(new MatchAny().match(first, second)).isTrue();
+        }
+
+        @Test
+        void matchNestedArrayNotEquals() {
+            // Arrange
+            String dataSetFilePath = "/dataset/internal/expect/expect_with_nested_array.json";
+            Map<String, Object> first = new TestData().read(dataSetFilePath).get("test").get(0);
+            Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(2);
+            // Act
+            assertThat(new MatchAny().match(first, second)).isFalse();
+        }
+
+        @Test
+        void matchNestedArrayNotSameLength() {
+            // Arrange
+            String dataSetFilePath = "/dataset/internal/expect/expect_with_nested_array.json";
+            Map<String, Object> first = new TestData().read(dataSetFilePath).get("test").get(0);
+            Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(3);
+            // Act
+            assertThat(new MatchAny().match(first, second)).isFalse();
         }
     }
+
 }

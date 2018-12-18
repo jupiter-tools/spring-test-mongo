@@ -2,7 +2,6 @@ package com.antkorwin.springtestmongo.internal.expect.match;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -31,7 +30,7 @@ public class MatchMap implements DataMatch {
             Object expectedValue = expectedEntry.getValue();
             Object originValue = originalMap.get(expectedEntry.getKey());
 
-            boolean matchResult = new AnyDataMatch().match(originValue, expectedValue);
+            boolean matchResult = new MatchAny().match(originValue, expectedValue);
             if (!matchResult) return false;
         }
 

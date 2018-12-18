@@ -1,7 +1,6 @@
 package com.antkorwin.springtestmongo.internal.expect.graph;
 
-import com.antkorwin.springtestmongo.internal.expect.ObjectMatcher;
-import com.antkorwin.springtestmongo.internal.expect.match.AnyDataMatch;
+import com.antkorwin.springtestmongo.internal.expect.match.MatchAny;
 
 import java.util.List;
 import java.util.Map;
@@ -38,10 +37,8 @@ public class MatchGraph implements Graph {
         boolean[][] matrix = new boolean[matchedSize][patternSize];
 
         for (int i = 0; i < matchedSize; i++) {
-            ObjectMatcher actualItem = new ObjectMatcher(dataRecords.get(i));
             for (int j = 0; j < patternSize; j++) {
-                //matrix[i][j] = actualItem.match(patterns.get(j));
-                matrix[i][j] = new AnyDataMatch().match(dataRecords.get(i), patterns.get(j));
+                matrix[i][j] = new MatchAny().match(dataRecords.get(i), patterns.get(j));
             }
         }
 

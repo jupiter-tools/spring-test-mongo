@@ -39,8 +39,8 @@ public class MatchList implements DataMatch {
         }
 
         for (int i = 0; i < originalList.size(); i++) {
-            if (!new AnyDataMatch().match(originalList.get(i),
-                                          expectedList.get(i))) {
+            if (!new MatchAny().match(originalList.get(i),
+                                      expectedList.get(i))) {
                 return false;
             }
         }

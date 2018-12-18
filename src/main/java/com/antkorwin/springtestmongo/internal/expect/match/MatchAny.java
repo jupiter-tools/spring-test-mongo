@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Korovin Anatoliy
  */
-public class AnyDataMatch implements DataMatch {
+public class MatchAny implements DataMatch {
 
     @Override
     public boolean match(Object original, Object expected) {
