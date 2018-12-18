@@ -1,13 +1,14 @@
 package com.antkorwin.springtestmongo.internal.expect.graph;
 
+import com.antkorwin.springtestmongo.internal.expect.ObjectMatcher;
+import com.antkorwin.springtestmongo.internal.expect.match.AnyDataMatch;
+
 import java.util.List;
 import java.util.Map;
 
-import com.antkorwin.springtestmongo.internal.expect.ObjectMatcher;
-
 /**
  * Created on 09.12.2018.
- *
+ * <p>
  * Evaluate the graph of the object matching,
  * try to match all data records to each pattern,
  * and save this in the matrix.
@@ -39,7 +40,8 @@ public class MatchGraph implements Graph {
         for (int i = 0; i < matchedSize; i++) {
             ObjectMatcher actualItem = new ObjectMatcher(dataRecords.get(i));
             for (int j = 0; j < patternSize; j++) {
-                matrix[i][j] = actualItem.match(patterns.get(j));
+                //matrix[i][j] = actualItem.match(patterns.get(j));
+                matrix[i][j] = new AnyDataMatch().match(dataRecords.get(i), patterns.get(j));
             }
         }
 

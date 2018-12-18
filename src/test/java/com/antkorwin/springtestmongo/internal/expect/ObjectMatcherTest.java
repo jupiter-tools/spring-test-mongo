@@ -3,6 +3,7 @@ package com.antkorwin.springtestmongo.internal.expect;
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.FooBar;
 import com.antkorwin.springtestmongo.internal.TestData;
+import com.antkorwin.springtestmongo.internal.expect.match.AnyDataMatch;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
@@ -285,7 +286,7 @@ class ObjectMatcherTest {
                                   .get("test")
                                   .get(1);
 
-            assertThat(new ObjectMatcher(first).match(second)).isTrue();
+            assertThat(new AnyDataMatch().match(first, second)).isTrue();
         }
     }
 }

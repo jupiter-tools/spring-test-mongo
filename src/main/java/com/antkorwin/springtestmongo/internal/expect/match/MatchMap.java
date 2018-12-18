@@ -2,6 +2,7 @@ package com.antkorwin.springtestmongo.internal.expect.match;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
