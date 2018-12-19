@@ -1,15 +1,15 @@
 package com.antkorwin.springtestmongo.internal.expect.match;
 
-import java.util.UUID;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created on 19.12.2018.
- *
+ * <p>
  * TODO: replace on javadoc
  *
  * @author Korovin Anatoliy
@@ -42,6 +42,14 @@ class MatchRegExpTest {
             boolean necessary = new MatchRegExp().isNecessary("regex:^123..7$");
             // Asserts
             assertThat(necessary).isTrue();
+        }
+
+        @Test
+        void necessaryWithWrongType() {
+            // Act
+            boolean necessary = new MatchRegExp().isNecessary(123);
+            // Asserts
+            assertThat(necessary).isFalse();
         }
     }
 
