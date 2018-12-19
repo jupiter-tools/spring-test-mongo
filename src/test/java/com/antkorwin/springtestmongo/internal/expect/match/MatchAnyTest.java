@@ -1,14 +1,14 @@
 package com.antkorwin.springtestmongo.internal.expect.match;
 
+import java.util.Map;
+import java.util.UUID;
+
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.FooBar;
 import com.antkorwin.springtestmongo.internal.TestData;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
-
-import java.util.Map;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -307,4 +307,15 @@ class MatchAnyTest {
         }
     }
 
+    @Nested
+    class DifferentTypes {
+
+        @Test
+        void intVsLong() {
+            ImmutableMap<String, Integer> intVal = ImmutableMap.of("value", 123);
+            ImmutableMap<String, Long> longVal = ImmutableMap.of("value", 123L);
+            // Act & Asserts
+            assertThat(new MatchAny().match(intVal, longVal)).isTrue();
+        }
+    }
 }

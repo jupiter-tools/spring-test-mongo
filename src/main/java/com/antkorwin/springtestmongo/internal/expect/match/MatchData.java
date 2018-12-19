@@ -7,7 +7,7 @@ package com.antkorwin.springtestmongo.internal.expect.match;
  *
  * @author Korovin Anatoliy
  */
-public interface DataMatch {
+public interface MatchData {
 
     boolean match(Object original, Object expected);
 }

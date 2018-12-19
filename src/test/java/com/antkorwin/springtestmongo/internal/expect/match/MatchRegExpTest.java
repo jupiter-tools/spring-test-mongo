@@ -1,18 +1,21 @@
-package com.antkorwin.springtestmongo.internal.expect.matcher;
+package com.antkorwin.springtestmongo.internal.expect.match;
+
+import java.util.UUID;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created on 15.12.2018.
+ * Created on 19.12.2018.
+ *
+ * TODO: replace on javadoc
  *
  * @author Korovin Anatoliy
  */
-class RegexMatcherTest {
+class MatchRegExpTest {
+
 
     @Nested
     class NecessaryTests {
@@ -20,7 +23,7 @@ class RegexMatcherTest {
         @Test
         void necessary() {
             // Act
-            boolean necessary = new RegexMatcher().isNecessary("regex: ^123..7$");
+            boolean necessary = new MatchRegExp().isNecessary("regex: ^123..7$");
             // Asserts
             assertThat(necessary).isTrue();
         }
@@ -28,7 +31,7 @@ class RegexMatcherTest {
         @Test
         void notNecessary() {
             // Act
-            boolean necessary = new RegexMatcher().isNecessary("^123..7$");
+            boolean necessary = new MatchRegExp().isNecessary("^123..7$");
             // Asserts
             assertThat(necessary).isFalse();
         }
@@ -36,7 +39,7 @@ class RegexMatcherTest {
         @Test
         void necessaryWithoutSpace() {
             // Act
-            boolean necessary = new RegexMatcher().isNecessary("regex:^123..7$");
+            boolean necessary = new MatchRegExp().isNecessary("regex:^123..7$");
             // Asserts
             assertThat(necessary).isTrue();
         }
@@ -49,7 +52,7 @@ class RegexMatcherTest {
         void matchSimpleRegexp() {
             // Arrange
             // Act
-            boolean match = new RegexMatcher().match("1987", "regex: 19.7");
+            boolean match = new MatchRegExp().match("1987", "regex: 19.7");
             // Asserts
             assertThat(match).isTrue();
         }
@@ -60,9 +63,10 @@ class RegexMatcherTest {
             String UUID_REGEX = "regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}";
             String id = UUID.randomUUID().toString();
             // Act
-            boolean match = new RegexMatcher().match(id, UUID_REGEX);
+            boolean match = new MatchRegExp().match(id, UUID_REGEX);
             // Asserts
             assertThat(match).isTrue();
         }
     }
+
 }

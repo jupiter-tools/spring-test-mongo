@@ -11,12 +11,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  * @author Korovin Anatoliy
  */
-public class MatchMap implements DataMatch {
+public class MatchMap implements MatchData {
 
     private final ObjectMapper objectMapper;
+    private final MatchAny matchAny;
 
     public MatchMap() {
         this.objectMapper = new ObjectMapper();
+        this.matchAny = new MatchAny();
     }
 
     @Override
@@ -30,8 +32,9 @@ public class MatchMap implements DataMatch {
             Object expectedValue = expectedEntry.getValue();
             Object originValue = originalMap.get(expectedEntry.getKey());
 
-            boolean matchResult = new MatchAny().match(originValue, expectedValue);
-            if (!matchResult) return false;
+            if (!matchAny.match(originValue, expectedValue)) {
+                return false;
+            }
         }
 
         return true;

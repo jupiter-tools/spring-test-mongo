@@ -1,12 +1,12 @@
 package com.antkorwin.springtestmongo.internal.expect.match;
 
+import java.util.List;
+
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * Created on 18.12.2018.
@@ -15,13 +15,15 @@ import java.util.List;
  *
  * @author Korovin Anatoliy
  */
-public class MatchList implements DataMatch {
+public class MatchList implements MatchData {
 
     private final ObjectMapper objectMapper;
+    private final MatchAny matchAny;
     private final Logger log;
 
     public MatchList() {
         this.objectMapper = new ObjectMapper();
+        this.matchAny = new MatchAny();
         this.log = LoggerFactory.getLogger(MatchList.class);
     }
 
@@ -39,8 +41,8 @@ public class MatchList implements DataMatch {
         }
 
         for (int i = 0; i < originalList.size(); i++) {
-            if (!new MatchAny().match(originalList.get(i),
-                                      expectedList.get(i))) {
+            if (!matchAny.match(originalList.get(i),
+                                expectedList.get(i))) {
                 return false;
             }
         }
@@ -55,7 +57,8 @@ public class MatchList implements DataMatch {
     private String writeObject(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
+        }
+        catch (JsonProcessingException e) {
             log.error("jackson parsing error", e);
             throw new InternalException("jackson error", 104, e);
         }

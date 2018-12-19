@@ -1,15 +1,16 @@
-package com.antkorwin.springtestmongo.internal.expect.matcher;
+package com.antkorwin.springtestmongo.internal.expect.match;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 /**
- * Match two objects with using a regular expression in the expected value.
+ * Created on 19.12.2018.
+ *
+ * TODO: replace on javadoc
  *
  * @author Korovin Anatoliy
  */
-public class RegexMatcher implements ValueMatcher {
+public class MatchRegExp implements MatchData {
 
     @Override
     public boolean match(Object originValue, Object comparableValue) {
@@ -20,12 +21,11 @@ public class RegexMatcher implements ValueMatcher {
         return matcher.matches();
     }
 
-    @Override
-    public boolean isNecessary(Object value) {
-        if (!(value instanceof String)) {
+    public boolean isNecessary(Object valueWithRegExp) {
+        if (!(valueWithRegExp instanceof String)) {
             return false;
         }
-        String strValue = (String) value;
+        String strValue = (String) valueWithRegExp;
         return (strValue.startsWith("regex:"));
     }
 }

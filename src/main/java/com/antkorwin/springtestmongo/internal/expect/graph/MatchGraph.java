@@ -19,6 +19,7 @@ public class MatchGraph implements Graph {
     private final List<Map<String, Object>> dataRecords;
     private final List<Map<String, Object>> patterns;
     private final String documentName;
+    private final MatchAny matchAny;
 
     public MatchGraph(String documentName,
                       List<Map<String, Object>> dataRecords,
@@ -26,6 +27,7 @@ public class MatchGraph implements Graph {
         this.documentName = documentName;
         this.dataRecords = dataRecords;
         this.patterns = patterns;
+        this.matchAny = new MatchAny();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class MatchGraph implements Graph {
 
         for (int i = 0; i < matchedSize; i++) {
             for (int j = 0; j < patternSize; j++) {
-                matrix[i][j] = new MatchAny().match(dataRecords.get(i), patterns.get(j));
+                matrix[i][j] = matchAny.match(dataRecords.get(i), patterns.get(j));
             }
         }
 
