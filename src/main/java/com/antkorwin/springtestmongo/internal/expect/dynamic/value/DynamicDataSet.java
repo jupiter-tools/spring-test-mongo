@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * Created on 16.12.2018.
- *
+ * <p>
  * Evaluate dynamic-values in the DataSet
  *
  * @author Korovin Anatoliy
@@ -44,7 +44,10 @@ public class DynamicDataSet implements DataSet {
         return evaluatedDataSet;
     }
 
-    private void applyReplacerToMap(Map<String, Object> maps) {
+    private void applyReplacerToMap(Map<String, Object> mapValues) {
+
+        Map<String, Object> maps = this.objectMapper.convertValue(mapValues, Map.class);
+
         for (String key : maps.keySet()) {
             Object value = maps.get(key);
             if (!this.complexityDataTypes.isComplexType(value)) {
@@ -54,12 +57,29 @@ public class DynamicDataSet implements DataSet {
                     }
                 }
             } else {
-                if(value instanceof Map) {
-                    Map<String, Object> map = this.objectMapper.convertValue(value, Map.class);
-                    applyReplacerToMap(map);
-                } else {
-                    List<Map<String, Object>> list = this.objectMapper.convertValue(value, List.class);
-                    list.forEach(this::applyReplacerToMap);
+                if (value instanceof Map) {
+                    applyReplacerToMap((Map<String, Object>) value);
+                } else if (value instanceof List) {
+                    applyReplacerToList((List<Object>) value);
+                }
+            }
+        }
+    }
+
+    private void applyReplacerToList(List<Object> listValues) {
+        for (int i = 0; i < listValues.size(); i++) {
+            Object value = listValues.get(i);
+            if (value instanceof Map) {
+                applyReplacerToMap((Map<String, Object>) value);
+                continue;
+            }
+            if (value instanceof List) {
+                applyReplacerToList((List<Object>) value);
+                continue;
+            }
+            for (DynamicValue replacer : this.dynamicValueEvaluators) {
+                if (replacer.isNecessary(value)) {
+                    listValues.set(i, replacer.evaluate(value));
                 }
             }
         }
