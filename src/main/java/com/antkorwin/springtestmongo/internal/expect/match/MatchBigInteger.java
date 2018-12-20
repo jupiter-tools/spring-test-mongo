@@ -5,6 +5,10 @@ import java.math.BigInteger;
 /**
  * Created on 19.12.2018.
  *
+ * Match two {@link BigInteger} values or
+ * {@link BigInteger} with {@link Long} or
+ * {@link BigInteger} with {@link Integer}
+ *
  * @author Korovin Anatoliy
  */
 public class MatchBigInteger implements MatchData {

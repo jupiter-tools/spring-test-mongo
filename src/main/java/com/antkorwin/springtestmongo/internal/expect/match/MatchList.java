@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created on 18.12.2018.
  * <p>
- * TODO: replace on javadoc
+ * Match one list to another list.
  *
  * @author Korovin Anatoliy
  */

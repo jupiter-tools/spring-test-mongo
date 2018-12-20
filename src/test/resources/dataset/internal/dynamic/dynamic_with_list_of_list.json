@@ -1,0 +1,18 @@
+{
+  "test": [
+    {
+      "array": [
+        [
+          0,
+          1
+        ],
+        [
+          "groovy: 1+1",
+          "groovy: 1+2",
+          "groovy: 1+4"
+        ]
+      ],
+      "simple": "fixme: 123"
+    }
+  ]
+}

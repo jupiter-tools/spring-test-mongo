@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Created on 19.12.2018.
  * <p>
- * TODO: replace on javadoc
+ * Match one {@link Number} value to another {@link Number} value.
  *
  * @author Korovin Anatoliy
  */

@@ -3,7 +3,8 @@ package com.antkorwin.springtestmongo.internal.expect.match;
 /**
  * Created on 19.12.2018.
  *
- * TODO: replace on javadoc
+ * Match one string value to another,
+ * with the check an expected string on regexp using.
  *
  * @author Korovin Anatoliy
  */

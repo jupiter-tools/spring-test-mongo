@@ -3,7 +3,7 @@ package com.antkorwin.springtestmongo.internal.expect.match;
 /**
  * Created on 19.12.2018.
  *
- * TODO: replace on javadoc
+ * Simple matcher to match two {@link Object} (based on equals)
  *
  * @author Korovin Anatoliy
  */

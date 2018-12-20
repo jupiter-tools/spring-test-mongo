@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Created on 18.12.2018.
  * <p>
- * TODO: replace on javadoc
+ * Top-level matcher, to match objects of any types
+ * (List, Map, Number e.t.c.)
  *
  * @author Korovin Anatoliy
  */

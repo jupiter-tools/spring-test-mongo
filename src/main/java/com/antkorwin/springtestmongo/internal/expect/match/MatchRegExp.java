@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 /**
  * Created on 19.12.2018.
  *
- * TODO: replace on javadoc
+ * Match original string to expected string, when in the expected string
+ * use a regular expression.
  *
  * @author Korovin Anatoliy
  */

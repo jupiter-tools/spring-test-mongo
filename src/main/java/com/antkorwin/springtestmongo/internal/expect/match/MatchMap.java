@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Created on 18.12.2018.
  *
- * TODO: replace on javadoc
+ * Match two {@link Map} objects
  *
  * @author Korovin Anatoliy
  */

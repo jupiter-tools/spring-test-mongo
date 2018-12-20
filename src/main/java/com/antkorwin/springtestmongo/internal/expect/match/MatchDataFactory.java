@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 /**
  * Created on 19.12.2018.
  *
- * TODO: replace on javadoc
+ * Factory of matchers by the type of JsonNode
  *
  * @author Korovin Anatoliy
  */

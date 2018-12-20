@@ -3,7 +3,8 @@ package com.antkorwin.springtestmongo.internal.expect.match;
 /**
  * Created on 19.12.2018.
  *
- * TODO: replace on javadoc
+ * Match two {@link Long} values,
+ * or {@link Long} with {@link Integer} values
  *
  * @author Korovin Anatoliy
  */
