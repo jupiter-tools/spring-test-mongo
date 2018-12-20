@@ -1,13 +1,16 @@
 package com.antkorwin.springtestmongo.internal.expect.dynamic.value;
 
-import com.antkorwin.springtestmongo.internal.DataSet;
-import com.antkorwin.springtestmongo.internal.TestData;
-import com.google.common.collect.Sets;
-import org.junit.jupiter.api.Test;
-
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import com.antkorwin.springtestmongo.internal.DataSet;
+import com.antkorwin.springtestmongo.internal.TestData;
+import com.antkorwin.springtestmongo.internal.exportdata.JsonExport;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -76,5 +79,70 @@ class DynamicDataSetTest {
         assertThat(sum).isEqualTo(55);
         String fix = (String) map.get("test").get(0).get("simple");
         assertThat(fix).isEqualTo("{fixed}");
+    }
+
+    @Test
+    void multipleDynamicValueInList() {
+        // Arrange
+        DataSet dataSet = new TestData().jsonDataSet("/dataset/internal/dynamic/groovy_and_simple_in_list.json");
+
+        // Act
+        DynamicDataSet dynamicDataSet = new DynamicDataSet(dataSet, Sets.newHashSet(new GroovyDynamicValue(),
+                                                                                    new SimpleDynamicValue()));
+        Map<String, List<Map<String, Object>>> map = dynamicDataSet.read();
+
+        // Asserts
+        int sum = (int) ((List) map.get("test").get(0).get("array")).get(0);
+        assertThat(sum).isEqualTo(55);
+
+        int twoByFore = (int) ((List) map.get("test").get(0).get("array")).get(1);
+        assertThat(twoByFore).isEqualTo(8);
+
+        String fix = (String) map.get("test").get(0).get("simple");
+        assertThat(fix).isEqualTo("{fixed}");
+
+        System.out.println(new JsonExport(dynamicDataSet).read());
+    }
+
+    @Test
+    void dynamicWithListOfMap() {
+        // Arrange
+        DataSet dataSet = new TestData().jsonDataSet("/dataset/internal/dynamic/dynamic_with_list_of_map.json");
+
+        List array = Arrays.asList(ImmutableMap.of("value", 55),
+                                   ImmutableMap.of("value", 8));
+
+        DataSet expect = () ->
+                ImmutableMap.of("test", Arrays.asList(ImmutableMap.of("array", array,
+                                                                      "simple", "{fixed}")));
+        // Act
+        DynamicDataSet dynamicDataSet = new DynamicDataSet(dataSet, Sets.newHashSet(new GroovyDynamicValue(),
+                                                                                    new SimpleDynamicValue()));
+        // Asserts
+        String dynamic = new JsonExport(dynamicDataSet).read();
+        String expected = new JsonExport(expect).read();
+        System.out.println(dynamic);
+        assertThat(dynamic).isEqualTo(expected);
+    }
+
+    @Test
+    void dynamicWithListOfList() {
+        // Arrange
+        DataSet dataSet = new TestData().jsonDataSet("/dataset/internal/dynamic/dynamic_with_list_of_list.json");
+
+        List array = Arrays.asList(Arrays.asList(0, 1), Arrays.asList(2, 3, 5));
+
+        DataSet expect = () ->
+                ImmutableMap.of("test", Arrays.asList(ImmutableMap.of("array", array,
+                                                                      "simple", "{fixed}")));
+
+        // Act
+        DynamicDataSet dynamicDataSet = new DynamicDataSet(dataSet, Sets.newHashSet(new GroovyDynamicValue(),
+                                                                                    new SimpleDynamicValue()));
+        // Asserts
+        String dynamic = new JsonExport(dynamicDataSet).read();
+        String expected = new JsonExport(expect).read();
+        System.out.println(dynamic);
+        assertThat(dynamic).isEqualTo(expected);
     }
 }

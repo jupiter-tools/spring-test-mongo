@@ -1,0 +1,15 @@
+{
+  "test": [
+    {
+      "array": [
+        {
+          "value": "groovy: (1..10).sum()"
+        },
+        {
+          "value": "groovy: 2*4"
+        }
+      ],
+      "simple": "fixme: 123"
+    }
+  ]
+}
