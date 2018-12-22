@@ -16,6 +16,7 @@ import javax.script.ScriptException;
  */
 public class MatchGroovy implements MatchDataSmart {
 
+    private static final String PREFIX = "groovy-match:";
     private final ScriptEngine engine;
     private final Logger log = LoggerFactory.getLogger(MatchGroovy.class);
 
@@ -27,11 +28,11 @@ public class MatchGroovy implements MatchDataSmart {
     @Override
     public boolean match(Object original, Object expected) {
         try {
-            String expectedValue = ((String) expected).replaceFirst("groovy-exp:", "");
+            String expectedValue = ((String) expected).replaceFirst(PREFIX, "");
             engine.put("value", original);
             Object result = engine.eval(expectedValue);
             if (!(result instanceof Boolean)) {
-                throw new InternalException("groovy-exp must return a boolean value instead of {" + result + "}", 106);
+                throw new InternalException(PREFIX + " must return a boolean value instead of {" + result + "}", 106);
             }
             return (boolean) result;
         } catch (ScriptException e) {
@@ -45,6 +46,6 @@ public class MatchGroovy implements MatchDataSmart {
         if (!(expected instanceof String)) {
             return false;
         }
-        return ((String) expected).startsWith("groovy-exp:");
+        return ((String) expected).startsWith(PREFIX);
     }
 }

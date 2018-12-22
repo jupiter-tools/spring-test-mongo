@@ -369,7 +369,7 @@ class MatchAnyTest {
         void minusOneDay() {
             // Arrange
             Map<String, Object> actual = ImmutableMap.of("sum", 55);
-            Map<String, Object> expected = ImmutableMap.of("sum", "groovy-exp: value == (1..10).sum()");
+            Map<String, Object> expected = ImmutableMap.of("sum", "groovy-match: value == (1..10).sum()");
             // Act & Asserts
             assertThat(new MatchAny().match(actual, expected)).isTrue();
         }

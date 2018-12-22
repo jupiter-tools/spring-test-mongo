@@ -25,7 +25,7 @@ class MatchGroovyTest {
         @Test
         void simpleValueComparing() {
             // Act
-            boolean match = matchGroovy.match(123, "groovy-exp: value == 123");
+            boolean match = matchGroovy.match(123, "groovy-match: value == 123");
             // Asserts
             assertThat(match).isEqualTo(true);
         }
@@ -33,7 +33,7 @@ class MatchGroovyTest {
         @Test
         void compareValueWithSum() {
             // Act
-            boolean match = matchGroovy.match(55, "groovy-exp: value == (1..10).sum()");
+            boolean match = matchGroovy.match(55, "groovy-match: value == (1..10).sum()");
             // Asserts
             assertThat(match).isEqualTo(true);
         }
@@ -42,7 +42,7 @@ class MatchGroovyTest {
         void checkDateAndTime() {
             // Act
             boolean match = matchGroovy.match(new Date(),
-                                              "groovy-exp: new Date().getTime() - value.getTime() < 10000");
+                                              "groovy-match: new Date().getTime() - value.getTime() < 10000");
             // Asserts
             assertThat(match).isEqualTo(true);
         }
@@ -53,7 +53,7 @@ class MatchGroovyTest {
 
         @Test
         void necessary() {
-            boolean necessary = matchGroovy.isNecessary("groovy-exp: value == 123");
+            boolean necessary = matchGroovy.isNecessary("groovy-match: value == 123");
             assertThat(necessary).isEqualTo(true);
         }
 
@@ -89,17 +89,17 @@ class MatchGroovyTest {
         void notBooleanResult() {
             // Act
             InternalException exception = Assertions.assertThrows(InternalException.class, () -> {
-                matchGroovy.match(55, "groovy-exp: (1..10).sum()");
+                matchGroovy.match(55, "groovy-match: (1..10).sum()");
             });
 
-            assertThat(exception.getMessage()).contains("groovy-exp must return a boolean value instead of {55}");
+            assertThat(exception.getMessage()).contains("groovy-match: must return a boolean value instead of {55}");
         }
 
         @Test
         void wrongGroovyScript() {
             // Act
             InternalException exception = Assertions.assertThrows(InternalException.class, () -> {
-                matchGroovy.match(55, "groovy-exp: *p = (1..10).sum() ");
+                matchGroovy.match(55, "groovy-match: *p = (1..10).sum() ");
             });
             assertThat(exception.getMessage()).contains("Groovy engine evaluate error");
         }
