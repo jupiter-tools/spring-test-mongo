@@ -1,17 +1,19 @@
-package com.antkorwin.springtestmongo.internal.expect.match;
+package com.antkorwin.springtestmongo.internal.expect.match.smart.regexp;
+
+import com.antkorwin.springtestmongo.internal.expect.match.smart.MatchDataSmart;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created on 19.12.2018.
- *
+ * <p>
  * Match original string to expected string, when in the expected string
  * use a regular expression.
  *
  * @author Korovin Anatoliy
  */
-public class MatchRegExp implements MatchData {
+public class MatchRegExp implements MatchDataSmart {
 
     @Override
     public boolean match(Object originValue, Object comparableValue) {
@@ -22,6 +24,7 @@ public class MatchRegExp implements MatchData {
         return matcher.matches();
     }
 
+    @Override
     public boolean isNecessary(Object valueWithRegExp) {
         if (!(valueWithRegExp instanceof String)) {
             return false;

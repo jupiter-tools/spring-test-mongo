@@ -1,4 +1,6 @@
-package com.antkorwin.springtestmongo.internal.expect.match;
+package com.antkorwin.springtestmongo.internal.expect.match.simple;
+
+import com.antkorwin.springtestmongo.internal.expect.match.MatchData;
 
 import java.math.BigInteger;
 

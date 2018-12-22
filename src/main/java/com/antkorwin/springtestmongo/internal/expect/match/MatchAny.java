@@ -1,5 +1,6 @@
 package com.antkorwin.springtestmongo.internal.expect.match;
 
+import com.antkorwin.springtestmongo.internal.expect.match.simple.MatchDataFactory;
 import com.antkorwin.springtestmongo.internal.expect.match.smart.MatchDataSmartFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

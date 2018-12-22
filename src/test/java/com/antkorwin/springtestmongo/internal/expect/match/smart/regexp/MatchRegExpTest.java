@@ -1,4 +1,4 @@
-package com.antkorwin.springtestmongo.internal.expect.match;
+package com.antkorwin.springtestmongo.internal.expect.match.smart.regexp;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

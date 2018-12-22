@@ -1,8 +1,10 @@
-package com.antkorwin.springtestmongo.internal.expect.match;
+package com.antkorwin.springtestmongo.internal.expect.match.simple;
 
 import java.util.List;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
+import com.antkorwin.springtestmongo.internal.expect.match.MatchAny;
+import com.antkorwin.springtestmongo.internal.expect.match.MatchData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

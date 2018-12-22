@@ -3,6 +3,7 @@ package com.antkorwin.springtestmongo.internal.expect.match.smart;
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.springtestmongo.internal.expect.match.smart.date.MatchDate;
 import com.antkorwin.springtestmongo.internal.expect.match.smart.groovy.MatchGroovy;
+import com.antkorwin.springtestmongo.internal.expect.match.smart.regexp.MatchRegExp;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +16,8 @@ import java.util.List;
 public class MatchDataSmartFactory {
 
     private List<MatchDataSmart> matchDataList = Arrays.asList(new MatchGroovy(),
-                                                               new MatchDate());
+                                                               new MatchDate(),
+                                                               new MatchRegExp());
 
     public boolean isNecessary(Object expected) {
         for (MatchDataSmart matchData : matchDataList) {
