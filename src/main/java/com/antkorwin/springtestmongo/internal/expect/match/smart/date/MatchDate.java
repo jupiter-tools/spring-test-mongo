@@ -7,6 +7,8 @@ import java.util.Date;
 /**
  * Created on 22.12.2018.
  *
+ * Match Date to expected pattern.
+ *
  * @author Korovin Anatoliy
  */
 public class MatchDate implements MatchDataSmart {

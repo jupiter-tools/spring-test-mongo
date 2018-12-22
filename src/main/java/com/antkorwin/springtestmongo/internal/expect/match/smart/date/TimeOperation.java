@@ -5,6 +5,11 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * Created on 22.12.2018.
+ *
+ * @author Korovin Anatoliy
+ */
 public class TimeOperation {
 
     private final TimeDirection direction;

@@ -19,6 +19,13 @@ public class MatchDataSmartFactory {
                                                                new MatchDate(),
                                                                new MatchRegExp());
 
+    /**
+     * check expected value to match on any matchers.
+     *
+     * @param expected expected value (or some scripts)
+     *
+     * @return true if this value match to any {@link MatchDataSmart}
+     */
     public boolean isNecessary(Object expected) {
         for (MatchDataSmart matchData : matchDataList) {
             if (matchData.isNecessary(expected)) {
@@ -28,6 +35,13 @@ public class MatchDataSmartFactory {
         return false;
     }
 
+    /**
+     * retrieve {@link MatchDataSmart} to the expected value
+     *
+     * @param expected expected value (or some scripts)
+     *
+     * @return MatchDataSmart which must be apply to this value
+     */
     public MatchDataSmart get(Object expected) {
         for (MatchDataSmart matchData : matchDataList) {
             if (matchData.isNecessary(expected)) {
