@@ -256,4 +256,31 @@ class MongoDbTestExpectedIT {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/expect_with_groovy.json");
         }
     }
+
+    @Nested
+    @SpringBootTest
+    @ExtendWith(SpringExtension.class)
+    @ExtendWith(MongoDbExtension.class)
+    @EnableMongoDbTestContainers
+    class SmartDataMatchingTests {
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void matchGroovy() {
+            // Arrange
+            Bar bar1 = new Bar("1", "55");
+            mongoTemplate.save(bar1);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/groovy_match.json");
+        }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void matchDate() {
+            Foo foo = new Foo("1", new Date(), 123);
+            mongoTemplate.save(foo);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/time_match.json");
+        }
+    }
 }

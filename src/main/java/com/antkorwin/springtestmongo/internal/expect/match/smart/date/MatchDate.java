@@ -20,7 +20,11 @@ public class MatchDate implements MatchDataSmart {
                                             description.getTimeOperation(),
                                             description.getThreshold());
 
-        return timeMatch.match((Date) original);
+        Date originalDate = (original instanceof Long)
+                            ? new Date((long)original)
+                            : (Date) original;
+
+        return timeMatch.match(originalDate);
     }
 
     @Override

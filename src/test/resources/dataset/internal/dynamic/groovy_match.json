@@ -1,0 +1,8 @@
+{
+  "com.antkorwin.springtestmongo.Bar": [
+    {
+      "id": "1",
+      "data": "groovy-exp: value.equals((1..10).sum().toString())"
+    }
+  ]
+}

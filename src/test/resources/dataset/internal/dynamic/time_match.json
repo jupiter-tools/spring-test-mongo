@@ -1,0 +1,9 @@
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "id": "1",
+      "time": "[NOW]",
+      "counter":123
+    }
+  ]
+}

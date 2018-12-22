@@ -53,9 +53,17 @@ class MatchDateTest {
         @Test
         void nowTime() {
             // Act
-            boolean necessary = matchDate.match(new Date(), "[NOW]");
+            boolean now = matchDate.match(new Date(), "[NOW]");
             // Asserts
-            assertThat(necessary).isTrue();
+            assertThat(now).isTrue();
+        }
+
+        @Test
+        void nowTimeInLong() {
+            // Act
+            boolean now = matchDate.match(new Date().getTime(), "[NOW]");
+            // Asserts
+            assertThat(now).isTrue();
         }
 
         @Test
