@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class TimeDescription {
 
     private static final String TIME_DESCRIPTION_PATTERN =
-            "^(\\[NOW\\])((\\+|\\-)([0-9]{1,7})(\\((DAYS)\\))){0,1}$";
+            "^(\\[NOW\\])((\\+|\\-)([0-9]{1,7})(\\((DAYS|HOURS|MINUTES|SECONDS)\\))){0,1}$";
 
     private final static int DEFAULT_THRESHOLD = 10_000;
 

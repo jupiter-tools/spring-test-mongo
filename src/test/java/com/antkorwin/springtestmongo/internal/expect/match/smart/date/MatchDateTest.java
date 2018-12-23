@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -106,6 +107,50 @@ class MatchDateTest {
             boolean match = matchDate.match(tomorrow, "[NOW]-1(DAYS)");
             // Assert
             assertThat(match).isTrue();
+        }
+
+        @Test
+        void plusOneHour() {
+            // Arrange
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.HOURS.toMillis(1));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+1(HOURS)");
+            // Assert
+            assertThat(match).isTrue();
+        }
+
+        @Test
+        void plus5Minutes() {
+            // Arrange
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(5));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+5(MINUTES)");
+            // Assert
+            assertThat(match).isTrue();
+        }
+
+        @Test
+        void plus25Seconds() {
+            // Arrange
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS)");
+            // Assert
+            assertThat(match).isTrue();
+        }
+
+        @Test
+        void wrongTime() {
+            // Arrange
+            Date now = new Date();
+            Date tooLate = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(5));
+            // Act
+            boolean match = matchDate.match(tooLate, "[NOW]+3(MINUTES)");
+            // Assert
+            assertThat(match).isFalse();
         }
     }
 
