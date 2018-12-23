@@ -1,14 +1,16 @@
 package com.antkorwin.springtestmongo.internal.expect.match;
 
-import java.util.Map;
-import java.util.UUID;
-
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.FooBar;
 import com.antkorwin.springtestmongo.internal.TestData;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -314,6 +316,62 @@ class MatchAnyTest {
             ImmutableMap<String, Long> longVal = ImmutableMap.of("value", 123L);
             // Act & Asserts
             assertThat(new MatchAny().match(intVal, longVal)).isTrue();
+        }
+    }
+
+    @Nested
+    class DateMatchTests {
+
+        @Test
+        void now() {
+            // Arrange
+            Map<String, Object> actual = ImmutableMap.of("time", new Date());
+            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]");
+            // Act & Asserts
+            assertThat(new MatchAny().match(actual, expected)).isTrue();
+        }
+
+        @Test
+        void plusOneDay() {
+            // Arrange
+            Date tomorrow = new Date(new Date().getTime() + TimeUnit.DAYS.toMillis(1));
+            Map<String, Object> actual = ImmutableMap.of("time", tomorrow);
+            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]+1(DAYS)");
+            // Act & Asserts
+            assertThat(new MatchAny().match(actual, expected)).isTrue();
+        }
+
+        @Test
+        void notSame() {
+            // Arrange
+            Date tomorrow = new Date(new Date().getTime() + TimeUnit.DAYS.toMillis(1));
+            Map<String, Object> actual = ImmutableMap.of("time", tomorrow);
+            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]");
+            // Act & Asserts
+            assertThat(new MatchAny().match(actual, expected)).isFalse();
+        }
+
+        @Test
+        void minusOneDay() {
+            // Arrange
+            Date yesterday = new Date(new Date().getTime() - TimeUnit.DAYS.toMillis(1));
+            Map<String, Object> actual = ImmutableMap.of("time", yesterday);
+            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]-1(DAYS)");
+            // Act & Asserts
+            assertThat(new MatchAny().match(actual, expected)).isTrue();
+        }
+    }
+
+    @Nested
+    class GroovyMatchTests{
+
+        @Test
+        void minusOneDay() {
+            // Arrange
+            Map<String, Object> actual = ImmutableMap.of("sum", 55);
+            Map<String, Object> expected = ImmutableMap.of("sum", "groovy-match: value == (1..10).sum()");
+            // Act & Asserts
+            assertThat(new MatchAny().match(actual, expected)).isTrue();
         }
     }
 }

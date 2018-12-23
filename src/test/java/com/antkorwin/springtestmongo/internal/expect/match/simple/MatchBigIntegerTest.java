@@ -1,5 +1,6 @@
-package com.antkorwin.springtestmongo.internal.expect.match;
+package com.antkorwin.springtestmongo.internal.expect.match.simple;
 
+import com.antkorwin.springtestmongo.internal.expect.match.simple.MatchBigInteger;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;

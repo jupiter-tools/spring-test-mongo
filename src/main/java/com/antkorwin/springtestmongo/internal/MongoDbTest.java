@@ -2,7 +2,6 @@ package com.antkorwin.springtestmongo.internal;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
-import com.antkorwin.springtestmongo.internal.DataSet;
 import com.antkorwin.springtestmongo.internal.expect.MatchDataSets;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicDataSet;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicValue;

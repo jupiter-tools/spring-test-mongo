@@ -1,7 +1,9 @@
-package com.antkorwin.springtestmongo.internal.expect.match;
+package com.antkorwin.springtestmongo.internal.expect.match.simple;
 
 import java.util.Map;
 
+import com.antkorwin.springtestmongo.internal.expect.match.MatchAny;
+import com.antkorwin.springtestmongo.internal.expect.match.MatchData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**

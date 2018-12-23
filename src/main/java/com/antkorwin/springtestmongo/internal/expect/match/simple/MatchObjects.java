@@ -1,4 +1,6 @@
-package com.antkorwin.springtestmongo.internal.expect.match;
+package com.antkorwin.springtestmongo.internal.expect.match.simple;
+
+import com.antkorwin.springtestmongo.internal.expect.match.MatchData;
 
 /**
  * Created on 19.12.2018.
