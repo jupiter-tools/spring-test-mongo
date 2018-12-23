@@ -12,11 +12,15 @@ import java.util.regex.Pattern;
 public class TimeDescription {
 
     private static final String TIME_DESCRIPTION_PATTERN =
-            "^(\\[NOW\\])((\\+|\\-)([0-9]{1,7})(\\((DAYS|HOURS|MINUTES|SECONDS)\\))){0,1}$";
+            "^(\\[NOW\\])" +
+            "((\\+|\\-)([0-9]{1,7})(\\((DAYS|HOURS|MINUTES|SECONDS)\\))){0,1}" +
+            "(\\{THR=([0-9]{1,10})\\}){0,1}$";
 
     private final static int DEFAULT_THRESHOLD = 10_000;
 
     private final String description;
+
+    private Integer threshold = null;
 
     public TimeDescription(String description) {
         this.description = description;
@@ -42,7 +46,6 @@ public class TimeDescription {
     public TimeOperation getTimeOperation() {
 
         Matcher matcher = matchTimeDescriptionPattern(description);
-        matcher.find();
 
         if (matcher.group(2) == null) {
             return new TimeOperation(TimeDirection.UNDEFINED, null, 0);
@@ -55,6 +58,8 @@ public class TimeDescription {
         int count = Integer.valueOf(matcher.group(4));
 
         TimeUnit unit = TimeUnit.valueOf(matcher.group(6));
+
+        threshold = parseThreshold(matcher);
 
         return new TimeOperation(direction, unit, count);
     }
@@ -69,16 +74,27 @@ public class TimeDescription {
         return matcher.matches();
     }
 
-    private Matcher matchTimeDescriptionPattern(String value) {
-        Pattern pattern = Pattern.compile(TIME_DESCRIPTION_PATTERN);
-        Matcher matcher = pattern.matcher(value);
-        return matcher;
-    }
-
     /**
      * @return amount of the possible threshold
      */
     public long getThreshold() {
-        return DEFAULT_THRESHOLD;
+        if (threshold == null) {
+            Matcher matcher = matchTimeDescriptionPattern(description);
+            threshold = parseThreshold(matcher);
+        }
+        return threshold;
+    }
+
+    private Matcher matchTimeDescriptionPattern(String value) {
+        Pattern pattern = Pattern.compile(TIME_DESCRIPTION_PATTERN);
+        Matcher matcher = pattern.matcher(value);
+        matcher.find();
+        return matcher;
+    }
+
+    private Integer parseThreshold(Matcher matcher){
+        return threshold = (matcher.group(8) != null)
+                    ? Integer.valueOf(matcher.group(8))
+                    : DEFAULT_THRESHOLD;
     }
 }

@@ -1,6 +1,5 @@
 package com.antkorwin.springtestmongo.internal.expect.match.smart.date;
 
-import com.antkorwin.springtestmongo.internal.expect.match.smart.date.MatchDate;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -149,6 +148,67 @@ class MatchDateTest {
             Date tooLate = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(5));
             // Act
             boolean match = matchDate.match(tooLate, "[NOW]+3(MINUTES)");
+            // Assert
+            assertThat(match).isFalse();
+        }
+    }
+
+    @Nested
+    class ThresholdTests {
+
+        @Test
+        void defaultThr() {
+            // Arrange
+            int defaultThreshold = 10; // SEC
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + defaultThreshold));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS)");
+            // Assert
+            assertThat(match).isTrue();
+        }
+
+        @Test
+        void moreThanDefaultValue() {
+            // Arrange
+            int defaultThreshold = 10; // SEC
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + defaultThreshold + 1));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS)");
+            // Assert
+            assertThat(match).isFalse();
+        }
+
+        @Test
+        void notDefaultThr() {
+            // Arrange
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + 20));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=20000}");
+            // Assert
+            assertThat(match).isTrue();
+        }
+
+        @Test
+        void notZeroThr() {
+            // Arrange
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=0}");
+            // Assert
+            assertThat(match).isTrue();
+        }
+
+        @Test
+        void notZeroThrFail() {
+            // Arrange
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + 1));
+            // Act
+            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=0}");
             // Assert
             assertThat(match).isFalse();
         }

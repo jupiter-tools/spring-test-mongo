@@ -20,7 +20,6 @@ class TimeDescriptionTest {
 
         @Test
         void now() {
-            // Arrange
             // Act
             TimeDescription description = new TimeDescription("[NOW]");
             // Asserts
@@ -29,7 +28,6 @@ class TimeDescriptionTest {
 
         @Test
         void plusDays() {
-            // Arrange
             // Act
             TimeDescription description = new TimeDescription("[NOW]+17(DAYS)");
             // Asserts
@@ -38,7 +36,6 @@ class TimeDescriptionTest {
 
         @Test
         void minusDays() {
-            // Arrange
             // Act
             TimeDescription description = new TimeDescription("[NOW]-17(DAYS)");
             // Asserts
@@ -47,7 +44,6 @@ class TimeDescriptionTest {
 
         @Test
         void notValid() {
-            // Arrange
             // Act
             TimeDescription description = new TimeDescription("NOW+123");
             // Asserts
@@ -56,7 +52,6 @@ class TimeDescriptionTest {
 
         @Test
         void notMatch() {
-            // Arrange
             // Act
             TimeDescription description = new TimeDescription("[NOW]+17DAYS");
             // Asserts
@@ -110,11 +105,34 @@ class TimeDescriptionTest {
 
         @Test
         void defaultValue() {
-            // Arrange
             // Act
             long threshold = new TimeDescription("[NOW]").getThreshold();
             // Asserts
             assertThat(threshold).isEqualTo(10_000);
+        }
+
+        @Test
+        void defaultThrAndTime() {
+            // Act
+            long threshold = new TimeDescription("[NOW]+3(MINUTES)").getThreshold();
+            // Asserts
+            assertThat(threshold).isEqualTo(10_000);
+        }
+
+        @Test
+        void setThreshold() {
+            // Act
+            long threshold = new TimeDescription("[NOW]{THR=123}").getThreshold();
+            // Asserts
+            assertThat(threshold).isEqualTo(123);
+        }
+
+        @Test
+        void setThresholdAndTime() {
+            // Act
+            long threshold = new TimeDescription("[NOW]+3(MINUTES){THR=1234}").getThreshold();
+            // Asserts
+            assertThat(threshold).isEqualTo(1234);
         }
     }
 
