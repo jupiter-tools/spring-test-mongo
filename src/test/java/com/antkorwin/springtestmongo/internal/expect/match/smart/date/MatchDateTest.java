@@ -197,7 +197,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=0}");
+            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=100}");
             // Assert
             assertThat(match).isTrue();
         }
@@ -206,7 +206,7 @@ class MatchDateTest {
         void notZeroThrFail() {
             // Arrange
             Date now = new Date();
-            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + 1));
+            Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25) + 1);
             // Act
             boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=0}");
             // Assert
