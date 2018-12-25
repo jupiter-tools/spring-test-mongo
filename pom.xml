@@ -125,7 +125,7 @@
     <profiles>
         <profile>
             <id>central</id>
-            <build>
+              <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

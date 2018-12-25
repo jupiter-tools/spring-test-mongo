@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.antkorwin.commonutils.exceptions.InternalException;
+
 /**
  * Created on 22.12.2018.
  *
@@ -12,7 +14,7 @@ import java.util.regex.Pattern;
 public class TimeDescription {
 
     private static final String TIME_DESCRIPTION_PATTERN =
-            "^(\\[NOW\\])" +
+            "^((date-match:|date:)\\[NOW\\])" +
             "((\\+|\\-)([0-9]{1,7})(\\((DAYS|HOURS|MINUTES|SECONDS)\\))){0,1}" +
             "(\\{THR=([0-9]{1,10})\\}){0,1}$";
 
@@ -47,21 +49,39 @@ public class TimeDescription {
 
         Matcher matcher = matchTimeDescriptionPattern(description);
 
-        if (matcher.group(2) == null) {
+        if (parseTimeOperation(matcher) == null) {
             return new TimeOperation(TimeDirection.UNDEFINED, null, 0);
         }
 
-        TimeDirection direction = (matcher.group(3).equals("+"))
-                                  ? TimeDirection.PLUS
-                                  : TimeDirection.MINUS;
-
-        int count = Integer.valueOf(matcher.group(4));
-
-        TimeUnit unit = TimeUnit.valueOf(matcher.group(6));
-
+        TimeDirection direction = parseDirection(matcher);
+        int count = parseCount(matcher);
+        TimeUnit unit = parseTimeUnit(matcher);
         threshold = parseThreshold(matcher);
 
         return new TimeOperation(direction, unit, count);
+    }
+
+    private String parseTimeOperation(Matcher matcher) {
+        return matcher.group(3);
+    }
+
+    private TimeUnit parseTimeUnit(Matcher matcher) {
+        return TimeUnit.valueOf(matcher.group(7));
+    }
+
+    private int parseCount(Matcher matcher) {
+        return Integer.valueOf(matcher.group(5));
+    }
+
+    private TimeDirection parseDirection(Matcher matcher) {
+        switch (matcher.group(4)) {
+            case "+":
+                return TimeDirection.PLUS;
+            case "-":
+                return TimeDirection.MINUS;
+            default:
+                throw new InternalException("unsupported operation", 106);
+        }
     }
 
     /**
@@ -92,9 +112,9 @@ public class TimeDescription {
         return matcher;
     }
 
-    private Integer parseThreshold(Matcher matcher){
-        return threshold = (matcher.group(8) != null)
-                    ? Integer.valueOf(matcher.group(8))
-                    : DEFAULT_THRESHOLD;
+    private Integer parseThreshold(Matcher matcher) {
+        return threshold = (matcher.group(9) != null)
+                           ? Integer.valueOf(matcher.group(9))
+                           : DEFAULT_THRESHOLD;
     }
 }
