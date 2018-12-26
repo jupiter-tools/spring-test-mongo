@@ -1,10 +1,11 @@
 package com.antkorwin.springtestmongo.internal.expect.match.smart.date;
 
+import java.util.concurrent.TimeUnit;
+
+import com.antkorwin.commonutils.exceptions.InternalException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -133,6 +134,41 @@ class TimeDescriptionTest {
             long threshold = new TimeDescription("date-match:[NOW]+3(MINUTES){THR=1234}").getThreshold();
             // Asserts
             assertThat(threshold).isEqualTo(1234);
+        }
+    }
+
+    @Nested
+    class DescriptionTypesTests {
+
+        @Test
+        void prefixIsEqualsDateMatch() {
+            // Act
+            TimeDescriptionType type = new TimeDescription("date-match:[NOW]").getType();
+            // Assert
+            assertThat(type).isEqualTo(TimeDescriptionType.MATCH);
+        }
+
+        @Test
+        void prefixIsEqualsDateMatchDifficult() {
+            // Act
+            TimeDescriptionType type = new TimeDescription("date-match:[NOW]+3(MINUTES)").getType();
+            // Assert
+            assertThat(type).isEqualTo(TimeDescriptionType.MATCH);
+        }
+
+        @Test
+        void prefixIsEqualsToDynamicValue() {
+            // Act
+            TimeDescriptionType type = new TimeDescription("date:[NOW]").getType();
+            // Assert
+            assertThat(type).isEqualTo(TimeDescriptionType.DYNAMIC_VALUE);
+        }
+
+        @Test
+        void wrongPrefix() {
+            // Act
+            Assertions.assertThrows(InternalException.class,
+                                    () -> new TimeDescription("wrong:[NOW]").getType());
         }
     }
 

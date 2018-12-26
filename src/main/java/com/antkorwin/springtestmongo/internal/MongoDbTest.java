@@ -3,6 +3,7 @@ package com.antkorwin.springtestmongo.internal;
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
 import com.antkorwin.springtestmongo.internal.expect.MatchDataSets;
+import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DateDynamicValue;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicDataSet;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicValue;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.GroovyDynamicValue;
@@ -59,7 +60,8 @@ public class MongoDbTest {
      * @param fileName path to file with an expected data set
      */
     public void expect(String fileName) {
-        Set<DynamicValue> dynamicEvaluators = Sets.newHashSet(new GroovyDynamicValue());
+        Set<DynamicValue> dynamicEvaluators = Sets.newHashSet(new GroovyDynamicValue(),
+                                                              new DateDynamicValue());
         DataSet dataSet = new DynamicDataSet(new JsonImport(new ImportFile(fileName)), dynamicEvaluators);
         DataSet mongoData = new MongoDataExport(mongoTemplate);
         new MatchDataSets(mongoData, dataSet).check();

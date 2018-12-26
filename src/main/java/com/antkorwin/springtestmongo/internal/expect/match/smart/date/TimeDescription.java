@@ -19,10 +19,9 @@ public class TimeDescription {
             "(\\{THR=([0-9]{1,10})\\}){0,1}$";
 
     private final static int DEFAULT_THRESHOLD = 10_000;
-
     private final String description;
-
     private Integer threshold = null;
+    private TimeDescriptionType type = null;
 
     public TimeDescription(String description) {
         this.description = description;
@@ -59,6 +58,13 @@ public class TimeDescription {
         threshold = parseThreshold(matcher);
 
         return new TimeOperation(direction, unit, count);
+    }
+
+    private Matcher matchTimeDescriptionPattern(String value) {
+        Pattern pattern = Pattern.compile(TIME_DESCRIPTION_PATTERN);
+        Matcher matcher = pattern.matcher(value);
+        matcher.find();
+        return matcher;
     }
 
     private String parseTimeOperation(Matcher matcher) {
@@ -105,16 +111,36 @@ public class TimeDescription {
         return threshold;
     }
 
-    private Matcher matchTimeDescriptionPattern(String value) {
-        Pattern pattern = Pattern.compile(TIME_DESCRIPTION_PATTERN);
-        Matcher matcher = pattern.matcher(value);
-        matcher.find();
-        return matcher;
-    }
-
     private Integer parseThreshold(Matcher matcher) {
         return threshold = (matcher.group(9) != null)
                            ? Integer.valueOf(matcher.group(9))
                            : DEFAULT_THRESHOLD;
+    }
+
+    /**
+     * @return Type of the current description
+     */
+    public TimeDescriptionType getType() {
+        if (type != null) {
+            return type;
+        }
+        type = parseType();
+        return type;
+    }
+
+    private TimeDescriptionType parseType() {
+        Matcher matcher = matchTimeDescriptionPattern(description);
+        if (!matcher.matches()) {
+            throw new InternalException("Unsupported type of Date Matcher", 107);
+        }
+        String prefix = matcher.group(2);
+        switch (prefix) {
+            case "date-match:":
+                return TimeDescriptionType.MATCH;
+            case "date:":
+                return TimeDescriptionType.DYNAMIC_VALUE;
+            default:
+                throw new InternalException("Unsupported type of Date Matcher", 107);
+        }
     }
 }
