@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -254,6 +255,18 @@ class MongoDbTestExpectedIT {
             mongoTemplate.save(bar2);
             // Act
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/expect_with_groovy.json");
+        }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void dateTimeNow() {
+            // Arrange
+            Foo foo1 = new Foo("1", new Date(), 1);
+            Foo foo2 = new Foo("2", new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(3)), 2);
+            mongoTemplate.save(foo1);
+            mongoTemplate.save(foo2);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/expect_with_dates.json");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.antkorwin.springtestmongo.internal.expect.dynamic.value;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,13 @@ class DateDynamicValueTest {
             Date before = new Date();
             Date now = (Date) new DateDynamicValue().evaluate("date:[NOW]");
             assertThat(now).isAfterOrEqualsTo(before);
+        }
+
+        @Test
+        void plus3Minutes() {
+            Date expected = new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(3));
+            Date evaluate = (Date) new DateDynamicValue().evaluate("date:[NOW]+3(MINUTES)");
+            assertThat(evaluate).isAfterOrEqualsTo(expected);
         }
     }
 
