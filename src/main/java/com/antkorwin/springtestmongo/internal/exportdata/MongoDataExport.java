@@ -30,7 +30,7 @@ public class MongoDataExport implements DataSet {
         Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
         this.objectMapper = new ObjectMapper();
-        this.objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        //this.objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
     @Override
