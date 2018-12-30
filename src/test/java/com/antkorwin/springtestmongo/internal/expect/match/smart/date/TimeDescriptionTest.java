@@ -170,6 +170,16 @@ class TimeDescriptionTest {
             Assertions.assertThrows(InternalException.class,
                                     () -> new TimeDescription("wrong:[NOW]").getType());
         }
+
+        @Test
+        void getTypeTwice() {
+            // Arrange
+            TimeDescription description = new TimeDescription("date:[NOW]");
+            // Act
+            description.getType();
+            // Asserts
+            assertThat(description.getType()).isEqualTo(TimeDescriptionType.DYNAMIC_VALUE);
+        }
     }
 
 
