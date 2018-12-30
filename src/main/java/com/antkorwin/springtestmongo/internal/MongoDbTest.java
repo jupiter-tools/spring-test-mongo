@@ -50,7 +50,10 @@ public class MongoDbTest {
      * @param fileName path to file with the data set.
      */
     public void importFrom(String fileName) {
-        new MongoDataImport(mongoTemplate).importFrom(new JsonImport(new ImportFile(fileName)));
+
+        new MongoDataImport(mongoTemplate).importFrom(
+                new DynamicDataSet(new JsonImport(new ImportFile(fileName)),
+                                   getDynamicEvaluators()));
     }
 
     /**
@@ -60,11 +63,15 @@ public class MongoDbTest {
      * @param fileName path to file with an expected data set
      */
     public void expect(String fileName) {
-        Set<DynamicValue> dynamicEvaluators = Sets.newHashSet(new GroovyDynamicValue(),
-                                                              new DateDynamicValue());
-        DataSet dataSet = new DynamicDataSet(new JsonImport(new ImportFile(fileName)), dynamicEvaluators);
+
+        DataSet dataSet = new DynamicDataSet(new JsonImport(new ImportFile(fileName)), getDynamicEvaluators());
         DataSet mongoData = new MongoDataExport(mongoTemplate);
         new MatchDataSets(mongoData, dataSet).check();
+    }
+
+    private Set<DynamicValue> getDynamicEvaluators() {
+        return Sets.newHashSet(new GroovyDynamicValue(),
+                               new DateDynamicValue());
     }
 
 }
