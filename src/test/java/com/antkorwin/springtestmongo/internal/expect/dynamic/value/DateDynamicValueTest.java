@@ -11,8 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created on 26.12.2018.
  *
- * TODO: replace on javadoc
- *
  * @author Korovin Anatoliy
  */
 class DateDynamicValueTest {
