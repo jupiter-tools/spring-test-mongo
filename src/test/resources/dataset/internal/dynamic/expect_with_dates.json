@@ -1,0 +1,12 @@
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "id": "1",
+      "time": "date-match:[NOW]"
+    },
+    {
+      "id": "2",
+      "time":"date-match:[NOW]+3(MINUTES)"
+    }
+  ]
+}

@@ -25,7 +25,7 @@ class MatchDateTest {
         @Test
         void necessary() {
             // Act
-            boolean necessary = matchDate.isNecessary("[NOW]");
+            boolean necessary = matchDate.isNecessary("date-match:[NOW]");
             // Asserts
             assertThat(necessary).isTrue();
         }
@@ -34,6 +34,14 @@ class MatchDateTest {
         void notNecessary() {
             // Act
             boolean necessary = matchDate.isNecessary("time");
+            // Asserts
+            assertThat(necessary).isFalse();
+        }
+
+        @Test
+        void notNecessaryWithoutPrefix() {
+            // Act
+            boolean necessary = matchDate.isNecessary("[NOW]");
             // Asserts
             assertThat(necessary).isFalse();
         }
@@ -53,7 +61,7 @@ class MatchDateTest {
         @Test
         void nowTime() {
             // Act
-            boolean now = matchDate.match(new Date(), "[NOW]");
+            boolean now = matchDate.match(new Date(), "date-match:[NOW]");
             // Asserts
             assertThat(now).isTrue();
         }
@@ -61,7 +69,7 @@ class MatchDateTest {
         @Test
         void nowTimeInLong() {
             // Act
-            boolean now = matchDate.match(new Date().getTime(), "[NOW]");
+            boolean now = matchDate.match(new Date().getTime(), "date-match:[NOW]");
             // Asserts
             assertThat(now).isTrue();
         }
@@ -75,7 +83,7 @@ class MatchDateTest {
             Date tomorrow = Date.from(localDateTime.plusDays(1)
                                                    .atZone(ZoneId.systemDefault()).toInstant());
             // Act
-            boolean match = matchDate.match(tomorrow, "[NOW]+1(DAYS)");
+            boolean match = matchDate.match(tomorrow, "date-match:[NOW]+1(DAYS)");
             // Assert
             assertThat(match).isTrue();
         }
@@ -89,7 +97,7 @@ class MatchDateTest {
             Date tomorrow = Date.from(localDateTime.plusDays(10)
                                                    .atZone(ZoneId.systemDefault()).toInstant());
             // Act
-            boolean match = matchDate.match(tomorrow, "[NOW]+10(DAYS)");
+            boolean match = matchDate.match(tomorrow, "date-match:[NOW]+10(DAYS)");
             // Assert
             assertThat(match).isTrue();
         }
@@ -103,7 +111,7 @@ class MatchDateTest {
             Date tomorrow = Date.from(localDateTime.minusDays(1)
                                                    .atZone(ZoneId.systemDefault()).toInstant());
             // Act
-            boolean match = matchDate.match(tomorrow, "[NOW]-1(DAYS)");
+            boolean match = matchDate.match(tomorrow, "date-match:[NOW]-1(DAYS)");
             // Assert
             assertThat(match).isTrue();
         }
@@ -114,7 +122,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.HOURS.toMillis(1));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+1(HOURS)");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+1(HOURS)");
             // Assert
             assertThat(match).isTrue();
         }
@@ -125,7 +133,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(5));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+5(MINUTES)");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+5(MINUTES)");
             // Assert
             assertThat(match).isTrue();
         }
@@ -136,7 +144,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS)");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+25(SECONDS)");
             // Assert
             assertThat(match).isTrue();
         }
@@ -147,7 +155,7 @@ class MatchDateTest {
             Date now = new Date();
             Date tooLate = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(5));
             // Act
-            boolean match = matchDate.match(tooLate, "[NOW]+3(MINUTES)");
+            boolean match = matchDate.match(tooLate, "date-match:[NOW]+3(MINUTES)");
             // Assert
             assertThat(match).isFalse();
         }
@@ -163,7 +171,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + defaultThreshold));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS)");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+25(SECONDS)");
             // Assert
             assertThat(match).isTrue();
         }
@@ -175,7 +183,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + defaultThreshold + 1));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS)");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+25(SECONDS)");
             // Assert
             assertThat(match).isFalse();
         }
@@ -186,7 +194,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25 + 20));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=20000}");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+25(SECONDS){THR=20000}");
             // Assert
             assertThat(match).isTrue();
         }
@@ -197,7 +205,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25));
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=100}");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+25(SECONDS){THR=100}");
             // Assert
             assertThat(match).isTrue();
         }
@@ -208,7 +216,7 @@ class MatchDateTest {
             Date now = new Date();
             Date feature = new Date(now.getTime() + TimeUnit.SECONDS.toMillis(25) + 1);
             // Act
-            boolean match = matchDate.match(feature, "[NOW]+25(SECONDS){THR=0}");
+            boolean match = matchDate.match(feature, "date-match:[NOW]+25(SECONDS){THR=0}");
             // Assert
             assertThat(match).isFalse();
         }

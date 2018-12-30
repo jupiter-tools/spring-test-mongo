@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.antkorwin.springtestmongo.internal.DataSet;
 import com.antkorwin.springtestmongo.internal.TestData;
@@ -144,5 +145,24 @@ class DynamicDataSetTest {
         String expected = new JsonExport(expect).read();
         System.out.println(dynamic);
         assertThat(dynamic).isEqualTo(expected);
+    }
+
+    @Test
+    void dateTime() {
+        // Arrange
+        Date before = new Date();
+        DataSet dataSet = new TestData().jsonDataSet("/dataset/internal/dynamic/dynamic_with_dates.json");
+
+        // Act
+        DynamicDataSet dynamicDataSet = new DynamicDataSet(dataSet, Sets.newHashSet(new DateDynamicValue()));
+        // Asserts
+        Date now = (Date) dynamicDataSet.read().get("test").get(0).get("now");
+        Date tomorrow = (Date) dynamicDataSet.read().get("test").get(0).get("tomorrow");
+
+        assertThat(now).isAfterOrEqualsTo(before);
+        assertThat(tomorrow).isAfterOrEqualsTo(new Date(before.getTime() + TimeUnit.MINUTES.toMillis(3)));
+
+        String dynamic = new JsonExport(dynamicDataSet).read();
+        System.out.println(dynamic);
     }
 }

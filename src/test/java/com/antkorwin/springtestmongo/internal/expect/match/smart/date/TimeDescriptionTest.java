@@ -1,10 +1,11 @@
 package com.antkorwin.springtestmongo.internal.expect.match.smart.date;
 
+import java.util.concurrent.TimeUnit;
+
+import com.antkorwin.commonutils.exceptions.InternalException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +22,7 @@ class TimeDescriptionTest {
         @Test
         void now() {
             // Act
-            TimeDescription description = new TimeDescription("[NOW]");
+            TimeDescription description = new TimeDescription("date-match:[NOW]");
             // Asserts
             assertThat(description.matches()).isTrue();
         }
@@ -29,7 +30,7 @@ class TimeDescriptionTest {
         @Test
         void plusDays() {
             // Act
-            TimeDescription description = new TimeDescription("[NOW]+17(DAYS)");
+            TimeDescription description = new TimeDescription("date-match:[NOW]+17(DAYS)");
             // Asserts
             assertThat(description.matches()).isTrue();
         }
@@ -37,7 +38,7 @@ class TimeDescriptionTest {
         @Test
         void minusDays() {
             // Act
-            TimeDescription description = new TimeDescription("[NOW]-17(DAYS)");
+            TimeDescription description = new TimeDescription("date-match:[NOW]-17(DAYS)");
             // Asserts
             assertThat(description.matches()).isTrue();
         }
@@ -53,7 +54,7 @@ class TimeDescriptionTest {
         @Test
         void notMatch() {
             // Act
-            TimeDescription description = new TimeDescription("[NOW]+17DAYS");
+            TimeDescription description = new TimeDescription("date-match:[NOW]+17DAYS");
             // Asserts
             assertThat(description.matches()).isFalse();
         }
@@ -67,7 +68,7 @@ class TimeDescriptionTest {
         void now() {
             // Arrange
             TimeOperation now = new TimeOperation(TimeDirection.UNDEFINED, null, 0);
-            TimeDescription description = new TimeDescription("[NOW]");
+            TimeDescription description = new TimeDescription("date-match:[NOW]");
             // Act & Asserts
             assertThat(description.getTimeOperation()).isEqualToComparingFieldByField(now);
         }
@@ -76,7 +77,7 @@ class TimeDescriptionTest {
         void plusDays() {
             // Arrange
             TimeOperation result = new TimeOperation(TimeDirection.PLUS, TimeUnit.DAYS, 17);
-            TimeDescription description = new TimeDescription("[NOW]+17(DAYS)");
+            TimeDescription description = new TimeDescription("date-match:[NOW]+17(DAYS)");
             // Act & Asserts
             assertThat(description.getTimeOperation()).isEqualToComparingFieldByField(result);
         }
@@ -85,7 +86,7 @@ class TimeDescriptionTest {
         void minusDays() {
             // Arrange
             TimeOperation result = new TimeOperation(TimeDirection.MINUS, TimeUnit.DAYS, 1);
-            TimeDescription description = new TimeDescription("[NOW]-1(DAYS)");
+            TimeDescription description = new TimeDescription("date-match:[NOW]-1(DAYS)");
             // Act & Asserts
             assertThat(description.getTimeOperation()).isEqualToComparingFieldByField(result);
         }
@@ -106,7 +107,7 @@ class TimeDescriptionTest {
         @Test
         void defaultValue() {
             // Act
-            long threshold = new TimeDescription("[NOW]").getThreshold();
+            long threshold = new TimeDescription("date-match:[NOW]").getThreshold();
             // Asserts
             assertThat(threshold).isEqualTo(10_000);
         }
@@ -114,7 +115,7 @@ class TimeDescriptionTest {
         @Test
         void defaultThrAndTime() {
             // Act
-            long threshold = new TimeDescription("[NOW]+3(MINUTES)").getThreshold();
+            long threshold = new TimeDescription("date-match:[NOW]+3(MINUTES)").getThreshold();
             // Asserts
             assertThat(threshold).isEqualTo(10_000);
         }
@@ -122,7 +123,7 @@ class TimeDescriptionTest {
         @Test
         void setThreshold() {
             // Act
-            long threshold = new TimeDescription("[NOW]{THR=123}").getThreshold();
+            long threshold = new TimeDescription("date-match:[NOW]{THR=123}").getThreshold();
             // Asserts
             assertThat(threshold).isEqualTo(123);
         }
@@ -130,9 +131,54 @@ class TimeDescriptionTest {
         @Test
         void setThresholdAndTime() {
             // Act
-            long threshold = new TimeDescription("[NOW]+3(MINUTES){THR=1234}").getThreshold();
+            long threshold = new TimeDescription("date-match:[NOW]+3(MINUTES){THR=1234}").getThreshold();
             // Asserts
             assertThat(threshold).isEqualTo(1234);
+        }
+    }
+
+    @Nested
+    class DescriptionTypesTests {
+
+        @Test
+        void prefixIsEqualsDateMatch() {
+            // Act
+            TimeDescriptionType type = new TimeDescription("date-match:[NOW]").getType();
+            // Assert
+            assertThat(type).isEqualTo(TimeDescriptionType.MATCH);
+        }
+
+        @Test
+        void prefixIsEqualsDateMatchDifficult() {
+            // Act
+            TimeDescriptionType type = new TimeDescription("date-match:[NOW]+3(MINUTES)").getType();
+            // Assert
+            assertThat(type).isEqualTo(TimeDescriptionType.MATCH);
+        }
+
+        @Test
+        void prefixIsEqualsToDynamicValue() {
+            // Act
+            TimeDescriptionType type = new TimeDescription("date:[NOW]").getType();
+            // Assert
+            assertThat(type).isEqualTo(TimeDescriptionType.DYNAMIC_VALUE);
+        }
+
+        @Test
+        void wrongPrefix() {
+            // Act
+            Assertions.assertThrows(InternalException.class,
+                                    () -> new TimeDescription("wrong:[NOW]").getType());
+        }
+
+        @Test
+        void getTypeTwice() {
+            // Arrange
+            TimeDescription description = new TimeDescription("date:[NOW]");
+            // Act
+            description.getType();
+            // Asserts
+            assertThat(description.getType()).isEqualTo(TimeDescriptionType.DYNAMIC_VALUE);
         }
     }
 

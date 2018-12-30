@@ -1,0 +1,8 @@
+{
+  "test": [
+    {
+      "now": "date:[NOW]",
+      "tomorrow": "date:[NOW]+3(MINUTES)"
+    }
+  ]
+}

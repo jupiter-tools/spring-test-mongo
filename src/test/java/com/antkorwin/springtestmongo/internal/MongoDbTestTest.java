@@ -15,7 +15,10 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
@@ -147,7 +150,43 @@ class MongoDbTestTest {
             }
         }
 
+        @Nested
+        @DisplayName("Dynamic data-values")
+        class ImportWithDynamicDataValues{
 
+            @Test
+            void dynamicDateValue() {
+                // Arrange
+                Date before = new Date();
+                Date plus3days = new Date(before.getTime() + TimeUnit.DAYS.toMillis(3));
+                ArgumentCaptor<Foo> captor = ArgumentCaptor.forClass(Foo.class);
+                // Act
+                mongoDbTest.importFrom("/dataset/internal/dynamic/import_dynamic_with_dates.json");
+                // Assert
+                verify(mongoTemplate, times(2)).save(captor.capture());
+
+                Date now = captor.getAllValues().get(0).getTime();
+                Assertions.assertThat(now).isAfterOrEqualsTo(before);
+
+                Date plus = captor.getAllValues().get(1).getTime();
+                Assertions.assertThat(plus).isAfterOrEqualsTo(plus3days);
+            }
+
+            @Test
+            void dynamicGroovy() {
+                // Arrange
+                Date before = new Date();
+                ArgumentCaptor<Foo> captor = ArgumentCaptor.forClass(Foo.class);
+                // Act
+                mongoDbTest.importFrom("/dataset/internal/dynamic/import_dynamic_groovy.json");
+                // Asserts
+                verify(mongoTemplate).save(captor.capture());
+                Foo foo = captor.getValue();
+                assertThat(foo.getId()).isEqualTo("8");
+                assertThat(foo.getTime()).isAfterOrEqualsTo(before);
+                assertThat(foo.getCounter()).isEqualTo(55);
+            }
+        }
     }
 
 

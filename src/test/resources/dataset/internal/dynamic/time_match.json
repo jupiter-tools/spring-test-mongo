@@ -2,7 +2,7 @@
   "com.antkorwin.springtestmongo.Foo": [
     {
       "id": "1",
-      "time": "[NOW]",
+      "time": "date-match:[NOW]",
       "counter":123
     }
   ]

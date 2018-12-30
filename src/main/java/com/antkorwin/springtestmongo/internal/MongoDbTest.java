@@ -3,6 +3,7 @@ package com.antkorwin.springtestmongo.internal;
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
 import com.antkorwin.springtestmongo.internal.expect.MatchDataSets;
+import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DateDynamicValue;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicDataSet;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicValue;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.GroovyDynamicValue;
@@ -49,7 +50,10 @@ public class MongoDbTest {
      * @param fileName path to file with the data set.
      */
     public void importFrom(String fileName) {
-        new MongoDataImport(mongoTemplate).importFrom(new JsonImport(new ImportFile(fileName)));
+
+        new MongoDataImport(mongoTemplate).importFrom(
+                new DynamicDataSet(new JsonImport(new ImportFile(fileName)),
+                                   getDynamicEvaluators()));
     }
 
     /**
@@ -59,10 +63,15 @@ public class MongoDbTest {
      * @param fileName path to file with an expected data set
      */
     public void expect(String fileName) {
-        Set<DynamicValue> dynamicEvaluators = Sets.newHashSet(new GroovyDynamicValue());
-        DataSet dataSet = new DynamicDataSet(new JsonImport(new ImportFile(fileName)), dynamicEvaluators);
+
+        DataSet dataSet = new DynamicDataSet(new JsonImport(new ImportFile(fileName)), getDynamicEvaluators());
         DataSet mongoData = new MongoDataExport(mongoTemplate);
         new MatchDataSets(mongoData, dataSet).check();
+    }
+
+    private Set<DynamicValue> getDynamicEvaluators() {
+        return Sets.newHashSet(new GroovyDynamicValue(),
+                               new DateDynamicValue());
     }
 
 }

@@ -326,7 +326,7 @@ class MatchAnyTest {
         void now() {
             // Arrange
             Map<String, Object> actual = ImmutableMap.of("time", new Date());
-            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]");
+            Map<String, Object> expected = ImmutableMap.of("time", "date-match:[NOW]");
             // Act & Asserts
             assertThat(new MatchAny().match(actual, expected)).isTrue();
         }
@@ -336,7 +336,7 @@ class MatchAnyTest {
             // Arrange
             Date tomorrow = new Date(new Date().getTime() + TimeUnit.DAYS.toMillis(1));
             Map<String, Object> actual = ImmutableMap.of("time", tomorrow);
-            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]+1(DAYS)");
+            Map<String, Object> expected = ImmutableMap.of("time", "date-match:[NOW]+1(DAYS)");
             // Act & Asserts
             assertThat(new MatchAny().match(actual, expected)).isTrue();
         }
@@ -346,7 +346,7 @@ class MatchAnyTest {
             // Arrange
             Date tomorrow = new Date(new Date().getTime() + TimeUnit.DAYS.toMillis(1));
             Map<String, Object> actual = ImmutableMap.of("time", tomorrow);
-            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]");
+            Map<String, Object> expected = ImmutableMap.of("time", "date-match:[NOW]");
             // Act & Asserts
             assertThat(new MatchAny().match(actual, expected)).isFalse();
         }
@@ -356,7 +356,7 @@ class MatchAnyTest {
             // Arrange
             Date yesterday = new Date(new Date().getTime() - TimeUnit.DAYS.toMillis(1));
             Map<String, Object> actual = ImmutableMap.of("time", yesterday);
-            Map<String, Object> expected = ImmutableMap.of("time", "[NOW]-1(DAYS)");
+            Map<String, Object> expected = ImmutableMap.of("time", "date-match:[NOW]-1(DAYS)");
             // Act & Asserts
             assertThat(new MatchAny().match(actual, expected)).isTrue();
         }

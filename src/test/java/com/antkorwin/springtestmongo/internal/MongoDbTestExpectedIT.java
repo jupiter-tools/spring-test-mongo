@@ -1,5 +1,9 @@
 package com.antkorwin.springtestmongo.internal;
 
+import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
 import com.antkorwin.springtestmongo.annotation.MongoDataSet;
@@ -9,13 +13,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Date;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -214,10 +216,10 @@ class MongoDbTestExpectedIT {
             });
 
             assertThat(error.getMessage()).contains("ExpectedDataSet of com.antkorwin.springtestmongo.Bar")
-            .contains("Not expected: \n" +
-                      "{\"id\":\"12345\",\"data\":\"data-1\"}")
-            .contains("Expected but not found: \n" +
-                      "{\"id\":\"regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}\",\"data\":\"data-1\"}");
+                                          .contains("Not expected: \n" +
+                                                    "{\"id\":\"12345\",\"data\":\"data-1\"}")
+                                          .contains("Expected but not found: \n" +
+                                                    "{\"id\":\"regex: [a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}\",\"data\":\"data-1\"}");
         }
 
         @Test
@@ -281,6 +283,32 @@ class MongoDbTestExpectedIT {
             mongoTemplate.save(foo);
             // Act
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/time_match.json");
+        }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void dateTimeNow() {
+            // Arrange
+            Foo foo1 = new Foo("1", new Date(), 1);
+            Foo foo2 = new Foo("2", new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(3)), 2);
+            mongoTemplate.save(foo1);
+            mongoTemplate.save(foo2);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/expect_with_dates.json");
+        }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void wrongDateTime() {
+            // Arrange
+            Foo foo1 = new Foo("1", new Date(), 1);
+            Foo foo2 = new Foo("2", new Date(), 2);
+            mongoTemplate.save(foo1);
+            mongoTemplate.save(foo2);
+            MongoDbTest mongoDbTest = new MongoDbTest(mongoTemplate);
+            // Act
+            Assertions.assertThrows(Error.class,
+                                    () -> mongoDbTest.expect("/dataset/internal/dynamic/expect_with_dates.json"));
         }
     }
 }
