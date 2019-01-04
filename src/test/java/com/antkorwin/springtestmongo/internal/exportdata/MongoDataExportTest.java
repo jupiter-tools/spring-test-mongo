@@ -2,11 +2,11 @@ package com.antkorwin.springtestmongo.internal.exportdata;
 
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.Foo;
-import com.antkorwin.springtestmongo.internal.exportdata.MongoDataExport;
+import com.antkorwin.springtestmongo.internal.exportdata.scanner.ReflectionsDocumentScanner;
+import com.antkorwin.springtestmongo.internal.exportdata.scanner.DocumentClasses;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.assertj.core.groups.Tuple;
-import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -23,13 +23,14 @@ import static org.mockito.Mockito.*;
  */
 class MongoDataExportTest {
 
-    private MongoTemplate mongoTemplate = mock(MongoTemplate.class, RETURNS_DEEP_STUBS);
-    private MongoDataExport mongoDataExport = new MongoDataExport(mongoTemplate);
+    private MongoTemplate mongoTemplate;
+    private MongoDataExport mongoDataExport;
 
     @BeforeEach
     void setUp() {
+        DocumentClasses documentClasses = new DocumentClasses(new ReflectionsDocumentScanner(""));
         mongoTemplate = mock(MongoTemplate.class, RETURNS_DEEP_STUBS);
-        mongoDataExport = new MongoDataExport(mongoTemplate);
+        mongoDataExport = new MongoDataExport(mongoTemplate, documentClasses);
     }
 
     @Test
@@ -61,7 +62,6 @@ class MongoDataExportTest {
         arrangeCollections(mongoTemplate,
                            new DocCollection<>(Bar.class, bars),
                            new DocCollection<>(Foo.class, foos));
-        MongoDataExport mongoDataExport = new MongoDataExport(mongoTemplate);
         // Act
         Map<String, List<Map<String, Object>>> dataSet = mongoDataExport.read();
         // Assert
@@ -82,12 +82,6 @@ class MongoDataExportTest {
     private void arrangeCollections(MongoTemplate mongoTemplate, DocCollection... documents) {
         Set<String> names = new HashSet<>();
         for (DocCollection d : documents) {
-            // mock the checking type of the first document
-            Document documentX = new Document("_class", d.getType().getCanonicalName());
-            when(mongoTemplate.getCollection(d.getType().getSimpleName())
-                              .find(Document.class)
-                              .first())
-                    .thenReturn(documentX);
             // mock stored collection of this documents
             when(mongoTemplate.findAll(d.getType())).thenReturn(d.getData());
             // collect each name of documents class
