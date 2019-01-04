@@ -7,6 +7,9 @@ import java.util.HashMap;
 /**
  * Created on 04.01.2019.
  *
+ * This Map cast keys to lower case when you put something
+ * and find by lowercase of the key when you get something from this map.
+ *
  * @author Korovin Anatoliy
  */
 public class CaseInsensitiveMap extends HashMap<String, Class<?>> {

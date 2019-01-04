@@ -10,6 +10,13 @@ import java.util.Set;
 /**
  * Created on 03.01.2019.
  *
+ * Scans selected package on the MongoDB Documents and returns
+ * a map with all founded collections with their class-types.
+ *
+ * Finds all classes which annotated by the Document annotation
+ * and takes collection names from this annotation or takes a class
+ * name if the collection name doesn't set by the Document annotation.
+ *
  * @author Korovin Anatoliy
  */
 public class ReflectionsDocumentScanner implements DocumentScanner {
