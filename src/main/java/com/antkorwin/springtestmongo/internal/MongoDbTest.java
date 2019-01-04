@@ -10,6 +10,8 @@ import com.antkorwin.springtestmongo.internal.expect.dynamic.value.GroovyDynamic
 import com.antkorwin.springtestmongo.internal.exportdata.ExportFile;
 import com.antkorwin.springtestmongo.internal.exportdata.JsonExport;
 import com.antkorwin.springtestmongo.internal.exportdata.MongoDataExport;
+import com.antkorwin.springtestmongo.internal.exportdata.scanner.ReflectionsDocumentScanner;
+import com.antkorwin.springtestmongo.internal.exportdata.scanner.DocumentClasses;
 import com.antkorwin.springtestmongo.internal.importdata.ImportFile;
 import com.antkorwin.springtestmongo.internal.importdata.JsonImport;
 import com.antkorwin.springtestmongo.internal.importdata.MongoDataImport;
@@ -41,7 +43,8 @@ public class MongoDbTest {
      * @param fileName path to the export file
      */
     public void exportTo(String fileName) {
-        new ExportFile(new JsonExport(new MongoDataExport(this.mongoTemplate))).write(fileName);
+        DocumentClasses documentClasses = new DocumentClasses(new ReflectionsDocumentScanner(""));
+        new ExportFile(new JsonExport(new MongoDataExport(this.mongoTemplate, documentClasses))).write(fileName);
     }
 
     /**
@@ -63,9 +66,9 @@ public class MongoDbTest {
      * @param fileName path to file with an expected data set
      */
     public void expect(String fileName) {
-
+        DocumentClasses documentClasses = new DocumentClasses(new ReflectionsDocumentScanner(""));
         DataSet dataSet = new DynamicDataSet(new JsonImport(new ImportFile(fileName)), getDynamicEvaluators());
-        DataSet mongoData = new MongoDataExport(mongoTemplate);
+        DataSet mongoData = new MongoDataExport(mongoTemplate, documentClasses);
         new MatchDataSets(mongoData, dataSet).check();
     }
 
