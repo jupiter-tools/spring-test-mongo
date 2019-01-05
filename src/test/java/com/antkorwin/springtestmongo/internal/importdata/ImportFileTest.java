@@ -1,7 +1,8 @@
 package com.antkorwin.springtestmongo.internal.importdata;
 
+import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.springtestmongo.internal.Text;
-import com.antkorwin.springtestmongo.internal.importdata.ImportFile;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,5 +42,14 @@ class ImportFileTest {
         String text = fileText.read();
         // Asserts
         assertThat(text).isEqualTo("secret-123");
+    }
+
+    @Test
+    void tryToReadNotExistsFile() {
+        // Arrange
+        Text fileText = new ImportFile("dataset/not_exist_file_name.txt");
+        // Act
+        Assertions.assertThrows(InternalException.class,
+                                fileText::read);
     }
 }

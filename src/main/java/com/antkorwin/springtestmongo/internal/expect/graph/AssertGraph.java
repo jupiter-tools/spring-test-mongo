@@ -3,6 +3,8 @@ package com.antkorwin.springtestmongo.internal.expect.graph;
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ public class AssertGraph {
 
     private final IndexedGraph indexGraph;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Logger log = LoggerFactory.getLogger(AssertGraph.class);
+
     private boolean failed = false;
     private List<String> errors = new ArrayList<>();
 
@@ -69,7 +73,7 @@ public class AssertGraph {
         try {
             return objectMapper.writeValueAsString(stringObjectMap);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error("Error while convert object to string", e);
             throw new InternalException(e);
         }
     }
