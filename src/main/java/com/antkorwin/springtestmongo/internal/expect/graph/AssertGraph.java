@@ -73,7 +73,7 @@ public class AssertGraph {
         try {
             return objectMapper.writeValueAsString(stringObjectMap);
         } catch (JsonProcessingException e) {
-            log.error("Error while convert object to string", e);
+            log.error("Error while convert object to string: {}", stringObjectMap, e);
             throw new InternalException(e);
         }
     }
