@@ -1,21 +1,22 @@
 package com.antkorwin.springtestmongo.internal.importdata;
 
+import com.antkorwin.commonutils.exceptions.InternalException;
+import com.antkorwin.commonutils.validation.GuardCheck;
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.internal.DataSet;
-import com.antkorwin.springtestmongo.internal.importdata.MongoDataImport;
 import org.assertj.core.groups.Tuple;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
+import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.DOCUMENT_RECORD_PARSING_ERROR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -26,41 +27,63 @@ import static org.mockito.Mockito.*;
  */
 class MongoDataImportTest {
 
-    private static Stream<Arguments> validDataSets() {
-        return Stream.of(Arguments.of(getDataSetTyped()));
-                         //Arguments.of(getDataSetUntyped()));
-    }
+    private MongoTemplate mongoTemplate = mock(MongoTemplate.class);
+    private MongoDataImport mongoDataImport = new MongoDataImport(mongoTemplate);
+    private ArgumentCaptor<Bar> captor = ArgumentCaptor.forClass(Bar.class);
 
-    private static DataSet getDataSetTyped() {
-        ImmutableMap<String, Object> bar1 = ImmutableMap.of("id", "101", "data", "data-1");
-        ImmutableMap<String, Object> bar2 = ImmutableMap.of("id", "102", "data", "data-2");
-        Map<String, List<Map<String, Object>>> map = ImmutableMap.of(Bar.class.getCanonicalName(),
-                                                                     Arrays.asList(bar1, bar2));
-        return () -> map;
-    }
-
-//    private static DataSet getDataSetUntyped() {
-//        Bar bar1 = new Bar("101", "data-1");
-//        Bar bar2 = new Bar("102", "data-2");
-//        Map<String, List<Map<String, Object>>> map = ImmutableMap.of(Bar.class.getCanonicalName(),
-//                                                   Arrays.asList(bar1, bar2));
-//        return () -> map;
-//    }
-
-    @ParameterizedTest
-    @MethodSource("validDataSets")
-    void importTest(DataSet dataSet) {
-        // Arrange
-        MongoTemplate mongoTemplate = mock(MongoTemplate.class);
-        MongoDataImport mongoDataImport = new MongoDataImport(mongoTemplate);
-        ArgumentCaptor<Bar> captor = ArgumentCaptor.forClass(Bar.class);
+    @Test
+    void importTestAllFields() {
         // Act
-        mongoDataImport.importFrom(dataSet);
+        mongoDataImport.importFrom(getDataSetFull());
         // Asserts
         verify(mongoTemplate, times(2)).save(captor.capture());
         assertThat(captor.getAllValues()).hasSize(2)
                                          .extracting(Bar::getId, Bar::getData)
                                          .containsOnly(Tuple.tuple("101", "data-1"),
                                                        Tuple.tuple("102", "data-2"));
+    }
+
+    @Test
+    void importTestPartial() {
+        // Act
+        mongoDataImport.importFrom(getDataSetPartial());
+        // Asserts
+        verify(mongoTemplate, times(2)).save(captor.capture());
+        assertThat(captor.getAllValues()).hasSize(2)
+                                         .extracting(Bar::getData)
+                                         .containsOnly("data-1", "data-2");
+    }
+
+    @Test
+    void tryToImportWithWrongFormat() {
+        // Arrange
+        ImmutableMap<String, Object> notBar = ImmutableMap.of("uniqueField", "05111987");
+
+        DataSet dataSet = () -> ImmutableMap.of(Bar.class.getCanonicalName(),
+                                                Collections.singletonList(notBar));
+        // Act & Assert
+        GuardCheck.check(()-> mongoDataImport.importFrom(dataSet),
+                         InternalException.class,
+                         DOCUMENT_RECORD_PARSING_ERROR);
+    }
+
+    private DataSet getDataSetFull() {
+        ImmutableMap<String, Object> bar1 = ImmutableMap.of("id", "101", "data", "data-1");
+        ImmutableMap<String, Object> bar2 = ImmutableMap.of("id", "102", "data", "data-2");
+
+        Map<String, List<Map<String, Object>>> map =
+                ImmutableMap.of(Bar.class.getCanonicalName(), Arrays.asList(bar1, bar2));
+
+        return () -> map;
+    }
+
+    private DataSet getDataSetPartial() {
+        ImmutableMap<String, Object> bar1 = ImmutableMap.of("data", "data-1");
+        ImmutableMap<String, Object> bar2 = ImmutableMap.of("data", "data-2");
+
+        Map<String, List<Map<String, Object>>> map =
+                ImmutableMap.of(Bar.class.getCanonicalName(), Arrays.asList(bar1, bar2));
+
+        return () -> map;
     }
 }

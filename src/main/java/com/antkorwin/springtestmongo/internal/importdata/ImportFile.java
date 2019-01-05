@@ -8,6 +8,8 @@ import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
 import com.antkorwin.springtestmongo.internal.Text;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.FILE_NOT_FOUND;
 import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.READ_DATASETS_FILE_ERROR;
@@ -20,6 +22,7 @@ import static com.antkorwin.springtestmongo.errorinfo.MongoDbErrorInfo.READ_DATA
 public class ImportFile implements Text {
 
     private final String fileName;
+    private final Logger log = LoggerFactory.getLogger(ImportFile.class);
 
     public ImportFile(String fileName) {
         this.fileName = fileName;
@@ -28,11 +31,10 @@ public class ImportFile implements Text {
     @Override
     public String read() {
         try (InputStream inputStream = getResourceStream()) {
-            Guard.check(inputStream != null, InternalException.class, FILE_NOT_FOUND);
             return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         }
-        catch (IOException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            log.error("Error while trying to read data from file: {}", fileName, e);
             throw new InternalException(READ_DATASETS_FILE_ERROR, e);
         }
     }

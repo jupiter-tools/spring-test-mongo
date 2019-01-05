@@ -15,7 +15,6 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,6 +36,14 @@ class MongoDbTestTest {
         mongoDbTest = new MongoDbTest(mongoTemplate);
     }
 
+    @Test
+    @DisplayName("Try to instantiate a MongoDbTest without the MongoTemplate.")
+    void testWithoutMongoTemplate() throws Exception {
+        // Act & Assert
+        GuardCheck.check(() -> new MongoDbTest(null),
+                         InternalException.class,
+                         MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY);
+    }
 
     @Nested
     @DisplayName("Test Import")
@@ -104,9 +111,10 @@ class MongoDbTestTest {
             @Test
             @DisplayName("Try to import from a not exists data file")
             void testWithWrongResourceFile() throws Exception {
+
                 GuardCheck.check(() -> mongoDbTest.importFrom("unexist"),
                                  InternalException.class,
-                                 MongoDbErrorInfo.FILE_NOT_FOUND);
+                                 MongoDbErrorInfo.READ_DATASETS_FILE_ERROR);
             }
 
             @Test
@@ -152,7 +160,7 @@ class MongoDbTestTest {
 
         @Nested
         @DisplayName("Dynamic data-values")
-        class ImportWithDynamicDataValues{
+        class ImportWithDynamicDataValues {
 
             @Test
             void dynamicDateValue() {
@@ -187,15 +195,5 @@ class MongoDbTestTest {
                 assertThat(foo.getCounter()).isEqualTo(55);
             }
         }
-    }
-
-
-    @Test
-    @DisplayName("Try to instantiate a MongoDbTest without the MongoTemplate.")
-    void testWithoutMongoTemplate() throws Exception {
-        // Act & Assert
-        GuardCheck.check(() -> new MongoDbTest(null),
-                         InternalException.class,
-                         MongoDbErrorInfo.MONGO_TEMPLATE_IS_MANDATORY);
     }
 }

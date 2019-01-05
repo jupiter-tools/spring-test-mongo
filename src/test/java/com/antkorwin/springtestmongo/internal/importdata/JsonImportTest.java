@@ -1,6 +1,8 @@
 package com.antkorwin.springtestmongo.internal.importdata;
 
-import com.antkorwin.springtestmongo.internal.importdata.JsonImport;
+import com.antkorwin.commonutils.exceptions.InternalException;
+import com.fasterxml.jackson.core.JsonParseException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,6 +29,14 @@ class JsonImportTest {
 
         assertThat(bar.keySet()).containsOnly("id", "data");
         assertThat(bar.values()).containsOnly("55f3ed00b1375a48e61830bf", "TEST");
+    }
+
+    @Test
+    void tryToImportWrongJsonFormat() {
+        InternalException exception = Assertions.assertThrows(InternalException.class, () -> {
+            new JsonImport(() -> "{\n  123:\"abcd\"\n}").read();
+        });
+        assertThat(exception.getCause()).isInstanceOf(JsonParseException.class);
     }
 
     private String getJson() {

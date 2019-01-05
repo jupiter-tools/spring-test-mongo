@@ -1,9 +1,10 @@
 package com.antkorwin.springtestmongo.internal.exportdata;
 
+import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.springtestmongo.Bar;
 import com.antkorwin.springtestmongo.internal.DataSet;
-import com.antkorwin.springtestmongo.internal.exportdata.JsonExport;
 import com.antkorwin.springtestmongo.internal.importdata.ImportFile;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
@@ -31,6 +32,12 @@ class JsonExportTest {
         // Asserts
         assertThat(text).isNotNull()
                         .isEqualTo(expectedJson);
+    }
+
+    @Test
+    void wrongDataSet() {
+        Assertions.assertThrows(InternalException.class,
+                                () -> new JsonExport(null).read());
     }
 
     private DataSet getDataSet() {

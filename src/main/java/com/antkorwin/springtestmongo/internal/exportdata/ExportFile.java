@@ -2,8 +2,9 @@ package com.antkorwin.springtestmongo.internal.exportdata;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.springtestmongo.internal.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,9 +17,11 @@ import java.nio.file.Paths;
 public class ExportFile {
 
     private final Text text;
+    private final Logger log;
 
     public ExportFile(Text text) {
         this.text = text;
+        this.log = LoggerFactory.getLogger(ExportFile.class);
     }
 
     /**
@@ -33,9 +36,8 @@ public class ExportFile {
             Path path = Paths.get(fileName);
             Files.createDirectories(path.getParent());
             Files.write(path, textData.getBytes());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error("Error while save text in file", e);
             throw new InternalException(e);
         }
     }
