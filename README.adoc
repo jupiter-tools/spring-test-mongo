@@ -8,6 +8,19 @@ image:https://codecov.io/gh/antkorwin/spring-test-mongo/branch/master/graph/badg
 Tools to write integration tests of applications with a MongoDb persistance layer and Spring Framework.
 
 
+## Introduction
+
+SpringTestMongo is a tool to write integration tests on systems which
+used the MongoDB as a data storage.
+This library provides you an ability to run your tests with the docker
+image of MongoDB (by the use of Testcontainers).
+
+Also, spring-test-mongo allows you to write tests in a more pragmatic
+manner using annotations and extension for JUnit5.
+Also, this library supports the JUnit4 by the using a Rule approach.
+You can use JSON files to prepare the state of a database
+or to check this state after some activities (update, delete e.t.c).
+
 ## Getting started
 
 You need to add next dependencies:
@@ -17,7 +30,7 @@ You need to add next dependencies:
 <dependency>
     <groupId>com.github.antkorwin</groupId>
     <artifactId>spring-test-mongo</artifactId>
-    <version>0.4</version>
+    <version>0.11</version>
 </dependency>
 ----
 
@@ -41,17 +54,17 @@ And the JUnit5 extension to make your tests more pragmatic and elegant.
 
 [source, java]
 ----
-@MongoDbIntegrationTest
+@MongoDbIntegrationTest <1>
 class JUnit5ExampleTest {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Test
-    @MongoDataSet(value = "/dataset/bar_dataset.json")
+    @MongoDataSet(value = "/dataset/bar_dataset.json")  <2>
     void testPopulatingByMongoDataSet() throws Exception {
 
-        Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300b", Bar.class);
+        Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300b", Bar.class);  <3>
 
         Assertions.assertThat(simpleDoc)
                   .isNotNull()
@@ -60,8 +73,13 @@ class JUnit5ExampleTest {
     }
 }
 ----
+<1> This annotation runs MongoDB instance by the use of Testcontainers library
+and turn on SpringTestMongo which able you to use DataSets in tests
+<2> Initialize the state of the database from JSON file before the test execute
+<3> Read data from the MongoDB instance which started by the MongoDbIntegrationTest annotation
 
-and here we can see the file with a data-set(`bar_dataset.json`):
+
+here we can see the file with a data-set(`bar_dataset.json`):
 
 [source, json]
 ----
