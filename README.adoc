@@ -122,26 +122,96 @@ public class JUnit4ExampleTest extends BaseMongoIT {
 }
 ----
 
-## Dynamic values in datasets
+## Using dynamic values in datasets
 
 ### Using GroovyScript in datasets
 
-..
+To use Groovy scriptable datasets you need to add the next dependency:
 
-### Using JavaScript in datasets
+[sourcce, xml]
+----
+<dependency>
+    <groupId>org.codehaus.groovy</groupId>
+    <artifactId>groovy-all</artifactId>
+    <version>2.4.6</version>
+    <scope>test</scope>
+</dependency>
+----
 
-You can use js scripts as a value of fields of a dataset, for example we can make this dataset file `javascript-dataset.json`:
+Let's look at the next document:
+
+[source, java]
+----
+@Document
+public class Task {
+
+    @Id
+    private String id;
+    private String title;
+    private int estimate;
+    private Date createTime;
+}
+----
+
+You can write groovy scripts in the values of fields:
 
 [source, json]
 ----
- {
+{
+  "com.antkorwin.springtestmongoexamples.model.Task": [
+    {
+      "id": "55f3ed00b1375a48e618300a",
+      "title": "black magic",
+      "estimate": "groovy: (1..5).sum()",
+      "createTime": "groovy: new Date(12345)"
+    }
+  ]
+}
+----
+
+And now you can write the next test with expected values of this fields:
+
+[source, java]
+----
+@Test
+@MongoDataSet(cleanBefore = true, cleanAfter = true,
+              value = "dataset/init_task_groovy.json")
+void groovyInitTest() {
+    Task task = taskService.get("55f3ed00b1375a48e618300a");
+    assertThat(task).extracting(Task::getEstimate, Task::getCreateTime)
+                    .contains(1 + 2 + 3 + 4 + 5, new Date(12345));
+}
+----
+
+
+### Using JavaScript in datasets
+
+Unlike Groovy scripts, Javascript comes by default in JDK and you don't need some extra dependencies to work with JavaScript.
+
+Let's consider the next simple document class:
+
+[source, java]
+----
+@Document
+public class Bar {
+    @Id
+    private String id;
+    private String data;
+}
+----
+
+and make the dataset file `javascript-dataset.json`:
+
+[source, json]
+----
+{
    "com.antkorwin.springtestmongo.Bar": [
      {
        "id": "55f3ed00b1375a48e618300a",
        "data": "js: 2+3"
      }
    ]
- }
+}
 ----
 
 And now we expecting a successful result of this test:
