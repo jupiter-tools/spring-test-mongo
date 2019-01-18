@@ -79,7 +79,8 @@ and turn on SpringTestMongo which able you to use DataSets in tests
 <3> Read data from the MongoDB instance which started by the MongoDbIntegrationTest annotation
 
 
-here we can see the file with a data-set(`bar_dataset.json`):
+
+Let's look at the file with a data-set(`bar_dataset.json`):
 
 [source, json]
 ----
@@ -117,6 +118,48 @@ public class JUnit4ExampleTest extends BaseMongoIT {
                   .isNotNull()
                   .extracting(Bar::getId, Bar::getData)
                   .containsOnly("55f3ed00b1375a48e618300b", "BB");
+    }
+}
+----
+
+## Dynamic values in datasets
+
+### Using GroovyScript in datasets
+
+..
+
+### Using JavaScript in datasets
+
+You can use js scripts as a value of fields of a dataset, for example we can make this dataset file `javascript-dataset.json`:
+
+[source, json]
+----
+ {
+   "com.antkorwin.springtestmongo.Bar": [
+     {
+       "id": "55f3ed00b1375a48e618300a",
+       "data": "js: 2+3"
+     }
+   ]
+ }
+----
+
+And now we expecting a successful result of this test:
+
+[source, java]
+----
+public class JUnit4ExampleTest extends BaseMongoIT {
+
+    @Test
+    @MongoDataSet(value = "javascript-dataset.json")
+    public void jsDataset() throws Exception {
+
+        Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300a", Bar.class);
+
+        Assertions.assertThat(simpleDoc)
+                  .isNotNull()
+                  .extracting(Bar::getData)
+                  .containsOnly(5);
     }
 }
 ----

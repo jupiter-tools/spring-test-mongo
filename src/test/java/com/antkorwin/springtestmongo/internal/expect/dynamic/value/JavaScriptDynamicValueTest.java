@@ -34,6 +34,14 @@ class JavaScriptDynamicValueTest {
             // Assert
             assertThat(necessary).isFalse();
         }
+
+        @Test
+        void notStringValue() {
+            // Act
+            boolean necessary = new JavaScriptDynamicValue().isNecessary(123);
+            // Assert
+            assertThat(necessary).isFalse();
+        }
     }
 
     @Nested
