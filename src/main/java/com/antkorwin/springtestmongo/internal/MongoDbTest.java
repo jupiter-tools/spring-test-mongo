@@ -7,6 +7,7 @@ import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DateDynamicVa
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicDataSet;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.DynamicValue;
 import com.antkorwin.springtestmongo.internal.expect.dynamic.value.GroovyDynamicValue;
+import com.antkorwin.springtestmongo.internal.expect.dynamic.value.JavaScriptDynamicValue;
 import com.antkorwin.springtestmongo.internal.exportdata.ExportFile;
 import com.antkorwin.springtestmongo.internal.exportdata.JsonExport;
 import com.antkorwin.springtestmongo.internal.exportdata.MongoDataExport;
@@ -74,6 +75,7 @@ public class MongoDbTest {
 
     private Set<DynamicValue> getDynamicEvaluators() {
         return Sets.newHashSet(new GroovyDynamicValue(),
+                               new JavaScriptDynamicValue(),
                                new DateDynamicValue());
     }
 

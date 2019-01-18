@@ -1,0 +1,9 @@
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "id": "js: 2*4",
+      "time":"js: new Date().getTime().toString()",
+      "counter": "js: 2+3"
+    }
+  ]
+}
