@@ -194,6 +194,19 @@ class MongoDbTestTest {
                 assertThat(foo.getTime()).isAfterOrEqualsTo(before);
                 assertThat(foo.getCounter()).isEqualTo(55);
             }
+
+            @Test
+            void dynamicJavaScript() {
+                // Arrange
+                ArgumentCaptor<Foo> captor = ArgumentCaptor.forClass(Foo.class);
+                // Act
+                mongoDbTest.importFrom("/dataset/internal/dynamic/import_dynamic_js.json");
+                // Asserts
+                verify(mongoTemplate).save(captor.capture());
+                Foo foo = captor.getValue();
+                assertThat(foo.getId()).isEqualTo("8");
+                assertThat(foo.getCounter()).isEqualTo(5);
+            }
         }
     }
 }
