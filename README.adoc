@@ -149,9 +149,13 @@ Let's look at the dataset file (`foo-init.json`) with a pare instances of this c
 {
   "com.antkorwin.springtestmongo.Foo": [  <1>
     {
-      "id": "77f3ed00b1375a48e618300a",
-      "time":1516527720000,
+      "id": "77f3ed00b1375a0000000001",
+      "time":1516527720001,
       "counter":1
+    },{
+      "id": "77f3ed00b1375a0000000002",
+      "time":1516527720002,
+      "counter":2
     }
   ]
 }
@@ -167,12 +171,12 @@ Now we can write an integration test which will init the database from this file
 @MongoDataSet(value = "/dataset/foo-init.json")  <1>
 void testImportByMongoDataSetAnnotation() {
     // Act
-    Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
+    Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a0000000001", Foo.class);
     // Assert
     Assertions.assertThat(fooDoc)
               .isNotNull()
               .extracting(Foo::getCounter, Foo::getTime)
-              .containsOnly(1, new Date(1516527720000L));
+              .containsOnly(1, new Date(1516527720001L));
 }
 ----
 <1> Annotation MongoDataSet initialize the state of MongoDb from JSON file before the test execution
@@ -207,6 +211,17 @@ then you can write multiple arrays of necessary types in a dataset:
 <1> first document array
 <2> second document array
 
+### Date and time in dataset
+
+To set a date and time value in a field you can use
+the next syntactic construction:
+
+image::./images/date-time-pattern.png[date-time-pattern]
+
+For example if you need tomorrow you can use this pattern: `[NOW]+1(DAYS)`,
+if you need a time value of three minutes ago: `[NOW]-3(MINUTES)`.
+
+Value of these fields will be prepare before run the test.
 
 ### GroovyScript in datasets
 
@@ -354,7 +369,7 @@ content of the expected dataset:
 
 Annotation ExpectedDataSet provide you an ability
 to use regular expressions in JSON datasets. For example you can
-describe expected field as: `regex: ^[^@]+@[^@]+$`
+describe expected field as: `regex: ^data-.$`
 
 Let's look at the dataset of ContactInfo documents:
 
@@ -364,7 +379,7 @@ Let's look at the dataset of ContactInfo documents:
   "com.antkorwin.springtestmongoexamples.model.ContactInfo": [
     {
       "title": "e-mail",
-      "value": "regex: ^\S+@\S+\.\S+$"   <1>
+      "value": "regex: \\S+@\\S+\\.\\S+$"  <1>
     }
   ]
 }
@@ -373,8 +388,50 @@ Let's look at the dataset of ContactInfo documents:
 
 ### Date & Time matching
 
+It works the same as import dataset but
+need to use prefix `date-match:` instead od `date:`
+in the expected value of fields:
 
+[source,java]
+----
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "time": "date-match:[NOW]",
+      "counter" : 1
+    },
+    {
+      "time":"date-match:[NOW]+3(MINUTES)",
+      "counter" : 2
+    }
+  ]
+}
+----
+
+Now we can run this test:
+
+[source, java]
+----
+@Test
+@ExpectedMongoDataSet("dataset/expect_with_dates.json")
+void dateTimeNow() {
+   Date now = new Date();
+   Date plus3min = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(3));
+   mongoTemplate.save(new Foo(now, 1));
+   mongoTemplate.save(new Foo(plus3min, 2));
+}
+----
+
+Date matching checks time with a threshold value, and you can set amount of this
+threshold in the date-matcher like this: `date-match:[NOW]+25(SECONDS){THR=0}`
+By default threshold value is 10 000 milliseconds.
+
+image::./images/date-match-pattern.png[date-match-pattern]
+
+You can see syntactic of the match date pattern on the picture above.
 
 ### JavaScript matching
+
+
 
 ### Groovy matching
