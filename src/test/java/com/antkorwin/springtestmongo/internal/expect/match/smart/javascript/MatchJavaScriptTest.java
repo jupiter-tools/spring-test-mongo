@@ -1,5 +1,6 @@
 package com.antkorwin.springtestmongo.internal.expect.match.smart.javascript;
 
+import com.antkorwin.commonutils.exceptions.InternalException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -64,6 +65,17 @@ class MatchJavaScriptTest {
             Exception exception =
                     Assertions.assertThrows(Exception.class,
                                             () -> matcher.match("123", "js-match: a+d.df.fr()=>frf"));
+            assertThat(exception.getMessage()).isEqualTo("JS engine evaluate error");
+        }
+
+        @Test
+        void wrongResultType() {
+            // Arrange
+            MatchJavaScript matcher = new MatchJavaScript();
+            // Act & Assert
+            Exception exception =
+                    Assertions.assertThrows(InternalException.class,
+                                            () -> matcher.match("123", "js-match: 4+3"));
             assertThat(exception.getMessage()).isEqualTo("JS engine evaluate error");
         }
     }
