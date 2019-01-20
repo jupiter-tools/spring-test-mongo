@@ -223,6 +223,7 @@ if you need a time value of three minutes ago: `[NOW]-3(MINUTES)`.
 
 Value of these fields will be prepare before run the test.
 
+[#groovy-scripting]
 ### GroovyScript in datasets
 
 To use Groovy scriptable datasets you need to add the next dependency:
@@ -432,6 +433,64 @@ You can see syntactic of the match date pattern on the picture above.
 
 ### JavaScript matching
 
+You can use javascript in expected datasets:
 
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "counter" : 17
+    },
+    {
+      "counter" : "js-match: value % 2 == 0"  <1>
+    }
+  ]
+}
+----
+<1> javascript expression expected even value in database
+
+
+[source, java]
+----
+@Test
+@MongoDataSet(cleanBefore = true, cleanAfter = true)
+@ExpectedMongoDataSet("js_match.json)
+void matchJavaScript() {
+    mongoTemplate.save(new Bar(17));
+    mongoTemplate.save(new Bar(32));
+}
+----
 
 ### Groovy matching
+
+Also, you can use groovy scripts for matching values after a test execution.
+To work with groovy you need to add it in dependencies (see <<groovy-scripting>> section)
+
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "counter" : "groovy-match: value == 10+7"
+    },
+    {
+      "counter" : "groovy-match: value == (1..10).sum()"
+    }
+  ]
+}
+----
+
+and now we can run this test:
+
+[source, java]
+----
+@Test
+@MongoDataSet(cleanBefore = true, cleanAfter = true)
+@ExpectedMongoDataSet("js_match.json)
+void matchJavaScript() {
+    mongoTemplate.save(new Bar(17));
+    mongoTemplate.save(new Bar(55));
+}
+----
