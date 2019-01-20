@@ -24,7 +24,7 @@ or to check this state after some activities (update, delete e.t.c).
 
 ## Getting started
 
-You need to add next dependencies:
+You need to add the next dependency:
 
 [source, xml]
 ----
@@ -160,7 +160,7 @@ Let's look at the dataset file (`foo-init.json`) with a pare instances of this c
   ]
 }
 ----
-<1> full class-reference of a populated document collection
+<1> full class-reference of populated document collection
 
 
 Now we can write an integration test which will init the database from this file:
@@ -335,7 +335,7 @@ public void jsDataset() throws Exception {
 }
 ----
 
-## Expecting database state after test execution
+## Expecting the state of the database after a test execution
 
 `spring-test-mongo` provides you an ability to declare dataset that you
 expect in MongoDB after test execution.
