@@ -352,9 +352,28 @@ content of the expected dataset:
 
 ### Using regular-expressions in datasets
 
+Annotation ExpectedDataSet provide you an ability
+to use regular expressions in JSON datasets. For example you can
+describe expected field as: `regex: ^[^@]+@[^@]+$`
 
+Let's look at the dataset of ContactInfo documents:
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongoexamples.model.ContactInfo": [
+    {
+      "title": "e-mail",
+      "value": "regex: ^\S+@\S+\.\S+$"   <1>
+    }
+  ]
+}
+----
+<1> using regex to check email value from database
 
 ### Date & Time matching
+
+
 
 ### JavaScript matching
 
