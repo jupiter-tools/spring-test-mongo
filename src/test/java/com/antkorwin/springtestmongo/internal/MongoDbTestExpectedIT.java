@@ -278,6 +278,16 @@ class MongoDbTestExpectedIT {
 
         @Test
         @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void matchJavaScript() {
+            // Arrange
+            Bar bar = new Bar("1", "baNaNa");
+            mongoTemplate.save(bar);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/dynamic/js_match.json");
+        }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
         void matchDate() {
             Foo foo = new Foo("1", new Date(), 123);
             mongoTemplate.save(foo);

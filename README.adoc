@@ -1,4 +1,5 @@
 :toc: preamble
+:sectnums:
 
 # Spring Test MongoDb
 
@@ -23,7 +24,7 @@ or to check this state after some activities (update, delete e.t.c).
 
 ## Getting started
 
-You need to add next dependencies:
+You need to add the next dependency:
 
 [source, xml]
 ----
@@ -122,9 +123,108 @@ public class JUnit4ExampleTest extends BaseMongoIT {
 }
 ----
 
-## Using dynamic values in datasets
+## Importing datasets before test execution
 
-### Using GroovyScript in datasets
+`spring-test-mongo` provides you an ability to import initial data in the
+MongoDB database before starting a test execution.
+You can describe this dataset as a JSON file with an array of MongoDB documents.
+
+For example we consider a simple document class:
+
+[source, java]
+----
+@Document
+public class Foo {
+    @Id
+    private String id;
+    private Date time;
+    private int counter;
+}
+----
+
+Let's look at the dataset file (`foo-init.json`) with a pare instances of this class:
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongo.Foo": [  <1>
+    {
+      "id": "77f3ed00b1375a0000000001",
+      "time":1516527720001,
+      "counter":1
+    },{
+      "id": "77f3ed00b1375a0000000002",
+      "time":1516527720002,
+      "counter":2
+    }
+  ]
+}
+----
+<1> full class-reference of populated document collection
+
+
+Now we can write an integration test which will init the database from this file:
+
+[sourcem java]
+----
+@Test
+@MongoDataSet(value = "/dataset/foo-init.json")  <1>
+void testImportByMongoDataSetAnnotation() {
+    // Act
+    Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a0000000001", Foo.class);
+    // Assert
+    Assertions.assertThat(fooDoc)
+              .isNotNull()
+              .extracting(Foo::getCounter, Foo::getTime)
+              .containsOnly(1, new Date(1516527720001L));
+}
+----
+<1> Annotation MongoDataSet initialize the state of MongoDb from JSON file before the test execution
+
+### Multiple document types in one dataset
+
+If you need to populate different documents collection before execution one test
+then you can write multiple arrays of necessary types in a dataset:
+
+[source, json]
+-----
+{
+  "com.antkorwin.springtestmongo.Bar": [  <1>
+    {
+      "id": "55f3ed00b1375a48e618300a",
+      "data": "A"
+    },
+    {
+      "id": "55f3ed00b1375a48e618300b",
+      "data": "BB"
+    }
+  ],
+  "com.antkorwin.springtestmongo.Foo": [  <2>
+    {
+      "id": "77f3ed00b1375a48e618300a",
+      "time":1516527720000,
+      "counter":1
+    }
+  ]
+}
+-----
+<1> first document array
+<2> second document array
+
+### Date and time in dataset
+
+To set a date and time value in a field you can use
+the next syntactic construction:
+
+image::./images/date-time-pattern.png[date-time-pattern]
+
+For example if you need tomorrow you can use this pattern: `[NOW]+1(DAYS)`,
+if you need a time value of three minutes ago: `[NOW]-3(MINUTES)`.
+
+Value of these fields will be prepare before run the test.
+
+[#groovy-scripting]
+### GroovyScript in datasets
 
 To use Groovy scriptable datasets you need to add the next dependency:
 
@@ -169,12 +269,14 @@ You can write groovy scripts in the values of fields:
 }
 ----
 
-And now you can write the next test with expected values of this fields:
+Values of these fields will be evaluated before populate data set in the database.
+And you can write the next test with expected values of this fields:
 
 [source, java]
 ----
 @Test
-@MongoDataSet(cleanBefore = true, cleanAfter = true,
+@MongoDataSet(cleanBefore = true,  <1>
+              cleanAfter = true,   <2>
               value = "dataset/init_task_groovy.json")
 void groovyInitTest() {
     Task task = taskService.get("55f3ed00b1375a48e618300a");
@@ -182,11 +284,13 @@ void groovyInitTest() {
                     .contains(1 + 2 + 3 + 4 + 5, new Date(12345));
 }
 ----
+<1> drops all collection before populate a dataset
+<2> clean database after the test execution
 
+### JavaScript in datasets
 
-### Using JavaScript in datasets
-
-Unlike Groovy scripts, Javascript comes by default in JDK and you don't need some extra dependencies to work with JavaScript.
+Unlike Groovy scripts, Javascript comes by default in JDK and you
+don't need some extra dependencies to work with JavaScript.
 
 Let's consider the next simple document class:
 
@@ -218,18 +322,175 @@ And now we expecting a successful result of this test:
 
 [source, java]
 ----
-public class JUnit4ExampleTest extends BaseMongoIT {
+@Test
+@MongoDataSet(value = "javascript-dataset.json")
+public void jsDataset() throws Exception {
 
-    @Test
-    @MongoDataSet(value = "javascript-dataset.json")
-    public void jsDataset() throws Exception {
+    Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300a", Bar.class);
 
-        Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e618300a", Bar.class);
+    Assertions.assertThat(simpleDoc)
+              .isNotNull()
+              .extracting(Bar::getData)
+              .containsOnly(5);
+}
+----
 
-        Assertions.assertThat(simpleDoc)
-                  .isNotNull()
-                  .extracting(Bar::getData)
-                  .containsOnly(5);
+## Expecting the state of the database after a test execution
+
+`spring-test-mongo` provides you an ability to declare dataset that you
+expect in MongoDB after test execution.
+
+Let's try to use it by the testing creation of new Task:
+
+[source, java]
+----
+@Test
+@ExpectedMongoDataSet("dataset/create_task_expected.json")
+void create() {
+    mongoTemplate.save(new Task("black magic", 123));
+}
+----
+
+content of the expected dataset:
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongoexamples.model.Task": [
+    {
+      "title": "black magic",
+      "estimate": 123
     }
+  ]
+}
+----
+
+
+### Using regular-expressions in datasets
+
+Annotation ExpectedDataSet provide you an ability
+to use regular expressions in JSON datasets. For example you can
+describe expected field as: `regex: ^data-.$`
+
+Let's look at the dataset of ContactInfo documents:
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongoexamples.model.ContactInfo": [
+    {
+      "title": "e-mail",
+      "value": "regex: \\S+@\\S+\\.\\S+$"  <1>
+    }
+  ]
+}
+----
+<1> using regex to check email value from database
+
+### Date & Time matching
+
+It works the same as import dataset but
+need to use prefix `date-match:` instead od `date:`
+in the expected value of fields:
+
+[source,java]
+----
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "time": "date-match:[NOW]",
+      "counter" : 1
+    },
+    {
+      "time":"date-match:[NOW]+3(MINUTES)",
+      "counter" : 2
+    }
+  ]
+}
+----
+
+Now we can run this test:
+
+[source, java]
+----
+@Test
+@ExpectedMongoDataSet("dataset/expect_with_dates.json")
+void dateTimeNow() {
+   Date now = new Date();
+   Date plus3min = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(3));
+   mongoTemplate.save(new Foo(now, 1));
+   mongoTemplate.save(new Foo(plus3min, 2));
+}
+----
+
+Date matching checks time with a threshold value, and you can set amount of this
+threshold in the date-matcher like this: `date-match:[NOW]+25(SECONDS){THR=0}`
+By default threshold value is 10 000 milliseconds.
+
+image::./images/date-match-pattern.png[date-match-pattern]
+
+You can see syntactic of the match date pattern on the picture above.
+
+### JavaScript matching
+
+You can use javascript in expected datasets:
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "counter" : 17
+    },
+    {
+      "counter" : "js-match: value % 2 == 0"  <1>
+    }
+  ]
+}
+----
+<1> javascript expression expected even value in database
+
+
+[source, java]
+----
+@Test
+@MongoDataSet(cleanBefore = true, cleanAfter = true)
+@ExpectedMongoDataSet("js_match.json)
+void matchJavaScript() {
+    mongoTemplate.save(new Bar(17));
+    mongoTemplate.save(new Bar(32));
+}
+----
+
+### Groovy matching
+
+Also, you can use groovy scripts for matching values after a test execution.
+To work with groovy you need to add it in dependencies (see <<groovy-scripting>> section)
+
+
+[source, json]
+----
+{
+  "com.antkorwin.springtestmongo.Foo": [
+    {
+      "counter" : "groovy-match: value == 10+7"
+    },
+    {
+      "counter" : "groovy-match: value == (1..10).sum()"
+    }
+  ]
+}
+----
+
+and now we can run this test:
+
+[source, java]
+----
+@Test
+@MongoDataSet(cleanBefore = true, cleanAfter = true)
+@ExpectedMongoDataSet("js_match.json)
+void matchJavaScript() {
+    mongoTemplate.save(new Bar(17));
+    mongoTemplate.save(new Bar(55));
 }
 ----

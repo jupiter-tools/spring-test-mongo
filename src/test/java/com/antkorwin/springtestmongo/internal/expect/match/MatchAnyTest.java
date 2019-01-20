@@ -363,13 +363,26 @@ class MatchAnyTest {
     }
 
     @Nested
-    class GroovyMatchTests{
+    class GroovyMatchTests {
 
         @Test
         void minusOneDay() {
             // Arrange
             Map<String, Object> actual = ImmutableMap.of("sum", 55);
             Map<String, Object> expected = ImmutableMap.of("sum", "groovy-match: value == (1..10).sum()");
+            // Act & Asserts
+            assertThat(new MatchAny().match(actual, expected)).isTrue();
+        }
+    }
+
+    @Nested
+    class JavaScriptMatchTests {
+
+        @Test
+        void evenNumber() {
+            // Arrange
+            Map<String, Object> actual = ImmutableMap.of("sum", 32);
+            Map<String, Object> expected = ImmutableMap.of("sum", "js-match: value % 2 == 0");
             // Act & Asserts
             assertThat(new MatchAny().match(actual, expected)).isTrue();
         }
