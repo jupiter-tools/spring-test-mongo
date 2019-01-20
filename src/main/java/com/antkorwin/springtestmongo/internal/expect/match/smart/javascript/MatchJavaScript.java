@@ -27,16 +27,22 @@ public class MatchJavaScript implements MatchDataSmart {
 
     @Override
     public boolean match(Object original, Object expected) {
+
+        Object result = evaluate((String) expected, original);
+
+        if (!(result instanceof Boolean)) {
+            throw new InternalException(PREFIX + " must return a boolean value instead of {" + result + "}", 111);
+        }
+
+        return (boolean) result;
+    }
+
+    private Object evaluate(String script, Object value){
         try {
-            String expectedValue = ((String) expected).replaceFirst(PREFIX, "");
-            engine.put("value", original);
-            Object result = engine.eval(expectedValue);
-            if (!(result instanceof Boolean)) {
-                throw new InternalException(PREFIX + " must return a boolean value instead of {" + result + "}", 111);
-            }
-            return (boolean) result;
+            String expectedValue = script.replaceFirst(PREFIX, "");
+            engine.put("value", value);
+            return engine.eval(expectedValue);
         } catch (Throwable e) {
-            log.error("JS engine evaluate error: ", e);
             throw new InternalException("JS engine evaluate error", 112, e);
         }
     }

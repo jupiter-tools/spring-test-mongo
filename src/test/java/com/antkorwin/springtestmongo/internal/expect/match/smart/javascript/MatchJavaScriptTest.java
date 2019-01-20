@@ -76,7 +76,7 @@ class MatchJavaScriptTest {
             Exception exception =
                     Assertions.assertThrows(InternalException.class,
                                             () -> matcher.match("123", "js-match: 4+3"));
-            assertThat(exception.getMessage()).isEqualTo("JS engine evaluate error");
+            assertThat(exception.getMessage()).isEqualTo("js-match: must return a boolean value instead of {7}");
         }
     }
 
