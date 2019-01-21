@@ -31,15 +31,15 @@ public class TimeDescription {
     /**
      * Parse time operation from the String description.
      *
-     * direction (group 3)
-     *    |
-     *    |  TimeUnit (group 6)
-     *    |    |
-     *    V    V
-     * NOW+17(DAYS)
-     *      ^
+     *   direction (group 3)
      *      |
-     *    amount of time (group 4)
+     *      |  TimeUnit (group 6)
+     *      |    |
+     *      V    V
+     * [NOW]+17(DAYS)
+     *        ^
+     *        |
+     *      amount of time (group 4)
      *
      * @return time operation
      */
