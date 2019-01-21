@@ -53,6 +53,14 @@ class MatchDateTest {
             // Asserts
             assertThat(necessary).isFalse();
         }
+
+        @Test
+        void necessaryWithSpace() {
+            // Act
+            boolean necessary = matchDate.isNecessary("date-match: [NOW]");
+            // Asserts
+            assertThat(necessary).isTrue();
+        }
     }
 
     @Nested
@@ -158,6 +166,17 @@ class MatchDateTest {
             boolean match = matchDate.match(tooLate, "date-match:[NOW]+3(MINUTES)");
             // Assert
             assertThat(match).isFalse();
+        }
+
+        @Test
+        void plusOneHourWithSpaces() {
+            // Arrange
+            Date now = new Date();
+            Date feature = new Date(now.getTime() + TimeUnit.HOURS.toMillis(1));
+            // Act
+            boolean match = matchDate.match(feature, "date-match: [NOW] + 1 (HOURS)");
+            // Assert
+            assertThat(match).isTrue();
         }
     }
 
