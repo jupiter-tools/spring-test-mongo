@@ -137,50 +137,5 @@ class TimeDescriptionTest {
         }
     }
 
-    @Nested
-    class DescriptionTypesTests {
-
-        @Test
-        void prefixIsEqualsDateMatch() {
-            // Act
-            TimeDescriptionType type = new TimeDescription("date-match:[NOW]").getType();
-            // Assert
-            assertThat(type).isEqualTo(TimeDescriptionType.MATCH);
-        }
-
-        @Test
-        void prefixIsEqualsDateMatchDifficult() {
-            // Act
-            TimeDescriptionType type = new TimeDescription("date-match:[NOW]+3(MINUTES)").getType();
-            // Assert
-            assertThat(type).isEqualTo(TimeDescriptionType.MATCH);
-        }
-
-        @Test
-        void prefixIsEqualsToDynamicValue() {
-            // Act
-            TimeDescriptionType type = new TimeDescription("date:[NOW]").getType();
-            // Assert
-            assertThat(type).isEqualTo(TimeDescriptionType.DYNAMIC_VALUE);
-        }
-
-        @Test
-        void wrongPrefix() {
-            // Act
-            Assertions.assertThrows(InternalException.class,
-                                    () -> new TimeDescription("wrong:[NOW]").getType());
-        }
-
-        @Test
-        void getTypeTwice() {
-            // Arrange
-            TimeDescription description = new TimeDescription("date:[NOW]");
-            // Act
-            description.getType();
-            // Asserts
-            assertThat(description.getType()).isEqualTo(TimeDescriptionType.DYNAMIC_VALUE);
-        }
-    }
-
 
 }

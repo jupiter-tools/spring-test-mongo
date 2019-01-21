@@ -14,7 +14,7 @@ import com.antkorwin.commonutils.exceptions.InternalException;
 public class TimeDescription {
 
     private static final String TIME_DESCRIPTION_PATTERN =
-            "^((date-match:|date:)\\[NOW\\])" +
+            "^(\\[NOW\\])" +
             "((\\+|\\-)([0-9]{1,7})(\\((DAYS|HOURS|MINUTES|SECONDS)\\))){0,1}" +
             "(\\{THR=([0-9]{1,10})\\}){0,1}$";
 
@@ -67,20 +67,32 @@ public class TimeDescription {
         return matcher;
     }
 
+    /**
+     * +3(MINUTES)
+     * -1(DAYS)
+     */
     private String parseTimeOperation(Matcher matcher) {
-        return matcher.group(3);
+        return matcher.group(2);
     }
 
+    /**
+     * MINUTES
+     * DAYS
+     */
     private TimeUnit parseTimeUnit(Matcher matcher) {
-        return TimeUnit.valueOf(matcher.group(7));
+        return TimeUnit.valueOf(matcher.group(6));
     }
+
 
     private int parseCount(Matcher matcher) {
-        return Integer.valueOf(matcher.group(5));
+        return Integer.valueOf(matcher.group(4));
     }
 
+    /**
+     * + / -
+     */
     private TimeDirection parseDirection(Matcher matcher) {
-        switch (matcher.group(4)) {
+        switch (matcher.group(3)) {
             case "+":
                 return TimeDirection.PLUS;
             case "-":
@@ -112,35 +124,8 @@ public class TimeDescription {
     }
 
     private Integer parseThreshold(Matcher matcher) {
-        return threshold = (matcher.group(9) != null)
-                           ? Integer.valueOf(matcher.group(9))
+        return threshold = (matcher.group(8) != null)
+                           ? Integer.valueOf(matcher.group(8))
                            : DEFAULT_THRESHOLD;
-    }
-
-    /**
-     * @return Type of the current description
-     */
-    public TimeDescriptionType getType() {
-        if (type != null) {
-            return type;
-        }
-        type = parseType();
-        return type;
-    }
-
-    private TimeDescriptionType parseType() {
-        Matcher matcher = matchTimeDescriptionPattern(description);
-        if (!matcher.matches()) {
-            throw new InternalException("Unsupported type of Date Matcher", 107);
-        }
-        String prefix = matcher.group(2);
-        switch (prefix) {
-            case "date-match:":
-                return TimeDescriptionType.MATCH;
-            case "date:":
-                return TimeDescriptionType.DYNAMIC_VALUE;
-            default:
-                throw new InternalException("Unsupported type of Date Matcher", 107);
-        }
     }
 }

@@ -1,13 +1,12 @@
 package com.antkorwin.springtestmongo.internal.expect.dynamic.value;
 
-import java.util.Date;
-
 import com.antkorwin.springtestmongo.internal.expect.match.smart.date.TimeDescription;
-import com.antkorwin.springtestmongo.internal.expect.match.smart.date.TimeDescriptionType;
+
+import java.util.Date;
 
 /**
  * Created on 26.12.2018.
- *
+ * <p>
  * Replaces date-time data values in dynamic data sets
  *
  * @author Korovin Anatoliy
@@ -16,19 +15,29 @@ public class DateDynamicValue implements DynamicValue {
 
     @Override
     public boolean isNecessary(Object value) {
+
         if (!(value instanceof String)) {
             return false;
         }
-        TimeDescription timeDescription = new TimeDescription((String) value);
-        if (!timeDescription.matches()) {
+
+        String val = (String) value;
+
+        if (!val.startsWith("date:")) {
             return false;
         }
-        return TimeDescriptionType.DYNAMIC_VALUE.equals(timeDescription.getType());
+
+        return new TimeDescription(trimPrefix(val)).matches();
     }
 
     @Override
     public Object evaluate(Object value) {
-        return new TimeDescription((String) value).getTimeOperation()
-                                                  .evaluate(new Date());
+
+        return new TimeDescription(trimPrefix((String) value)).getTimeOperation()
+                                                              .evaluate(new Date());
+    }
+
+    private String trimPrefix(String valueWithPrefix) {
+        return valueWithPrefix.replaceFirst("date:", "")
+                              .replaceAll(" ", "");
     }
 }
