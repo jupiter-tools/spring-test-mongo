@@ -21,7 +21,6 @@ public class TimeDescription {
     private final static int DEFAULT_THRESHOLD = 10_000;
     private final String description;
     private Integer threshold = null;
-    private TimeDescriptionType type = null;
 
     public TimeDescription(String description) {
         this.description = description;
