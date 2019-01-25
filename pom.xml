@@ -217,6 +217,10 @@
                 <version>2.22.0</version>
                 <configuration>
                     <reportFormat>plain</reportFormat>
+                    <includes>
+                        <include>**/*Test*.java</include>
+                        <include>**/*IT*.java</include>
+                    </includes>
                 </configuration>
                 <dependencies>
                     <dependency>
