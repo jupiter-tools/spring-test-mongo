@@ -9,7 +9,7 @@ addons:
   sonarcloud:
     organization: "antkorwin-github"
     token:
-      secure: "faca0ba57e2786f53d9caa7099033aa000953f0f"
+      secure: $SONAR_CLOUD_KEY
 
 after_success:
  - mvn cobertura:cobertura
