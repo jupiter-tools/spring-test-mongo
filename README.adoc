@@ -29,22 +29,10 @@ You need to add the next dependency:
 [source, xml]
 ----
 <dependency>
-    <groupId>com.github.antkorwin</groupId>
+    <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mongo</artifactId>
-    <version>0.11</version>
+    <version>0.12</version>
 </dependency>
-----
-
-And repository:
-
-[source, xml]
-----
-<repositories>
-	<repository>
-		<id>jitpack.io</id>
-		<url>https://jitpack.io</url>
-	</repository>
-</repositories>
 ----
 
 ## JUnit5 integration test
