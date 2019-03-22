@@ -1,5 +1,5 @@
 {
-  "com.antkorwin.springtestmongo.Bar" : [ {
+  "com.jupiter.tools.spring.test.mongo.Bar" : [ {
     "data" : "data-1"
   }, {
     "data" : "data-2"
