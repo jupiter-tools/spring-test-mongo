@@ -3,8 +3,7 @@
 
 # Spring Test MongoDb
 
-image:https://travis-ci.com/jupiter-tools/spring-test-mongo.svg?branch=master["Build Status", link="https://travis-ci
-.com/jupiter-tools/spring-test-mongo"]
+image:https://travis-ci.com/jupiter-tools/spring-test-mongo.svg?branch=master["Build Status", link="https://travis-ci.com/jupiter-tools/spring-test-mongo"]
 image:https://codecov.io/gh/antkorwin/spring-test-mongo/branch/master/graph/badge.svg[link ="https://codecov.io/gh/antkorwin/spring-test-mongo"]
 
 Tools to write integration tests of applications with a MongoDb persistance layer and Spring Framework.
@@ -30,22 +29,10 @@ You need to add the next dependency:
 [source, xml]
 ----
 <dependency>
-    <groupId>com.github.antkorwin</groupId>
+    <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mongo</artifactId>
-    <version>0.11</version>
+    <version>0.12</version>
 </dependency>
-----
-
-And repository:
-
-[source, xml]
-----
-<repositories>
-	<repository>
-		<id>jitpack.io</id>
-		<url>https://jitpack.io</url>
-	</repository>
-</repositories>
 ----
 
 ## JUnit5 integration test

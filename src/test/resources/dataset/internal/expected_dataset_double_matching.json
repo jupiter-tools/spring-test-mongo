@@ -1,5 +1,5 @@
 {
-  "com.antkorwin.springtestmongo.Bar": [
+  "com.jupiter.tools.spring.test.mongo.Bar": [
     {
       "data": "data-1"
     },
@@ -10,7 +10,7 @@
       "data": "data-2"
     }
   ],
-  "com.antkorwin.springtestmongo.Foo": [
+  "com.jupiter.tools.spring.test.mongo.Foo": [
     {
       "counter": 1
     },

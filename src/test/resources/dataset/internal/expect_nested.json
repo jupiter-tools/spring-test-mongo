@@ -1,5 +1,5 @@
 {
-  "com.antkorwin.springtestmongo.FooBar" : [ {
+  "com.jupiter.tools.spring.test.mongo.FooBar" : [ {
     "id": "1FB",
     "data" : "DATA",
     "bar": {

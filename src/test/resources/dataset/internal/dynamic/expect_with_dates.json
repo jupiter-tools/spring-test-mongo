@@ -1,5 +1,5 @@
 {
-  "com.antkorwin.springtestmongo.Foo": [
+  "com.jupiter.tools.spring.test.mongo.Foo": [
     {
       "id": "1",
       "time": "date-match:[NOW]"
