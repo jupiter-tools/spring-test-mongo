@@ -3,8 +3,7 @@
 
 # Spring Test MongoDb
 
-image:https://travis-ci.com/jupiter-tools/spring-test-mongo.svg?branch=master["Build Status", link="https://travis-ci
-.com/jupiter-tools/spring-test-mongo"]
+image:https://travis-ci.com/jupiter-tools/spring-test-mongo.svg?branch=master["Build Status", link="https://travis-ci.com/jupiter-tools/spring-test-mongo"]
 image:https://codecov.io/gh/antkorwin/spring-test-mongo/branch/master/graph/badge.svg[link ="https://codecov.io/gh/antkorwin/spring-test-mongo"]
 
 Tools to write integration tests of applications with a MongoDb persistance layer and Spring Framework.
