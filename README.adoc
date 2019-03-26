@@ -199,6 +199,48 @@ then you can write multiple arrays of necessary types in a dataset:
 <1> first document array
 <2> second document array
 
+### Nested documents
+
+You can describe nested objects in your dataset.
+Let's look at the the next model:
+
+[source, java]
+----
+@Data
+@Document
+public class FooBar {
+    @Id
+    private String id;
+    private String data;
+    private Bar bar;  <1>
+}
+
+@Data
+@Document
+public class Bar {
+    @Id
+    private String id;
+    private String data;
+}
+----
+<1> nested object with another type
+
+so, you can describe a dataset for this example as shown below:
+
+[source, json]
+----
+{
+  "com.jupiter.tools.spring.test.mongo.FooBar" : [ {
+    "id": "55f1dd90a1246a44e118300b",
+    "data" : "TOP LEVEL DATA",
+    "bar": {
+      "id": "88f3ed00b1375a48e619900c",
+      "data":"NESTED DATA"
+    }
+  }]
+}
+----
+
 ### Date and time in dataset
 
 To set a date and time value in a field you can use
