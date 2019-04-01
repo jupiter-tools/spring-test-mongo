@@ -42,7 +42,9 @@ class MatchNumberTest {
                          Arguments.of(1234L, BigInteger.valueOf(1234), true),
                          // Float
                          Arguments.of(0.123, 0.123, true),
-                         Arguments.of(0.123, 0, false));
+                         Arguments.of(0.123, 0, false),
+                         Arguments.of(0.3E+8, 0.3E+8, true),
+                         Arguments.of(0.123, 0.124, false));
     }
 
     @ParameterizedTest
