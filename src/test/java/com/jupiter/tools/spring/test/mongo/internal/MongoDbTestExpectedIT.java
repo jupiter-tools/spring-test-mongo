@@ -1,10 +1,12 @@
 package com.jupiter.tools.spring.test.mongo.internal;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.jupiter.tools.spring.test.mongo.Bar;
+import com.jupiter.tools.spring.test.mongo.FloatHolder;
 import com.jupiter.tools.spring.test.mongo.Foo;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import com.jupiter.tools.spring.test.mongo.junit5.EnableMongoDbTestContainers;
@@ -319,6 +321,27 @@ class MongoDbTestExpectedIT {
             // Act
             Assertions.assertThrows(Error.class,
                                     () -> mongoDbTest.expect("/dataset/internal/dynamic/expect_with_dates.json"));
+        }
+    }
+
+    @Nested
+    @SpringBootTest
+    @ExtendWith(SpringExtension.class)
+    @ExtendWith(MongoDbExtension.class)
+    @EnableMongoDbTestContainers
+    class NestedArraysOfFloatTest {
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void equalArraysOfFloat() {
+            // Arrange
+            FloatHolder firstHolder = new FloatHolder("first", Arrays.asList(1.3E+2F));
+            FloatHolder secondHolder = new FloatHolder("second", Arrays.asList(1.3E+5F, 0.3E-7F));
+
+            mongoTemplate.save(firstHolder);
+            mongoTemplate.save(secondHolder);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/expect/expect_with_float_array_holder.json");
         }
     }
 }

@@ -259,24 +259,6 @@ class MatchAnyTest {
     class NestedArraysTests {
 
         @Test
-        void matchWithNullable() {
-
-            String DATA_SET_JSON_PATH = "/dataset/internal/expect/expect_with_nested_array.json";
-
-            Map<String, Object> first =
-                    new TestData().read(DATA_SET_JSON_PATH)
-                                  .get("test")
-                                  .get(0);
-
-            Map<String, Object> second =
-                    new TestData().read(DATA_SET_JSON_PATH)
-                                  .get("test")
-                                  .get(1);
-
-            assertThat(new MatchAny().match(first, second)).isTrue();
-        }
-
-        @Test
         void matchNestedArray() {
             // Arrange
             String dataSetFilePath = "/dataset/internal/expect/expect_with_nested_array.json";
@@ -304,6 +286,36 @@ class MatchAnyTest {
             Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(3);
             // Act
             assertThat(new MatchAny().match(first, second)).isFalse();
+        }
+
+        @Test
+        void matchArraysOfFloat() {
+            // Arrange
+            String dataSetFilePath = "/dataset/internal/expect/expect_with_nested_arrays_of_float.json";
+            Map<String, Object> first = new TestData().read(dataSetFilePath).get("test").get(0);
+            Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(1);
+            // Act
+            assertThat(new MatchAny().match(first, second)).isTrue();
+        }
+
+        @Test
+        void matchNotSameArraysOfFloat() {
+            // Arrange
+            String dataSetFilePath = "/dataset/internal/expect/expect_with_nested_arrays_of_float.json";
+            Map<String, Object> first = new TestData().read(dataSetFilePath).get("test").get(0);
+            Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(2);
+            // Act
+            assertThat(new MatchAny().match(first, second)).isFalse();
+        }
+
+        @Test
+        void matchNotSameArraysOfFloatWithSingleValue() {
+            // Arrange
+            String dataSetFilePath = "/dataset/internal/expect/expect_with_nested_arrays_of_float.json";
+            Map<String, Object> first = new TestData().read(dataSetFilePath).get("test").get(4);
+            Map<String, Object> second = new TestData().read(dataSetFilePath).get("test").get(5);
+            // Act
+            assertThat(new MatchAny().match(first, second)).isTrue();
         }
     }
 

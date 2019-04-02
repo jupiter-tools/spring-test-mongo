@@ -1,0 +1,12 @@
+{
+  "com.jupiter.tools.spring.test.mongo.FloatHolder": [
+    {
+      "name": "first",
+      "values": [1.3E+2]
+    },
+    {
+      "name": "second",
+      "values": [1.3E+5, 0.3E-7]
+    }
+  ]
+}
