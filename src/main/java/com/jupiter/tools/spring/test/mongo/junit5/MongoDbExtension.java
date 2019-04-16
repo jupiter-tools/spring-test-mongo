@@ -5,16 +5,13 @@ import com.antkorwin.commonutils.validation.Guard;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.ExportMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
-import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
 import com.jupiter.tools.spring.test.mongo.errorinfo.MongoDbErrorInfo;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.Extension;
-import org.junit.jupiter.api.extension.ExtensionContext;
-
+import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
+import org.junit.jupiter.api.extension.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.io.File;
 
 /**
  * Created on 30.11.2018.
@@ -28,6 +25,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEachCallback, AfterEachCallback {
 
     private MongoTemplate mongoTemplate;
+
+    public static final ExtensionContext.Namespace NAMESPACE =
+            ExtensionContext.Namespace.create("com", "jupiter-tools", "spring-test-mongo", "read-only-dataset");
 
     /**
      * check existence of the {@link MongoTemplate} in the context
@@ -64,6 +64,14 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
         if (!mongoDataSet.value().isEmpty()) {
             new MongoDbTest(mongoTemplate).importFrom(mongoDataSet.value());
         }
+
+        // if read-only data set than we need to save a mongo state before run test in temp file
+        if (isReadOnlyDataSet(context)) {
+            File tempFile = File.createTempFile("mongo-test-", "-readonly");
+            tempFile.deleteOnExit();
+            new MongoDbTest(mongoTemplate).exportTo(tempFile.getAbsolutePath());
+            context.getStore(NAMESPACE).put("beforeDataSetFile", tempFile.getAbsolutePath());
+        }
     }
 
     /**
@@ -78,10 +86,22 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
     }
 
     private void expectedDataSet(ExtensionContext context) {
+
+        if (isReadOnlyDataSet(context)) {
+            String filePath = (String) context.getStore(NAMESPACE)
+                                              .get("beforeDataSetFile");
+            try {
+                new MongoDbTest(mongoTemplate).expect(filePath);
+            } catch (Error e) {
+                throw new RuntimeException("Expected read only dataset",e);
+            }
+            return;
+        }
+
         ExpectedMongoDataSet expectedMongoDataSet = context.getRequiredTestMethod()
                                                            .getAnnotation(ExpectedMongoDataSet.class);
 
-        if(expectedMongoDataSet == null) {
+        if (expectedMongoDataSet == null) {
             return;
         }
 
@@ -117,5 +137,10 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
     private void cleanDataBase() {
         mongoTemplate.getCollectionNames()
                      .forEach(mongoTemplate::dropCollection);
+    }
+
+    private boolean isReadOnlyDataSet(ExtensionContext context) {
+        MongoDataSet mongoDataSet = getAnnotationFromCurrentMethod(context);
+        return mongoDataSet != null && mongoDataSet.readOnly();
     }
 }

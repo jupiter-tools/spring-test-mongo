@@ -1,7 +1,10 @@
 package com.jupiter.tools.spring.test.mongo.internal.importdata;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.jupiter.tools.spring.test.mongo.internal.Text;
@@ -36,7 +39,7 @@ public class ImportFile implements Text {
         }
     }
 
-    private InputStream getResourceStream() {
+    private InputStream getResourceStream() throws IOException {
         String dataFileName = (!fileName.startsWith("/"))
                               ? "/" + fileName
                               : fileName;
@@ -44,6 +47,9 @@ public class ImportFile implements Text {
         InputStream inputStream = getClass().getResourceAsStream(dataFileName);
         if (inputStream == null) {
             inputStream = getClass().getResourceAsStream("/dataset" + dataFileName);
+        }
+        if(inputStream == null) {
+            inputStream = Files.newInputStream(Paths.get(dataFileName));
         }
         return inputStream;
     }
