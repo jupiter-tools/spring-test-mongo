@@ -13,6 +13,7 @@ import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
+import org.junit.platform.testkit.engine.EngineTestKit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,13 +23,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectMethod;
 import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.request;
+import static org.junit.platform.testkit.engine.EventConditions.event;
+import static org.junit.platform.testkit.engine.EventConditions.finishedWithFailure;
+import static org.junit.platform.testkit.engine.EventConditions.test;
+import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
+import static org.junit.platform.testkit.engine.TestExecutionResultConditions.message;
 
 /**
  * Created on 12.12.2018.
  *
  * @author Korovin Anatoliy
  */
-@Disabled("TODO: find a way to test extension which throws an exception.")
+//@Disabled("TODO: find a way to test extension which throws an exception.")
 // To run this tests remove disabled from parent and child classes
 class MongoDbExtensionExpectedDataSetIT {
 
@@ -108,6 +114,7 @@ class MongoDbExtensionExpectedDataSetIT {
     }
 
     private TestExecutionSummary runTestMethod(Class<?> testClass, String methodName) {
+
         SummaryGeneratingListener listener = new SummaryGeneratingListener();
 
         LauncherDiscoveryRequest request = request().selectors(selectMethod(testClass, methodName)).build();
@@ -116,7 +123,29 @@ class MongoDbExtensionExpectedDataSetIT {
         return listener.getSummary();
     }
 
-    @Disabled("TODO: find a way to test extension which throws an exception.")
+    @Test
+    void name() {
+        String expectedErrorMessage = "Expected ReadOnly dataset, but found some modifications";
+        String testMethod = "readOnlyFail";
+        //Arrange
+        EngineTestKit.engine("junit-jupiter")
+                     .selectors(selectMethod(RealTests.class, testMethod))
+                     // Act
+                     .execute()
+                     .tests()
+                     // Assert
+                     .assertStatistics(stats -> stats.started(1)
+                                                     .succeeded(0)
+                                                     .failed(1))
+                     // Check error
+                     .assertThatEvents()
+                     .haveExactly(1,
+                                  event(test(testMethod),
+                                        finishedWithFailure(instanceOf(RuntimeException.class),
+                                                            message(m -> m.contains(expectedErrorMessage)))));
+    }
+
+//  @Disabled("TODO: find a way to test extension which throws an exception.")
     @SpringBootTest
     @ExtendWith(SpringExtension.class)
     @ExtendWith(MongoDbExtension.class)
