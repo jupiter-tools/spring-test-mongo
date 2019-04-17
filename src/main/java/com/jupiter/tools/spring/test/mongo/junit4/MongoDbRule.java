@@ -5,13 +5,15 @@ import com.antkorwin.commonutils.validation.Guard;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.ExportMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
-import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
 import com.jupiter.tools.spring.test.mongo.errorinfo.MongoDbErrorInfo;
+import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.function.Supplier;
 
 /**
@@ -27,6 +29,7 @@ public class MongoDbRule implements TestRule {
 
     private MongoTemplate mongoTemplate;
     private Supplier<MongoTemplate> mongoTemplateProvider;
+    private String initialDataSetFilePath;
 
     /**
      * Init test rule, required MongoTemplate provider
@@ -69,7 +72,7 @@ public class MongoDbRule implements TestRule {
 
         MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
 
-        if (mongoDataSet == null) return;
+        if (mongoDataSet == null) { return; }
 
         // clean before
         if (mongoDataSet.cleanBefore()) {
@@ -79,6 +82,20 @@ public class MongoDbRule implements TestRule {
         // populate before test invocation
         if (!mongoDataSet.value().isEmpty()) {
             new MongoDbTest(mongoTemplate).importFrom(mongoDataSet.value());
+        }
+
+        // processing read-only data set
+        if (isReadOnlyDataSet(description)) {
+            File tempFile;
+            try {
+                tempFile = File.createTempFile("mongo-test-", "-readonly");
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Error while creating temp file to store immutable dataset", e);
+            }
+            tempFile.deleteOnExit();
+            new MongoDbTest(mongoTemplate).exportTo(tempFile.getAbsolutePath());
+            this.initialDataSetFilePath = tempFile.getAbsolutePath();
         }
     }
 
@@ -94,12 +111,20 @@ public class MongoDbRule implements TestRule {
     }
 
     private void expectedDataSet(Description description) {
-        ExpectedMongoDataSet expectedMongoDataSet = description.getAnnotation(ExpectedMongoDataSet.class);
 
-        if(expectedMongoDataSet == null) {
+        if (isReadOnlyDataSet(description)) {
+            try {
+                new MongoDbTest(mongoTemplate).expect(initialDataSetFilePath);
+            } catch (Error e) {
+                throw new RuntimeException("Expected ReadOnly dataset, but found some modifications:", e);
+            }
             return;
         }
 
+        ExpectedMongoDataSet expectedMongoDataSet = description.getAnnotation(ExpectedMongoDataSet.class);
+        if (expectedMongoDataSet == null) {
+            return;
+        }
         new MongoDbTest(mongoTemplate).expect(expectedMongoDataSet.value());
     }
 
@@ -129,5 +154,10 @@ public class MongoDbRule implements TestRule {
     private void cleanDataBase() {
         mongoTemplate.getCollectionNames()
                      .forEach(mongoTemplate::dropCollection);
+    }
+
+    private boolean isReadOnlyDataSet(Description description) {
+        MongoDataSet mongoDataSet = description.getAnnotation(MongoDataSet.class);
+        return mongoDataSet != null && mongoDataSet.readOnly();
     }
 }
