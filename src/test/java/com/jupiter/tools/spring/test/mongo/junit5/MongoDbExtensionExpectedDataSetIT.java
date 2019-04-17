@@ -7,6 +7,7 @@ import com.jupiter.tools.spring.test.mongo.Foo;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -34,8 +35,6 @@ import static org.junit.platform.testkit.engine.TestExecutionResultConditions.me
  *
  * @author Korovin Anatoliy
  */
-//@Disabled("TODO: find a way to test extension which throws an exception.")
-// To run this tests remove disabled from parent and child classes
 class MongoDbExtensionExpectedDataSetIT {
 
     @Test
@@ -124,7 +123,7 @@ class MongoDbExtensionExpectedDataSetIT {
     }
 
     @Test
-    void name() {
+    void readOnlyFailTestInTheTestKitStyle() {
         String expectedErrorMessage = "Expected ReadOnly dataset, but found some modifications";
         String testMethod = "readOnlyFail";
         //Arrange
@@ -145,11 +144,12 @@ class MongoDbExtensionExpectedDataSetIT {
                                                             message(m -> m.contains(expectedErrorMessage)))));
     }
 
-//  @Disabled("TODO: find a way to test extension which throws an exception.")
+
     @SpringBootTest
     @ExtendWith(SpringExtension.class)
     @ExtendWith(MongoDbExtension.class)
     @EnableMongoDbTestContainers
+    @Tag("idea-exclude")
     static class RealTests {
 
         @Autowired
