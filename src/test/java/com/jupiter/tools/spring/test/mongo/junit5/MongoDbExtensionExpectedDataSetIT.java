@@ -92,6 +92,21 @@ class MongoDbExtensionExpectedDataSetIT {
         assertThat(summary.getTestsFailedCount()).isEqualTo(1);
     }
 
+    @Test
+    void testReadOnlyFail() {
+        TestExecutionSummary summary = runTestMethod(RealTests.class, "readOnlyFail");
+        assertThat(summary.getTestsFailedCount()).isEqualTo(1);
+
+        Throwable error = summary.getFailures().get(0).getException();
+        assertThat(error.getMessage()).contains("Expected ReadOnly dataset, but found some modifications:");
+        assertThat(error.getCause()).isInstanceOf(Error.class);
+        assertThat(error.getCause().getMessage())
+                .contains("Not expected: \n" +
+                          "{\"id\":\"77f3ed00b1375a48e618300a\",\"time\":1516527720000,\"counter\":51187}")
+                .contains("Expected but not found: \n" +
+                          "{\"id\":\"77f3ed00b1375a48e618300a\",\"time\":1516527720000,\"counter\":1}");
+    }
+
     private TestExecutionSummary runTestMethod(Class<?> testClass, String methodName) {
         SummaryGeneratingListener listener = new SummaryGeneratingListener();
 
@@ -203,6 +218,17 @@ class MongoDbExtensionExpectedDataSetIT {
             Bar bar2 = new Bar("111100002", "data-2");
             mongoTemplate.save(bar1);
             mongoTemplate.save(bar2);
+        }
+
+        @Test
+        @MongoDataSet(value = "/dataset/multidocument_dataset.json",
+                      readOnly = true,  // ASSERT THIS
+                      cleanBefore = true,
+                      cleanAfter = true)
+        void readOnlyFail() {
+            Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
+            fooDoc.setCounter(51187);
+            mongoTemplate.save(fooDoc);
         }
     }
 }

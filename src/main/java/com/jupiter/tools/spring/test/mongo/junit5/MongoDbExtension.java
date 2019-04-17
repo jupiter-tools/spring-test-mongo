@@ -93,7 +93,7 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
             try {
                 new MongoDbTest(mongoTemplate).expect(filePath);
             } catch (Error e) {
-                throw new RuntimeException("Expected read only dataset",e);
+                throw new RuntimeException("Expected ReadOnly dataset, but found some modifications:",e);
             }
             return;
         }

@@ -58,15 +58,4 @@ class MongoDbExtensionImportIT {
         Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
         Assertions.assertThat(fooDoc).isNotNull();
     }
-
-    @Test
-    @MongoDataSet(value = "/dataset/multidocument_dataset.json",
-                  readOnly = true,
-                  cleanBefore = true,
-                  cleanAfter = true)
-    void readWrite() {
-        Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
-        fooDoc.setCounter(51187);
-        mongoTemplate.save(fooDoc);
-    }
 }

@@ -49,7 +49,7 @@ public class ImportFile implements Text {
             inputStream = getClass().getResourceAsStream("/dataset" + dataFileName);
         }
         if(inputStream == null) {
-            inputStream = Files.newInputStream(Paths.get(dataFileName));
+            inputStream = Files.newInputStream(Paths.get(fileName));
         }
         return inputStream;
     }
