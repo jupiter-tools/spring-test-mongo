@@ -4,8 +4,10 @@ import com.jupiter.tools.spring.test.mongo.Bar;
 import com.jupiter.tools.spring.test.mongo.Foo;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
@@ -28,6 +30,7 @@ import static org.junit.platform.testkit.engine.TestExecutionResultConditions.me
  *
  * @author Korovin Anatoliy
  */
+@DisabledIfSystemProperty(named = "sun.java.command", matches = "com.intellij.rt.execution.*")
 public class MongoDbRuleExpectedIT {
 
     @org.junit.jupiter.api.Test
@@ -138,11 +141,13 @@ public class MongoDbRuleExpectedIT {
     }
 
 
-    @Tag("idea-exclude")
     public static class RealTests extends BaseMongoIT {
 
         @Autowired
         private MongoTemplate mongoTemplate;
+
+        @ClassRule
+        public static IdeaTestSkipRule ideaTestSkipRule = new IdeaTestSkipRule();
 
         @Test
         @MongoDataSet(cleanAfter = true, cleanBefore = true)

@@ -9,6 +9,7 @@ import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherFactory;
@@ -35,6 +36,7 @@ import static org.junit.platform.testkit.engine.TestExecutionResultConditions.me
  *
  * @author Korovin Anatoliy
  */
+@DisabledIfSystemProperty(named = "sun.java.command", matches = "com.intellij.rt.execution.*")
 class MongoDbExtensionExpectedDataSetIT {
 
     @Test
@@ -149,7 +151,7 @@ class MongoDbExtensionExpectedDataSetIT {
     @ExtendWith(SpringExtension.class)
     @ExtendWith(MongoDbExtension.class)
     @EnableMongoDbTestContainers
-    @Tag("idea-exclude")
+    @DisabledIfSystemProperty(named = "sun.java.command", matches = "com.intellij.rt.execution.*")
     static class RealTests {
 
         @Autowired
