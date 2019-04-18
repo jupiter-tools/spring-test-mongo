@@ -377,7 +377,7 @@ test execution then you can use parameter `readOnly` in the annotation
 @MongoDataSet(value = "/dataset/foo-init.json", readOnly = true)
 void testImportByMongoDataSetAnnotation() {
     Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a0000000001", Foo.class);
-    // if you change data in MongoDB here, then the test will fail.
+    // if you change data in MongoDB here, then this test will fail.
 }
 ----
 
