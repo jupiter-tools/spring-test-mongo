@@ -58,4 +58,9 @@ class MongoDbExtensionImportIT {
         Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
         Assertions.assertThat(fooDoc).isNotNull();
     }
+
+    @Test
+    void withoutAnnotation() {
+        //nothing
+    }
 }
