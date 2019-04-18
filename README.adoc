@@ -365,6 +365,23 @@ public void jsDataset() throws Exception {
 }
 ----
 
+### Immutable data set
+
+If you need to assert that data in the mongodb do not change after
+test execution then you can use parameter `readOnly` in the annotation
+`MongoDataSet` as you can see below:
+
+[sourcem java]
+----
+@Test
+@MongoDataSet(value = "/dataset/foo-init.json", readOnly = true)
+void testImportByMongoDataSetAnnotation() {
+    Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a0000000001", Foo.class);
+    // if you change data in MongoDB here, then the test will fail.
+}
+----
+
+
 ## Expecting the state of the database after a test execution
 
 `spring-test-mongo` provides you an ability to declare dataset that you
