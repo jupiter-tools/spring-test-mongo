@@ -371,7 +371,7 @@ If you need to assert that data in the mongodb do not change after
 test execution then you can use parameter `readOnly` in the annotation
 `MongoDataSet` as you can see below:
 
-[sourcem java]
+[source, java]
 ----
 @Test
 @MongoDataSet(value = "/dataset/foo-init.json", readOnly = true)
