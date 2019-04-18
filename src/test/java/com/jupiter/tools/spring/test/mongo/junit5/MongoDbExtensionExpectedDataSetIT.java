@@ -6,13 +6,17 @@ import com.jupiter.tools.spring.test.mongo.Bar;
 import com.jupiter.tools.spring.test.mongo.Foo;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
+import com.jupiter.tools.spring.test.mongo.idea.skip.test.IdeaSkipTest;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
+import org.junit.platform.testkit.engine.EngineTestKit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,14 +26,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectMethod;
 import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.request;
+import static org.junit.platform.testkit.engine.EventConditions.event;
+import static org.junit.platform.testkit.engine.EventConditions.finishedWithFailure;
+import static org.junit.platform.testkit.engine.EventConditions.test;
+import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
+import static org.junit.platform.testkit.engine.TestExecutionResultConditions.message;
 
 /**
  * Created on 12.12.2018.
  *
  * @author Korovin Anatoliy
  */
-@Disabled("TODO: find a way to test extension which throws an exception.")
-// To run this tests remove disabled from parent and child classes
+@IdeaSkipTest
 class MongoDbExtensionExpectedDataSetIT {
 
     @Test
@@ -92,7 +100,23 @@ class MongoDbExtensionExpectedDataSetIT {
         assertThat(summary.getTestsFailedCount()).isEqualTo(1);
     }
 
+    @Test
+    void testReadOnlyFail() {
+        TestExecutionSummary summary = runTestMethod(RealTests.class, "readOnlyFail");
+        assertThat(summary.getTestsFailedCount()).isEqualTo(1);
+
+        Throwable error = summary.getFailures().get(0).getException();
+        assertThat(error.getMessage()).contains("Expected ReadOnly dataset, but found some modifications:");
+        assertThat(error.getCause()).isInstanceOf(Error.class);
+        assertThat(error.getCause().getMessage())
+                .contains("Not expected: \n" +
+                          "{\"id\":\"77f3ed00b1375a48e618300a\",\"time\":1516527720000,\"counter\":51187}")
+                .contains("Expected but not found: \n" +
+                          "{\"id\":\"77f3ed00b1375a48e618300a\",\"time\":1516527720000,\"counter\":1}");
+    }
+
     private TestExecutionSummary runTestMethod(Class<?> testClass, String methodName) {
+
         SummaryGeneratingListener listener = new SummaryGeneratingListener();
 
         LauncherDiscoveryRequest request = request().selectors(selectMethod(testClass, methodName)).build();
@@ -101,11 +125,34 @@ class MongoDbExtensionExpectedDataSetIT {
         return listener.getSummary();
     }
 
-    @Disabled("TODO: find a way to test extension which throws an exception.")
+    @Test
+    void readOnlyFailTestInTheTestKitStyle() {
+        String expectedErrorMessage = "Expected ReadOnly dataset, but found some modifications";
+        String testMethod = "readOnlyFail";
+        //Arrange
+        EngineTestKit.engine("junit-jupiter")
+                     .selectors(selectMethod(RealTests.class, testMethod))
+                     // Act
+                     .execute()
+                     .tests()
+                     // Assert
+                     .assertStatistics(stats -> stats.started(1)
+                                                     .succeeded(0)
+                                                     .failed(1))
+                     // Check error
+                     .assertThatEvents()
+                     .haveExactly(1,
+                                  event(test(testMethod),
+                                        finishedWithFailure(instanceOf(RuntimeException.class),
+                                                            message(m -> m.contains(expectedErrorMessage)))));
+    }
+
+
     @SpringBootTest
     @ExtendWith(SpringExtension.class)
     @ExtendWith(MongoDbExtension.class)
     @EnableMongoDbTestContainers
+    @IdeaSkipTest
     static class RealTests {
 
         @Autowired
@@ -203,6 +250,17 @@ class MongoDbExtensionExpectedDataSetIT {
             Bar bar2 = new Bar("111100002", "data-2");
             mongoTemplate.save(bar1);
             mongoTemplate.save(bar2);
+        }
+
+        @Test
+        @MongoDataSet(value = "/dataset/multidocument_dataset.json",
+                      readOnly = true,  // ASSERT THIS
+                      cleanBefore = true,
+                      cleanAfter = true)
+        void readOnlyFail() {
+            Foo fooDoc = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
+            fooDoc.setCounter(51187);
+            mongoTemplate.save(fooDoc);
         }
     }
 }

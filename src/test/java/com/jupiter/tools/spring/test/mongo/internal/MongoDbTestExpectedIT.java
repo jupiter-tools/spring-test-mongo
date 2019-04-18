@@ -329,7 +329,7 @@ class MongoDbTestExpectedIT {
     @ExtendWith(SpringExtension.class)
     @ExtendWith(MongoDbExtension.class)
     @EnableMongoDbTestContainers
-    class NestedArraysOfFloatTest {
+    class NestedArraysOfFloatTests {
 
         @Test
         @MongoDataSet(cleanBefore = true, cleanAfter = true)

@@ -32,4 +32,9 @@ public @interface MongoDataSet {
      * Clean a MongoDB database after the test execution
      */
     boolean cleanAfter() default false;
+
+    /**
+     * expected unmodifiable data set in this test case
+     */
+    boolean readOnly() default false;
 }

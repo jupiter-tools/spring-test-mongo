@@ -45,6 +45,8 @@ class MongoDbTestIT {
     @BeforeEach
     void setUp() {
         mongoDbTest = new MongoDbTest(mongoTemplate);
+        mongoTemplate.getCollectionNames()
+                     .forEach(mongoTemplate::dropCollection);
     }
 
     @AfterEach
