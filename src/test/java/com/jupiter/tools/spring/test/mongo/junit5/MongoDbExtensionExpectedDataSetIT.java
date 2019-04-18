@@ -6,6 +6,7 @@ import com.jupiter.tools.spring.test.mongo.Bar;
 import com.jupiter.tools.spring.test.mongo.Foo;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
+import com.jupiter.tools.spring.test.mongo.idea.skip.test.IdeaSkipTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ import static org.junit.platform.testkit.engine.TestExecutionResultConditions.me
  *
  * @author Korovin Anatoliy
  */
-@DisabledIfSystemProperty(named = "sun.java.command", matches = "com.intellij.rt.execution.*")
+@IdeaSkipTest
 class MongoDbExtensionExpectedDataSetIT {
 
     @Test
@@ -151,7 +152,7 @@ class MongoDbExtensionExpectedDataSetIT {
     @ExtendWith(SpringExtension.class)
     @ExtendWith(MongoDbExtension.class)
     @EnableMongoDbTestContainers
-    @DisabledIfSystemProperty(named = "sun.java.command", matches = "com.intellij.rt.execution.*")
+    @IdeaSkipTest
     static class RealTests {
 
         @Autowired
