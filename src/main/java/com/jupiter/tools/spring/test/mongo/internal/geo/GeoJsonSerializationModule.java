@@ -36,8 +36,8 @@ public class GeoJsonSerializationModule extends SimpleModule {
      * <pre>
      * <code>
      * { "type": "Point", "coordinates": [10.0, 20.0] }
-     * </pre>
      * </code>
+     * </pre>
      */
     private class GeoJsonPointSerializer extends JsonSerializer<GeoJsonPoint> {
 
@@ -74,8 +74,8 @@ public class GeoJsonSerializationModule extends SimpleModule {
      *     [10.0, 20.0], [30.0, 40.0], [50.0, 60.0]
      *   ]
      * }
-     * </pre>
      * </code>
+     * </pre>
      */
     private class GeoJsonMultiPointSerializer extends JsonSerializer<GeoJsonMultiPoint> {
 
@@ -110,8 +110,8 @@ public class GeoJsonSerializationModule extends SimpleModule {
      *     [10.0, 20.0], [30.0, 40.0], [50.0, 60.0]
      *   ]
      * }
-     * </pre>
      * </code>
+     * </pre>
      */
     private class GeoJsonLineStringSerializer extends JsonSerializer<GeoJsonLineString> {
 
@@ -147,8 +147,8 @@ public class GeoJsonSerializationModule extends SimpleModule {
      *     [ [50.0, 60.0] , [70.0, 80.0] ]
      *   ]
      * }
-     * </pre>
      * </code>
+     * </pre>
      */
     private class GeoJsonMultiLineStringSerializer extends JsonSerializer<GeoJsonMultiLineString> {
 
@@ -187,8 +187,8 @@ public class GeoJsonSerializationModule extends SimpleModule {
      *     [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0] ]
      *   ]
      * }
-     * </pre>
      * </code>
+     * </pre>
      */
     private class GeoJsonPolygonSerializer extends JsonSerializer<GeoJsonPolygon> {
 
@@ -227,8 +227,8 @@ public class GeoJsonSerializationModule extends SimpleModule {
      *          [[ [2.0,1.0], [2.0,2.0], [2.0,3.0], [2.0,4.0] ]]
      *      ]
      * }
-     * </pre>
      * </code>
+     * </pre>
      */
     private class GeoJsonMultiPolygonSerializer extends JsonSerializer<GeoJsonMultiPolygon> {
 
