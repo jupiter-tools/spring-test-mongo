@@ -574,8 +574,8 @@ to the target file in a next way:
     {
       "id": "5cbbff29921376648d6f4e81",
       "name": "Dreadnought",
-      "armor": 5,
-      "damage": 1,
+      "armor": 100,
+      "damage": 50,
       "location": {
         "type": "Point",
         "coordinates": [20.0, 40.0]
@@ -610,8 +610,9 @@ void exportPolygon() {
     Point p4 = new Point(20, 42);
 
     StarShip dreadnought = StarShip.builder()
-                                   .armor(5)
-                                   .damage(1)
+                                   .name("Dreadnought")
+                                   .armor(100)
+                                   .damage(50)
                                    .location(new GeoJsonPoint(20, 40))
                                    .shape(new GeoJsonPolygon(p1, p2, p3, p4))
                                    .build();
@@ -648,7 +649,7 @@ void findWithinRectangle() {
 }
 ----
 
-and we used a next data set with two objects in the file `dataset/geo/geo_within.json` :
+we used a next data set with two objects in the file `dataset/geo/geo_within.json` :
 
 [source, json]
 ----
