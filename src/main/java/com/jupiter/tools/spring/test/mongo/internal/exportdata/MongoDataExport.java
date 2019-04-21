@@ -5,6 +5,7 @@ import com.antkorwin.commonutils.validation.Guard;
 import com.jupiter.tools.spring.test.mongo.internal.DataSet;
 import com.jupiter.tools.spring.test.mongo.internal.exportdata.scanner.DocumentClasses;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jupiter.tools.spring.test.mongo.internal.geo.GeoJsonSerializationModule;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class MongoDataExport implements DataSet {
         this.mongoTemplate = mongoTemplate;
         this.documentClasses = documentClasses;
         this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new GeoJsonSerializationModule());
         //this.objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 

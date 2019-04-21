@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.geo.GeoJsonModule;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class MongoDataImport implements DataSetImport {
         Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
         this.mongoTemplate = mongoTemplate;
         this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new GeoJsonModule());
     }
 
     @Override

@@ -541,3 +541,144 @@ void matchJavaScript() {
     mongoTemplate.save(new Bar(55));
 }
 ----
+
+## Use GeoJson in data sets
+
+With this library you can use different GeoJson data types in
+your tests. Let's consider the next document:
+
+[source, java]
+----
+@Document
+public class StarShip {
+    @Id
+    private String id;
+    private String name;
+    private int armor;
+    private int damage;
+    private GeoJsonPoint location;
+    private GeoJsonPolygon shape;
+}
+----
+
+### Export GeoJson data after tests execution in the dataset
+
+When you use `@ExportMongoDataSet` annotation in tests
+then documents from the database will be serialized
+to the target file in a next way:
+
+[souce, json]
+----
+{
+  "com.jupiter.tools.spring.test.mongo.documents.StarShip": [
+    {
+      "id": "5cbbff29921376648d6f4e81",
+      "name": "Dreadnought",
+      "armor": 100,
+      "damage": 50,
+      "location": {
+        "type": "Point",
+        "coordinates": [20.0, 40.0]
+      },
+      "shape": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [20.0, 40.0],
+            [22.0, 42.0],
+            [22.0, 40.0],
+            [20.0, 42.0]
+          ]
+        ]
+      }
+    }
+  ]
+}
+----
+
+example of the test with the exporting dataset:
+
+[source, java]
+----
+@Test
+@ExportMongoDataSet(outputFile = "target/dataset/export.json")
+void exportPolygon() {
+
+    Point p1 = new Point(20, 40);
+    Point p2 = new Point(22, 42);
+    Point p3 = new Point(22, 40);
+    Point p4 = new Point(20, 42);
+
+    StarShip dreadnought = StarShip.builder()
+                                   .name("Dreadnought")
+                                   .armor(100)
+                                   .damage(50)
+                                   .location(new GeoJsonPoint(20, 40))
+                                   .shape(new GeoJsonPolygon(p1, p2, p3, p4))
+                                   .build();
+
+    mongoTemplate.save(dreadnought);
+}
+----
+
+### Expected GeoJson in the data set
+
+Let's look at the sample of the searching an object in MongoDB within the (GeoJson) rectangle boundary:
+
+[source, java]
+----
+@Test
+@MongoDataSet(value = "dataset/geo/geo_within.json")
+void findWithinRectangle() {
+    // Act
+    GeoJsonPolygon boundary = new GeoJsonPolygon(new Point(0, 0),
+                                                 new Point(10, 0),
+                                                 new Point(10, 10),
+                                                 new Point(0, 10),
+                                                 new Point(0, 0));
+
+    Query query = new Query();
+    query.addCriteria(Criteria.where("location")
+                              .within(boundary));
+    // Act
+    List<StarShip> ships = mongoTemplate.find(query, StarShip.class);
+
+    // Assert
+    assertThat(ships).hasSize(1);
+    assertThat(ships.get(0).getName()).isEqualTo("x-wing");
+}
+----
+
+we used a next data set with two objects in the file `dataset/geo/geo_within.json` :
+
+[source, json]
+----
+{
+  "com.jupiter.tools.spring.test.mongo.documents.StarShip": [
+    {
+      "id": "5cbaa745921376602705886f",
+      "name": "x-wing",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          1.0,
+          5.0
+        ]
+      }
+    },
+    {
+      "id": "5cbaa74592137660270588ff",
+      "name": "falcon",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          15.0,
+          10.0
+        ]
+      }
+    }
+  ]
+}
+----
+
+
