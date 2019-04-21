@@ -1,6 +1,7 @@
 package com.jupiter.tools.spring.test.mongo.internal.exportdata.scanner;
 
 import org.reflections.Reflections;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
@@ -9,10 +10,10 @@ import java.util.Set;
 
 /**
  * Created on 03.01.2019.
- *
+ * <p>
  * Scans selected package on the MongoDB Documents and returns
  * a map with all founded collections with their class-types.
- *
+ * <p>
  * Finds all classes which annotated by the Document annotation
  * and takes collection names from this annotation or takes a class
  * name if the collection name doesn't set by the Document annotation.
@@ -38,24 +39,23 @@ public class ReflectionsDocumentScanner implements DocumentScanner {
         for (Class<?> doc : documents) {
 
             Document annotation = doc.getAnnotation(Document.class);
+            String value = (String) AnnotationUtils.getValue(annotation, "value");
 
-            if (notEmpty(annotation.value())) {
-                result.put(annotation.value(), doc);
-                continue;
+            if (empty(value)) {
+                value = annotation.collection();
             }
 
-            if (notEmpty(annotation.collection())) {
-                result.put(annotation.collection(), doc);
-                continue;
+            if(empty(value)){
+                value = doc.getSimpleName().toLowerCase();
             }
 
-            result.put(doc.getSimpleName().toLowerCase(), doc);
+            result.put(value, doc);
         }
 
         return result;
     }
 
-    private boolean notEmpty(String value) {
-        return !("".equals(value));
+    private boolean empty(String value) {
+        return value == null || "".equals(value);
     }
 }

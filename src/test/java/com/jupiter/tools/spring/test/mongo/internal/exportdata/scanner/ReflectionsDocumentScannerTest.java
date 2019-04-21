@@ -40,7 +40,9 @@ class ReflectionsDocumentScannerTest {
 
     }
 
-    @Document(value = "antkorwin-test-doc-second")
+    // since spring boot 2.1.x
+    // you can use value instead of the attribute `collection`:
+    @Document("antkorwin-test-doc-second")
     private class AntkorwinTestDocSecond {
 
     }
