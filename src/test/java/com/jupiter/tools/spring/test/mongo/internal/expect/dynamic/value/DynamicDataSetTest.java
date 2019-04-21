@@ -165,4 +165,16 @@ class DynamicDataSetTest {
         String dynamic = new JsonExport(dynamicDataSet).read();
         System.out.println(dynamic);
     }
+
+    @Test
+    void nullValueInDataSet() {
+        // Arrange
+        DataSet dataSet = new TestData().jsonDataSet("/dataset/internal/dynamic/dynamic_with_null_value.json");
+        // Act
+        DynamicDataSet dynamicDataSet = new DynamicDataSet(dataSet, Sets.newHashSet(new SimpleDynamicValue()));
+        Map<String, List<Map<String, Object>>> map = dynamicDataSet.read();
+        // Asserts
+        assertThat(map.get("test").get(0).get("first")).isEqualTo("{fixed}");
+        assertThat(map.get("test").get(0).get("second")).isNull();
+    }
 }

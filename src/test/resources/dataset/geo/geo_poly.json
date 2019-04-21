@@ -1,0 +1,33 @@
+{
+  "com.jupiter.tools.spring.test.mongo.documents.StarShip": [
+    {
+      "id": "5cbba77d92137661ee1919e2",
+      "armor": 5,
+      "damage": 1,
+      "shape": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              20.0,
+              40.0
+            ],
+            [
+              22.0,
+              42.0
+            ],
+            [
+              22.0,
+              40.0
+            ],
+            [
+              20.0,
+              42.0
+            ]
+          ]
+        ]
+      },
+      "target": null
+    }
+  ]
+}

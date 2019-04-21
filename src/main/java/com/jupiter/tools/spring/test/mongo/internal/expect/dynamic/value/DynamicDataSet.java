@@ -50,6 +50,9 @@ public class DynamicDataSet implements DataSet {
 
         for (String key : maps.keySet()) {
             Object value = maps.get(key);
+            if(value == null){
+                continue;
+            }
             if (!this.complexityDataTypes.isComplexType(value)) {
                 for (DynamicValue replacer : this.dynamicValueEvaluators) {
                     if (replacer.isNecessary(value)) {

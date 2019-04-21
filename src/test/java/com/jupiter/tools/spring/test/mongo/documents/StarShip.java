@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.geo.GeoJsonLineString;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -27,6 +29,7 @@ public class StarShip {
     private int armor;
     private int damage;
 
-    @JsonDeserialize(using = GeoJsonPointDeserializer.class)
     private GeoJsonPoint location;
+    private GeoJsonPolygon shape;
+    private GeoJsonLineString target;
 }
