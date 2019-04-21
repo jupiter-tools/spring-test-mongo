@@ -1,0 +1,26 @@
+{
+  "com.jupiter.tools.spring.test.mongo.documents.StarShip": [
+    {
+      "id": "5cbaa745921376602705886f",
+      "name": "x-wing",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          1.0,
+          5.0
+        ]
+      }
+    },
+    {
+      "id": "5cbaa74592137660270588ff",
+      "name": "solar",
+      "location": {
+        "type": "Point",
+        "coordinates": [
+          15.0,
+          10.0
+        ]
+      }
+    }
+  ]
+}
