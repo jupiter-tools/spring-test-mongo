@@ -3,13 +3,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.antkorwin</groupId>
+    <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mongo</artifactId>
-    <version>0.13-SNAPSHOT</version>
+    <version>0.13</version>
     <packaging>jar</packaging>
 
     <name>spring-test-mongo</name>
     <description>Tools suit to write integration tests for MongoDb in Spring Framework.</description>
+
+    <url>https://github.com/jupiter-tools/spring-test-mongo</url>
+    <scm>
+        <url>https://github.com/jupiter-tools/spring-test-mongo</url>
+        <connection>scm:git:git://github.com/jupiter-tools/spring-test-mongo.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/jupiter-tools/spring-test-mongo.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/jupiter-tools/spring-test-mongo/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <developers>
         <developer>

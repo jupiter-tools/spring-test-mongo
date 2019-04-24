@@ -31,7 +31,7 @@ You need to add the next dependency:
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mongo</artifactId>
-    <version>0.12</version>
+    <version>0.13</version>
 </dependency>
 ----
 
