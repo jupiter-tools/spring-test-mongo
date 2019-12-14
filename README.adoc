@@ -6,7 +6,7 @@
 image:https://travis-ci.com/jupiter-tools/spring-test-mongo.svg?branch=master["Build Status", link="https://travis-ci.com/jupiter-tools/spring-test-mongo"]
 image:https://codecov.io/gh/antkorwin/spring-test-mongo/branch/master/graph/badge.svg[link ="https://codecov.io/gh/antkorwin/spring-test-mongo"]
 
-Tools to write integration tests of applications with a MongoDb persistance layer and Spring Framework.
+Tools to write integration tests of applications with a MongoDb persistence layer and Spring Framework.
 
 
 ## Introduction
@@ -32,6 +32,7 @@ You need to add the next dependency:
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mongo</artifactId>
     <version>0.13</version>
+    <scope>test</scope>
 </dependency>
 ----
 
@@ -502,7 +503,7 @@ You can use javascript in expected datasets:
 ----
 @Test
 @MongoDataSet(cleanBefore = true, cleanAfter = true)
-@ExpectedMongoDataSet("js_match.json)
+@ExpectedMongoDataSet("js_match.json")
 void matchJavaScript() {
     mongoTemplate.save(new Bar(17));
     mongoTemplate.save(new Bar(32));
@@ -535,7 +536,7 @@ and now we can run this test:
 ----
 @Test
 @MongoDataSet(cleanBefore = true, cleanAfter = true)
-@ExpectedMongoDataSet("js_match.json)
+@ExpectedMongoDataSet("js_match.json")
 void matchJavaScript() {
     mongoTemplate.save(new Bar(17));
     mongoTemplate.save(new Bar(55));
