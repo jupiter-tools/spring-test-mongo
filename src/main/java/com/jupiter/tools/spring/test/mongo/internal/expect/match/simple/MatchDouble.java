@@ -1,5 +1,7 @@
 package com.jupiter.tools.spring.test.mongo.internal.expect.match.simple;
 
+import java.math.BigDecimal;
+
 import com.jupiter.tools.spring.test.mongo.internal.expect.match.MatchData;
 import org.apache.commons.math3.util.Precision;
 
@@ -14,8 +16,9 @@ public class MatchDouble implements MatchData {
 
     @Override
     public boolean match(Object original, Object expected) {
-        Number originalNumber = (Number) original;
-        Number expectedNumber = (Number) expected;
-        return Precision.equals(originalNumber.doubleValue(), expectedNumber.doubleValue(), THRESHOLD);
+
+        Number originalNumber = new BigDecimal(original.toString());
+        Number expectedNumber = new BigDecimal(expected.toString());
+        return originalNumber.equals(expectedNumber);
     }
 }

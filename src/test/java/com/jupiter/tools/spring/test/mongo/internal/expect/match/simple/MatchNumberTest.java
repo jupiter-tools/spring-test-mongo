@@ -44,6 +44,17 @@ class MatchNumberTest {
                          Arguments.of(0.123, 0.123, true),
                          Arguments.of(0.123, 0, false),
                          Arguments.of(0.3E+8, 0.3E+8, true),
+                         Arguments.of(4.7f, 4.7, true),
+                         Arguments.of(4.7, 4.7f, true),
+                         Arguments.of(4.7f, 4.7f, true),
+                         Arguments.of(4.7f, 4.8f, false),
+                         Arguments.of(4.9, 4.7f, false),
+                         Arguments.of(4.71, 4.7f, false),
+                         Arguments.of(4.71f, 4.7f, false),
+                         Arguments.of(4.71, 4.7, false),
+                         Arguments.of(4.7777776f, 4.777777f, false),
+                         Arguments.of(4.77777776f, 4.7777777f, true),
+                         Arguments.of(4.77777776f, 4.7777777, true),
                          Arguments.of(0.123, 0.124, false));
     }
 
