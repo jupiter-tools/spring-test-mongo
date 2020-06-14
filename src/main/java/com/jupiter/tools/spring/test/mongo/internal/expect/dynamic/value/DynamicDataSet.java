@@ -2,7 +2,6 @@ package com.jupiter.tools.spring.test.mongo.internal.expect.dynamic.value;
 
 import com.jupiter.tools.spring.test.mongo.internal.DataSet;
 import com.jupiter.tools.spring.test.mongo.internal.expect.ComplexityDataTypes;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -20,14 +19,12 @@ public class DynamicDataSet implements DataSet {
     private final DataSet dataSet;
     private final Set<DynamicValue> dynamicValueEvaluators;
     private final ComplexityDataTypes complexityDataTypes;
-    private final ObjectMapper objectMapper;
 
     public DynamicDataSet(DataSet dataSet,
                           Set<DynamicValue> dynamicValueEvaluators) {
         this.dataSet = dataSet;
         this.dynamicValueEvaluators = dynamicValueEvaluators;
         this.complexityDataTypes = new ComplexityDataTypes();
-        this.objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -44,10 +41,7 @@ public class DynamicDataSet implements DataSet {
         return evaluatedDataSet;
     }
 
-    private void applyReplacerToMap(Map<String, Object> mapValues) {
-
-        Map<String, Object> maps = this.objectMapper.convertValue(mapValues, Map.class);
-
+    private void applyReplacerToMap(Map<String, Object> maps) {
         for (String key : maps.keySet()) {
             Object value = maps.get(key);
             if(value == null){
