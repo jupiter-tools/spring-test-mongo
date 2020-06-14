@@ -83,7 +83,7 @@ class MongoDbExtensionImportIT {
 		Foo foo = mongoTemplate.findById("77f3ed00b1375a48e618300a", Foo.class);
 		assertThat(foo).isNotNull();
 		assertThat(foo.getCounter()).isEqualTo(3);
-		assertThat(foo.getTime()).isEqualTo(new Date(87, Calendar.NOVEMBER, 5));
+		assertThat(foo.getTime()).isEqualTo(new Date(5111987));
 	}
 
 	@Test
