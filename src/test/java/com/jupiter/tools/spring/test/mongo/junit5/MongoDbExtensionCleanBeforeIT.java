@@ -3,6 +3,8 @@ package com.jupiter.tools.spring.test.mongo.junit5;
 import com.jupiter.tools.spring.test.mongo.Bar;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +46,10 @@ class MongoDbExtensionCleanBeforeIT {
         Bar simpleDoc = mongoTemplate.findById("55f3ed00b1375a48e61830bf", Bar.class);
         assertThat(simpleDoc).isNull();
 
-        assertThat(mongoTemplate.getCollectionNames().size()).isEqualTo(0);
+        String collectionName = mongoTemplate.getCollectionName(Bar.class);
+        MongoCollection<Document> collection = mongoTemplate.getCollection(collectionName);
+
+        assertThat(collection.countDocuments()).isEqualTo(0L);
     }
 
     public static class TestExtension implements Extension, BeforeEachCallback {

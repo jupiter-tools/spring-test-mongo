@@ -3,12 +3,16 @@ package com.jupiter.tools.spring.test.mongo.junit5;
 import com.jupiter.tools.spring.test.mongo.Bar;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
+import com.mongodb.client.MongoCollection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,7 +45,13 @@ class MongoDbExtensionCleanAfterIT {
             MongoTemplate mongoTemplate = SpringExtension.getApplicationContext(context)
                                                          .getBean(MongoTemplate.class);
 
-            assertThat(mongoTemplate.getCollectionNames().size()).isEqualTo(0);
+            Set<Long> documentCount = mongoTemplate.getCollectionNames()
+                                             .stream()
+                                             .map(mongoTemplate::getCollection)
+                                             .map(MongoCollection::countDocuments)
+                                             .collect(Collectors.toSet());
+
+            assertThat(documentCount).containsOnly(0L);
         }
     }
 }

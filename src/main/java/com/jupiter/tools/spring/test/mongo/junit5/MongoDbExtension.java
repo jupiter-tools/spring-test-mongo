@@ -9,6 +9,7 @@ import com.jupiter.tools.spring.test.mongo.errorinfo.MongoDbErrorInfo;
 import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.File;
@@ -93,7 +94,7 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
             try {
                 new MongoDbTest(mongoTemplate).expect(filePath);
             } catch (Error e) {
-                throw new RuntimeException("Expected ReadOnly dataset, but found some modifications:",e);
+                throw new RuntimeException("Expected ReadOnly dataset, but found some modifications:", e);
             }
             return;
         }
@@ -136,7 +137,7 @@ public class MongoDbExtension implements Extension, BeforeAllCallback, BeforeEac
      */
     private void cleanDataBase() {
         mongoTemplate.getCollectionNames()
-                     .forEach(mongoTemplate::dropCollection);
+                     .forEach(collectionName -> mongoTemplate.remove(new Query(), collectionName));
     }
 
     private boolean isReadOnlyDataSet(ExtensionContext context) {

@@ -1,0 +1,24 @@
+{
+  "com.jupiter.tools.spring.test.mongo.Bar": [
+    {
+      "data": "data-1"
+    },
+    {
+      "data": "data-2"
+    }
+  ],
+  "com.jupiter.tools.spring.test.mongo.Boo": [
+    {
+      "id": "F1",
+      "counter": 1
+    },
+    {
+      "id": "F2",
+      "counter": 2
+    },
+    {
+      "id": "F3",
+      "counter": 3
+    }
+  ]
+}
