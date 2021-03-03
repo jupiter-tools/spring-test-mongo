@@ -39,8 +39,8 @@ public class MatchDataSets {
         Map<String, List<Map<String, Object>>> patternMap = pattern.read();
         Map<String, List<Map<String, Object>>> matchedMap = matched.read();
 
-        assertSetsOfDocumentsAreIdentical(matchedMap.keySet(),
-                                          patternMap.keySet());
+        assertMatchedCollectionsAllContainsInPattern(matchedMap.keySet(),
+                                                     patternMap.keySet());
 
         patternMap.keySet().forEach(documentName -> {
             checkOneCollection(documentName, matchedMap.get(documentName), patternMap.get(documentName));
@@ -70,12 +70,14 @@ public class MatchDataSets {
                 .isEqualTo(pattern.size());
     }
 
-    private void assertSetsOfDocumentsAreIdentical(Set<String> documentNamesFirst,
-                                                   Set<String> documentNamesSecond) {
-        Assertions.assertEquals(documentNamesFirst,
-                                documentNamesSecond,
-                                () -> String.format("Not equal document collections:\n expected:\n[%s],\n actual: \n[%s]",
-                                                    documentNamesFirst.stream().collect(Collectors.joining(", ")),
-                                                    documentNamesSecond.stream().collect(Collectors.joining(", "))));
+    private void assertMatchedCollectionsAllContainsInPattern(Set<String> matched,
+                                                              Set<String> pattern) {
+        Set<String> notFoundCollections = pattern.stream()
+                                                 .filter(collection -> !matched.contains(collection))
+                                                 .collect(Collectors.toSet());
+
+        Assertions.assertTrue(notFoundCollections.isEmpty(),
+                              () -> String.format("Not equal document collections:\n expected but not found:\n[%s]",
+                                                  String.join(", ", notFoundCollections)));
     }
 }

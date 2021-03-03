@@ -1,10 +1,5 @@
 package com.jupiter.tools.spring.test.mongo.internal;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
 import com.jupiter.tools.spring.test.mongo.Bar;
 import com.jupiter.tools.spring.test.mongo.FloatHolder;
 import com.jupiter.tools.spring.test.mongo.Foo;
@@ -15,11 +10,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -88,7 +87,7 @@ class MongoDbTestExpectedIT {
         Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset.json");
         });
-        assertThat(error.getMessage()).contains("Not equal document collections");
+        assertThat(error.getMessage()).contains("expected 2 but found 0 - com.jupiter.tools.spring.test.mongo.Bar entities");
     }
 
     @Test
@@ -174,15 +173,12 @@ class MongoDbTestExpectedIT {
         mongoTemplate.save(bar2);
         // Act
         Error error = Assertions.assertThrows(Error.class, () -> {
-            new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset_multiple.json");
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset_not_exists_collection.json");
         });
 
         assertThat(error.getMessage()).contains("Not equal document collections")
-                                      .contains("expected:\n[com.jupiter.tools.spring.test.mongo.Bar]")
-                                      .contains("actual: \n[com.jupiter.tools.spring.test.mongo.Bar," +
-                                                " com.jupiter.tools.spring.test.mongo.Foo]");
+                                      .contains("expected but not found:\n[com.jupiter.tools.spring.test.mongo.Boo]");
     }
-
 
     @Nested
     @SpringBootTest
