@@ -2,9 +2,9 @@ package com.jupiter.tools.spring.test.mongo.internal.exportdata;
 
 import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.validation.Guard;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jupiter.tools.spring.test.mongo.internal.DataSet;
 import com.jupiter.tools.spring.test.mongo.internal.exportdata.scanner.DocumentClasses;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jupiter.tools.spring.test.mongo.internal.geo.GeoJsonSerializationModule;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -40,7 +40,10 @@ public class MongoDataExport implements DataSet {
         Map<String, List<Map<String, Object>>> map = new HashMap<>();
 
         for (String name : mongoTemplate.getCollectionNames()) {
-            map.put(documentClasses.getDocumentClassName(name), getDataSet(name));
+            List<Map<String, Object>> dataSet = getDataSet(name);
+
+            if (!dataSet.isEmpty())
+                map.put(documentClasses.getDocumentClassName(name), dataSet);
         }
 
         return map;

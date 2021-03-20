@@ -87,7 +87,7 @@ class MongoDbTestExpectedIT {
         Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset.json");
         });
-        assertThat(error.getMessage()).contains("expected 2 but found 0 - com.jupiter.tools.spring.test.mongo.Bar entities");
+        assertThat(error.getMessage()).contains("Not equal document collections");
     }
 
     @Test
