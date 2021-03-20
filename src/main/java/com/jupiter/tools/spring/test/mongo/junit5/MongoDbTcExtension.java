@@ -28,7 +28,8 @@ public class MongoDbTcExtension implements Extension {
 
         mongo.start();
 
-        executeInContainer(mongo, "mongo --eval \"rs.initiate()\"");
+        executeInContainer(mongo, "mongo --eval \"rs.initiate()\" || \"rs.status().ok\"");
+        executeInContainer(mongo, "until mongo --eval \"printjson(rs.isMaster())\" | grep ismaster | grep true > /dev/null 2>&1;do sleep 1;done");
 
         System.setProperty("spring.data.mongodb.host", mongo.getContainerIpAddress());
         System.setProperty("spring.data.mongodb.port", mongo.getMappedPort(MONGO_PORT).toString());
