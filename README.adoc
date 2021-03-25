@@ -31,7 +31,7 @@ You need to add the next dependency:
 <dependency>
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mongo</artifactId>
-    <version>0.14</version>
+    <version>0.15</version>
     <scope>test</scope>
 </dependency>
 ----
@@ -683,3 +683,8 @@ we used a next data set with two objects in the file `dataset/geo/geo_within.jso
 ----
 
 
+## MongoDb transactions support
+
+Since 0.15 version of the `spring-test-mongo` supports transactions in mongodb.
+MongoDB currently supports transactions over a replica set,
+you can read about this feature here: https://www.baeldung.com/spring-data-mongodb-transactions
