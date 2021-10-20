@@ -8,7 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import com.jupiter.tools.spring.test.mongo.annotation.ExportMongoDataSet;
+import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import com.jupiter.tools.spring.test.mongo.internal.MongoDbTest;
+import lombok.Data;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.ClassRule;
@@ -62,6 +64,7 @@ public class MongoDbRuleExportDataSetIT extends BaseMongoIT {
     };
 
     @Test
+    @MongoDataSet(cleanBefore = true, cleanAfter = true)
     @ExportMongoDataSet(outputFile = OUTPUT_FILE_NAME)
     public void testExportDataSet() throws Exception {
         new MongoDbTest(mongoTemplate).importFrom(INPUT_DATA_SET_FILE);

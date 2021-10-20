@@ -24,4 +24,8 @@ public class DocumentClasses {
     public String getDocumentClassName(String collectionName) {
         return documents.get(collectionName).getCanonicalName();
     }
+
+    public boolean hasCollection(String collectionName) {
+        return documents.containsKey(collectionName);
+    }
 }
