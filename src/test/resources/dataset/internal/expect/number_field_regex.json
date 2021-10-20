@@ -1,0 +1,7 @@
+{
+  "com.jupiter.tools.spring.test.mongo.Foo": [
+    {
+      "counter": "regex:.+"
+    }
+  ]
+}

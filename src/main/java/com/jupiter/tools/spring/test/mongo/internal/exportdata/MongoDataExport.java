@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jupiter.tools.spring.test.mongo.internal.DataSet;
 import com.jupiter.tools.spring.test.mongo.internal.exportdata.scanner.DocumentClasses;
 import com.jupiter.tools.spring.test.mongo.internal.geo.GeoJsonSerializationModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class MongoDataExport implements DataSet {
     private final MongoTemplate mongoTemplate;
     private final ObjectMapper objectMapper;
     private final DocumentClasses documentClasses;
+    private final Logger log = LoggerFactory.getLogger(MongoDataExport.class);
 
     public MongoDataExport(MongoTemplate mongoTemplate, DocumentClasses documentClasses) {
         Guard.check(mongoTemplate != null, InternalException.class, MONGO_TEMPLATE_IS_MANDATORY);
@@ -40,10 +43,15 @@ public class MongoDataExport implements DataSet {
         Map<String, List<Map<String, Object>>> map = new HashMap<>();
 
         for (String name : mongoTemplate.getCollectionNames()) {
-            List<Map<String, Object>> dataSet = getDataSet(name);
+            if (documentClasses.hasCollection(name)) {
 
-            if (!dataSet.isEmpty())
-                map.put(documentClasses.getDocumentClassName(name), dataSet);
+                List<Map<String, Object>> dataSet = getDataSet(name);
+
+                if (dataSet != null)
+                    map.put(documentClasses.getDocumentClassName(name), dataSet);
+            } else {
+                log.warn("Not found document class for collection {}", name);
+            }
         }
 
         return map;

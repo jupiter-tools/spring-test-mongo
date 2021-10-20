@@ -87,7 +87,7 @@ class MongoDbTestExpectedIT {
         Error error = Assertions.assertThrows(Error.class, () -> {
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expected_dataset.json");
         });
-        assertThat(error.getMessage()).contains("Not equal document collections");
+        assertThat(error.getMessage()).contains("expected 2 but found 0 - com.jupiter.tools.spring.test.mongo.Bar entities");
     }
 
     @Test
@@ -234,6 +234,16 @@ class MongoDbTestExpectedIT {
             mongoTemplate.save(bar4);
             // Act
             new MongoDbTest(mongoTemplate).expect("/dataset/internal/expect/multiple_regex.json");
+        }
+
+        @Test
+        @MongoDataSet(cleanBefore = true, cleanAfter = true)
+        void numberFieldRegexp() {
+            // Arrange
+            Foo foo = new Foo("1", new Date(), 1);
+            mongoTemplate.save(foo);
+            // Act
+            new MongoDbTest(mongoTemplate).expect("/dataset/internal/expect/number_field_regex.json");
         }
     }
 

@@ -20,7 +20,7 @@ public class MatchRegExp implements MatchDataSmart {
         String cmpValue = (String) comparableValue;
         cmpValue = cmpValue.replaceFirst("regex:", "").trim();
         Pattern pattern = Pattern.compile(cmpValue);
-        Matcher matcher = pattern.matcher((String) originValue);
+        Matcher matcher = pattern.matcher(originValue.toString());
         return matcher.matches();
     }
 
