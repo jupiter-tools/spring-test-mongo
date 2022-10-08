@@ -174,10 +174,10 @@ class MongoDbTestTest {
                 verify(mongoTemplate, times(2)).save(captor.capture());
 
                 Date now = captor.getAllValues().get(0).getTime();
-                Assertions.assertThat(now).isAfterOrEqualsTo(before);
+                Assertions.assertThat(now).isAfterOrEqualTo(before);
 
                 Date plus = captor.getAllValues().get(1).getTime();
-                Assertions.assertThat(plus).isAfterOrEqualsTo(plus3days);
+                Assertions.assertThat(plus).isAfterOrEqualTo(plus3days);
             }
 
             @Test
@@ -191,7 +191,7 @@ class MongoDbTestTest {
                 verify(mongoTemplate).save(captor.capture());
                 Foo foo = captor.getValue();
                 assertThat(foo.getId()).isEqualTo("8");
-                assertThat(foo.getTime()).isAfterOrEqualsTo(before);
+                assertThat(foo.getTime()).isAfterOrEqualTo(before);
                 assertThat(foo.getCounter()).isEqualTo(55);
             }
 

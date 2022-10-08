@@ -5,7 +5,7 @@
 
     <groupId>com.jupiter-tools</groupId>
     <artifactId>spring-test-mongo</artifactId>
-    <version>0.15</version>
+    <version>0.16</version>
     <packaging>jar</packaging>
 
     <name>spring-test-mongo</name>
@@ -45,20 +45,21 @@
     </developers>
 
     <properties>
-        <spring-boot.version>[2.0.3.RELEASE, 2.3.1.RELEASE]</spring-boot.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <spring-boot.version>2.7.4</spring-boot.version>
         <junit.vintage.version>5.4.2</junit.vintage.version>
-        <junit-jupiter.version>5.4.2</junit-jupiter.version>
-        <junit-platform.version>1.4.2</junit-platform.version>
-        <jackson.version>2.11.0</jackson.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <guava.version>27.1-jre</guava.version>
-        <org.reflections.version>0.9.11</org.reflections.version>
+        <junit-jupiter.version>5.9.0</junit-jupiter.version>
+        <junit-platform.version>1.9.0</junit-platform.version>
+        <jackson.version>2.13.4</jackson.version>
+        <guava.version>31.1-jre</guava.version>
+        <org.reflections.version>0.9.12</org.reflections.version>
+        <testcontainers.version>1.17.5</testcontainers.version>
+        <jna.version>5.12.1</jna.version>
     </properties>
 
     <distributionManagement>
@@ -139,20 +140,19 @@
         <!-- Junit 5 -->
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
-            <version>3.5</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>1.10.2</version>
+            <artifactId>mongodb</artifactId>
+            <version>${testcontainers.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.11.0</version>
         </dependency>
 
 
@@ -164,7 +164,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
+            <version>1.18.24</version>
             <scope>test</scope>
         </dependency>
 

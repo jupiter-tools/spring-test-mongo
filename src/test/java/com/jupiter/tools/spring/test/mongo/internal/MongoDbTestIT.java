@@ -80,10 +80,10 @@ class MongoDbTestIT {
         assertThat(foos).hasSize(2);
 
         assertThat(foos.get(0).getId()).isEqualTo("1");
-        assertThat(foos.get(0).getTime()).isAfterOrEqualsTo(before);
+        assertThat(foos.get(0).getTime()).isAfterOrEqualTo(before);
 
         assertThat(foos.get(1).getId()).isEqualTo("2");
-        assertThat(foos.get(1).getTime()).isAfterOrEqualsTo(plus3Days);
+        assertThat(foos.get(1).getTime()).isAfterOrEqualTo(plus3Days);
     }
 
     @Test
@@ -96,7 +96,7 @@ class MongoDbTestIT {
         List<Foo> foos = mongoTemplate.findAll(Foo.class);
         assertThat(foos).hasSize(1);
         assertThat(foos.get(0).getId()).isEqualTo("8");
-        assertThat(foos.get(0).getTime()).isAfterOrEqualsTo(before);
+        assertThat(foos.get(0).getTime()).isAfterOrEqualTo(before);
         assertThat(foos.get(0).getCounter()).isEqualTo(55);
     }
 

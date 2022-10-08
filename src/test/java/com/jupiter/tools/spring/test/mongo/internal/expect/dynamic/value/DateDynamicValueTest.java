@@ -50,28 +50,28 @@ class DateDynamicValueTest {
         void currentTime() {
             Date before = new Date();
             Date now = (Date) new DateDynamicValue().evaluate("date:[NOW]");
-            assertThat(now).isAfterOrEqualsTo(before);
+            assertThat(now).isAfterOrEqualTo(before);
         }
 
         @Test
         void plus3Minutes() {
             Date expected = new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(3));
             Date evaluate = (Date) new DateDynamicValue().evaluate("date:[NOW]+3(MINUTES)");
-            assertThat(evaluate).isAfterOrEqualsTo(expected);
+            assertThat(evaluate).isAfterOrEqualTo(expected);
         }
 
         @Test
         void spaceBetweenPrefix() {
             Date before = new Date();
             Date now = (Date) new DateDynamicValue().evaluate("date: [NOW]");
-            assertThat(now).isAfterOrEqualsTo(before);
+            assertThat(now).isAfterOrEqualTo(before);
         }
 
         @Test
         void spaceBetweenDirectionAndTimeUnit() {
             Date expected = new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(3));
             Date evaluate = (Date) new DateDynamicValue().evaluate("date: [NOW] + 3 (MINUTES)");
-            assertThat(evaluate).isAfterOrEqualsTo(expected);
+            assertThat(evaluate).isAfterOrEqualTo(expected);
         }
     }
 

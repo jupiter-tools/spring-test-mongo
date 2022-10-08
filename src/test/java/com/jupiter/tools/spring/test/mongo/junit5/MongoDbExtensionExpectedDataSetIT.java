@@ -1,34 +1,28 @@
 package com.jupiter.tools.spring.test.mongo.junit5;
 
-import java.util.Date;
-
 import com.jupiter.tools.spring.test.mongo.Bar;
 import com.jupiter.tools.spring.test.mongo.Foo;
 import com.jupiter.tools.spring.test.mongo.annotation.ExpectedMongoDataSet;
 import com.jupiter.tools.spring.test.mongo.annotation.MongoDataSet;
 import com.jupiter.tools.spring.test.mongo.idea.skip.test.IdeaSkipTest;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 import org.junit.platform.testkit.engine.EngineTestKit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Date;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectMethod;
 import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.request;
-import static org.junit.platform.testkit.engine.EventConditions.event;
-import static org.junit.platform.testkit.engine.EventConditions.finishedWithFailure;
-import static org.junit.platform.testkit.engine.EventConditions.test;
+import static org.junit.platform.testkit.engine.EventConditions.*;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.message;
 
@@ -134,7 +128,7 @@ class MongoDbExtensionExpectedDataSetIT {
                      .selectors(selectMethod(RealTests.class, testMethod))
                      // Act
                      .execute()
-                     .tests()
+                     .testEvents()
                      // Assert
                      .assertStatistics(stats -> stats.started(1)
                                                      .succeeded(0)

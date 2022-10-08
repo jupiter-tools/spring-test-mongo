@@ -159,8 +159,8 @@ class DynamicDataSetTest {
         Date now = (Date) dynamicDataSet.read().get("test").get(0).get("now");
         Date tomorrow = (Date) dynamicDataSet.read().get("test").get(0).get("tomorrow");
 
-        assertThat(now).isAfterOrEqualsTo(before);
-        assertThat(tomorrow).isAfterOrEqualsTo(new Date(before.getTime() + TimeUnit.MINUTES.toMillis(3)));
+        assertThat(now).isAfterOrEqualTo(before);
+        assertThat(tomorrow).isAfterOrEqualTo(new Date(before.getTime() + TimeUnit.MINUTES.toMillis(3)));
 
         String dynamic = new JsonExport(dynamicDataSet).read();
         System.out.println(dynamic);

@@ -3,9 +3,9 @@ package com.jupiter.tools.spring.test.mongo.junit5;
 import com.antkorwin.commonutils.exceptions.InternalException;
 import org.junit.jupiter.api.extension.Extension;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.images.builder.Transferable;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -22,23 +22,18 @@ public class MongoDbTcExtension implements Extension {
     static {
         System.out.println("Start MongoDb testcontainers extension...\n");
 
-        GenericContainer mongo = new GenericContainer("mongo:latest")
-                .withCommand("mongod --bind_ip_all --replSet rs0")
-                .withExposedPorts(MONGO_PORT);
+        MongoDBContainer mongo = new MongoDBContainer("mongo:6.0.2");
 
         mongo.start();
 
-        executeInContainer(mongo, "mongo --eval \"rs.initiate()\" || \"rs.status().ok\"");
-        executeInContainer(mongo, "until mongo --eval \"printjson(rs.isMaster())\" | grep ismaster | grep true > /dev/null 2>&1;do sleep 1;done");
-
-        System.setProperty("spring.data.mongodb.host", mongo.getContainerIpAddress());
+        System.setProperty("spring.data.mongodb.host", mongo.getHost());
         System.setProperty("spring.data.mongodb.port", mongo.getMappedPort(MONGO_PORT).toString());
-        System.setProperty("spring.data.mongodb.replicaSet", "rs0");
+        System.setProperty("spring.data.mongodb.replicaSet", "docker-rs");
     }
 
     private static void executeInContainer(GenericContainer container, String command) {
         byte[] contentBytes = command.getBytes(UTF_8);
-        String shellFilePath = "/etc/mongo-" + UUID.randomUUID().toString();
+        String shellFilePath = "/etc/mongo-" + UUID.randomUUID();
 
         try {
             container.copyFileToContainer(Transferable.of(contentBytes), shellFilePath);
