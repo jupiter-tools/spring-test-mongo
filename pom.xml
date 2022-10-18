@@ -52,7 +52,7 @@
         <junit.vintage.version>5.4.2</junit.vintage.version>
         <junit-jupiter.version>5.4.2</junit-jupiter.version>
         <junit-platform.version>1.4.2</junit-platform.version>
-        <jackson.version>2.11.0</jackson.version>
+        <jackson.version>2.13.4.1</jackson.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>${java.version}</maven.compiler.target>
