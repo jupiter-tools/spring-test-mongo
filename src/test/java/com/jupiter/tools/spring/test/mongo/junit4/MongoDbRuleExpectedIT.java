@@ -128,7 +128,7 @@ public class MongoDbRuleExpectedIT {
                      .selectors(selectMethod(RealTests.class, testMethod))
                      // Act
                      .execute()
-                     .tests()
+                     .testEvents()
                      // Assert
                      .assertStatistics(stats -> stats.started(1)
                                                      .succeeded(0)
